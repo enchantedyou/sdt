@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.local.SdpSystemParameterMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdpSystemParameter">
+    <constructor>
+      <idArg column="main_key" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="sub_key" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="parm_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="parm_value" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="parm_remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    main_key, sub_key, parm_desc, parm_value, parm_remark, data_create_user, data_create_time, 
+    data_update_user, data_update_time, data_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sdp_system_parameter
+    where main_key = #{mainKey,jdbcType=VARCHAR}
+      and sub_key = #{subKey,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from sdp_system_parameter
+    where main_key = #{mainKey,jdbcType=VARCHAR}
+      and sub_key = #{subKey,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdpSystemParameter">
+    insert into sdp_system_parameter (main_key, sub_key, parm_desc, 
+      parm_value, parm_remark, data_create_user, 
+      data_create_time, data_update_user, data_update_time, 
+      data_version)
+    values (#{mainKey,jdbcType=VARCHAR}, #{subKey,jdbcType=VARCHAR}, #{parmDesc,jdbcType=VARCHAR}, 
+      #{parmValue,jdbcType=VARCHAR}, #{parmRemark,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, 
+      #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, 
+      #{dataVersion,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdpSystemParameter">
+    insert into sdp_system_parameter
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mainKey != null">
+        main_key,
+      </if>
+      <if test="subKey != null">
+        sub_key,
+      </if>
+      <if test="parmDesc != null">
+        parm_desc,
+      </if>
+      <if test="parmValue != null">
+        parm_value,
+      </if>
+      <if test="parmRemark != null">
+        parm_remark,
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mainKey != null">
+        #{mainKey,jdbcType=VARCHAR},
+      </if>
+      <if test="subKey != null">
+        #{subKey,jdbcType=VARCHAR},
+      </if>
+      <if test="parmDesc != null">
+        #{parmDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="parmValue != null">
+        #{parmValue,jdbcType=VARCHAR},
+      </if>
+      <if test="parmRemark != null">
+        #{parmRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdpSystemParameter">
+    update sdp_system_parameter
+    <set>
+      <if test="parmDesc != null">
+        parm_desc = #{parmDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="parmValue != null">
+        parm_value = #{parmValue,jdbcType=VARCHAR},
+      </if>
+      <if test="parmRemark != null">
+        parm_remark = #{parmRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    where main_key = #{mainKey,jdbcType=VARCHAR}
+      and sub_key = #{subKey,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdpSystemParameter">
+    update sdp_system_parameter
+    set parm_desc = #{parmDesc,jdbcType=VARCHAR},
+      parm_value = #{parmValue,jdbcType=VARCHAR},
+      parm_remark = #{parmRemark,jdbcType=VARCHAR},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=INTEGER}
+    where main_key = #{mainKey,jdbcType=VARCHAR}
+      and sub_key = #{subKey,jdbcType=VARCHAR}
+  </update>
+</mapper>

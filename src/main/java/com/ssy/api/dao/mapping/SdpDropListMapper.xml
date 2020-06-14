@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.local.SdpDropListMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdpDropList">
+    <constructor>
+      <idArg column="drop_list_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="drop_list_value" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="drop_list_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_sort" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="enable_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    drop_list_type, drop_list_value, drop_list_desc, data_sort, enable_ind, data_create_user, 
+    data_create_time, data_update_user, data_update_time, data_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sdp_drop_list
+    where drop_list_type = #{dropListType,jdbcType=VARCHAR}
+      and drop_list_value = #{dropListValue,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from sdp_drop_list
+    where drop_list_type = #{dropListType,jdbcType=VARCHAR}
+      and drop_list_value = #{dropListValue,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdpDropList">
+    insert into sdp_drop_list (drop_list_type, drop_list_value, drop_list_desc, 
+      data_sort, enable_ind, data_create_user, 
+      data_create_time, data_update_user, data_update_time, 
+      data_version)
+    values (#{dropListType,jdbcType=VARCHAR}, #{dropListValue,jdbcType=VARCHAR}, #{dropListDesc,jdbcType=VARCHAR}, 
+      #{dataSort,jdbcType=INTEGER}, #{enableInd,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, 
+      #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, 
+      #{dataVersion,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdpDropList">
+    insert into sdp_drop_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dropListType != null">
+        drop_list_type,
+      </if>
+      <if test="dropListValue != null">
+        drop_list_value,
+      </if>
+      <if test="dropListDesc != null">
+        drop_list_desc,
+      </if>
+      <if test="dataSort != null">
+        data_sort,
+      </if>
+      <if test="enableInd != null">
+        enable_ind,
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dropListType != null">
+        #{dropListType,jdbcType=VARCHAR},
+      </if>
+      <if test="dropListValue != null">
+        #{dropListValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dropListDesc != null">
+        #{dropListDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSort != null">
+        #{dataSort,jdbcType=INTEGER},
+      </if>
+      <if test="enableInd != null">
+        #{enableInd,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdpDropList">
+    update sdp_drop_list
+    <set>
+      <if test="dropListDesc != null">
+        drop_list_desc = #{dropListDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSort != null">
+        data_sort = #{dataSort,jdbcType=INTEGER},
+      </if>
+      <if test="enableInd != null">
+        enable_ind = #{enableInd,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    where drop_list_type = #{dropListType,jdbcType=VARCHAR}
+      and drop_list_value = #{dropListValue,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdpDropList">
+    update sdp_drop_list
+    set drop_list_desc = #{dropListDesc,jdbcType=VARCHAR},
+      data_sort = #{dataSort,jdbcType=INTEGER},
+      enable_ind = #{enableInd,jdbcType=VARCHAR},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=INTEGER}
+    where drop_list_type = #{dropListType,jdbcType=VARCHAR}
+      and drop_list_value = #{dropListValue,jdbcType=VARCHAR}
+  </update>
+</mapper>
