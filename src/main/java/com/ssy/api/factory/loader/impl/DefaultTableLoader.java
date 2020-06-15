@@ -1,6 +1,7 @@
 package com.ssy.api.factory.loader.impl;
 
 import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.factory.loader.TableTypeLoader;
 import com.ssy.api.factory.odb.OdbFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
@@ -42,7 +43,7 @@ public class DefaultTableLoader implements TableTypeLoader {
                         ));
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException("Failed to load table type model", e);
+                    ApPubErr.E0007(e);
                 }
             }
         }

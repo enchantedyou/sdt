@@ -199,4 +199,10 @@
     where datasource_id = #{datasourceId,jdbcType=VARCHAR}
       and datasource_type = #{datasourceType,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAll_odb1" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sdp_datasource
+  </select>
 </mapper>

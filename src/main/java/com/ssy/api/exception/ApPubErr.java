@@ -40,12 +40,17 @@ public class ApPubErr {
     }
 
     /** 元数据模型加载失败 **/
-    public static SdtException E0007() {
+    public static SdtException E0007(Throwable e) {
         throw new SdtException("Failed to load metadata model", ErrCodeDef.XML_DEAL_FAILURE);
     }
 
     /** 元数据模型的优先级未配置 **/
     public static SdtException E0008(String modelName) {
         throw new SdtException("The priority of metadata model ["+modelName+"] is not configured or not effective", ErrCodeDef.DB_NO_RECORD);
+    }
+
+    /** 动态数据源不存在 **/
+    public static SdtException E0009(String dataSource) {
+        throw new SdtException("Dynamic data source ["+dataSource+"] does not exist", ErrCodeDef.DB_NO_RECORD);
     }
 }

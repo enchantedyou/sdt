@@ -92,7 +92,7 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
                     }
                     map.put(location, currentRestrictionTypeMap);
                 } catch (Exception e) {
-                    throw new RuntimeException("Failed to load restriction type model", e);
+                    ApPubErr.E0007(e);
                 }
             }
         }

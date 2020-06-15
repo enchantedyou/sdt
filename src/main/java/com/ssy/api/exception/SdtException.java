@@ -19,6 +19,12 @@ public class SdtException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
+    public SdtException(String errorMsg, String errorCode, Throwable e) {
+        super("[" + CommUtil.nvl(errorCode, ErrCodeDef.UNKNOWN_ERROR) + "]:" + errorMsg, e);
+        this.errorMsg = errorMsg;
+        this.errorCode = errorCode;
+    }
+
     public String getErrorMsg() {
         return errorMsg;
     }

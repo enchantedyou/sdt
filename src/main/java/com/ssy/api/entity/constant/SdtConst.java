@@ -35,4 +35,8 @@ public class SdtConst {
     public static final String TABLE_SUFFIX = ".tables.xml";
     public static final String INTF_EXCEL_SUFFIX = ".xlsx";
     public static final String[] PROJECT_FILE_SUFFIX = {".xml"};
+
+    /** 动态数据源配置 **/
+    public static final String MASTER_DATASOURCE = "masterDS";
+    public static final String DYNAMIC_DATASOURCE = "dynamicDS";
 }

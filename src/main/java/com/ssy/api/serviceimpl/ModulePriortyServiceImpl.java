@@ -2,7 +2,7 @@ package com.ssy.api.serviceimpl;
 
 import com.ssy.api.entity.table.local.SdpDictPriorty;
 import com.ssy.api.entity.table.local.SdpEnumPriorty;
-import com.ssy.api.serv.priorty.SdMetaPriorty;
+import com.ssy.api.serv.SdMetaPriorty;
 import com.ssy.api.servicetype.ModulePriortyService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

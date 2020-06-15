@@ -1,8 +1,6 @@
 package com.ssy.api;
 
 import com.ssy.api.factory.odb.OdbFactory;
-import com.ssy.api.meta.defaults.Element;
-import com.ssy.api.meta.defaults.TableType;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

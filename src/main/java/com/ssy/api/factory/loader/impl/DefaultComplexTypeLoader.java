@@ -69,7 +69,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
                     }
                     map.put(location, complexTypeMap);
                 } catch (Exception e) {
-                    throw new RuntimeException("Failed to load complex type model", e);
+                    ApPubErr.E0007(e);
                 } finally {
                     beforeElementMap.clear();
                 }
