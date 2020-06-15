@@ -1,6 +1,8 @@
 package com.ssy.api.factory.loader.impl;
 
+import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.entity.enums.E_RESTRICTION;
 import com.ssy.api.entity.table.local.SdpEnumPriorty;
 import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.factory.loader.RestrictionLoader;
@@ -9,11 +11,11 @@ import com.ssy.api.meta.defaults.DefaultBaseType;
 import com.ssy.api.meta.defaults.DefaultEnumType;
 import com.ssy.api.meta.defaults.DefaultEnumerationType;
 import com.ssy.api.servicetype.ModulePriortyService;
+import com.ssy.api.utils.BizUtil;
 import com.ssy.api.utils.CommUtil;
 import com.ssy.api.utils.XmlUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,17 +31,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2020/6/12-23:16
  */
 @Component
+@Slf4j
 public class DefaultRestrictionLoader implements RestrictionLoader {
 
     @Autowired
     private ModulePriortyService modulePriortyService;
-    //log4j2日志
-    private static final Logger logger = LoggerFactory.getLogger(DefaultRestrictionLoader.class);
+    @Autowired
+    private SdtContextConfig sdtContextConfig;
 
     @Override
     public Map<String, Map<String, AbstractRestrictionType>> load(Map<String, File> fileMap) {
         Map<String, Map<String, AbstractRestrictionType>> map = new ConcurrentHashMap<>();
-        Map<String, SdpEnumPriorty> priority = modulePriortyService.getEnumPriortyMap(false);
+        Map<String, SdpEnumPriorty> priority = modulePriortyService.getEnumPriortyMap(sdtContextConfig.getMsModelFirst());
 
         for(String fileName : fileMap.keySet()){
             if(fileName.contains(SdtConst.ENUM_SUFFIX) || fileName.contains(SdtConst.REUSABLE_SUFFIX)){
@@ -78,10 +81,14 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
                             );
                         }
 
-                        //优先级检查
-                        AbstractRestrictionType before = searchBefore(map, restrictionTypeId);
-                        AbstractRestrictionType suitableValue = checkEnumPriorty(priority, before, currentRestrictionType);
-                        currentRestrictionTypeMap.put(restrictionTypeId, suitableValue);
+                        //枚举类型优先级检查
+                        if(currentRestrictionType.getRestriction() == E_RESTRICTION.ENUMTYPE){
+                            AbstractRestrictionType before = searchBefore(map, restrictionTypeId);
+                            AbstractRestrictionType suitableValue = checkEnumPriorty(priority, before, currentRestrictionType);
+                            currentRestrictionTypeMap.put(restrictionTypeId, suitableValue);
+                        }else{
+                            currentRestrictionTypeMap.put(restrictionTypeId, currentRestrictionType);
+                        }
                     }
                     map.put(location, currentRestrictionTypeMap);
                 } catch (Exception e) {
@@ -101,8 +108,10 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
      * @return com.ssy.api.meta.abstracts.AbstractRestrictionType
      */
     private AbstractRestrictionType checkEnumPriorty(Map<String, SdpEnumPriorty> priority, AbstractRestrictionType before, AbstractRestrictionType now){
-        //之前的数据为空,直接添加
-        if(CommUtil.isNull(before)){
+        //之前的数据为空或[当前或之前是微服务模型但不是微服务模型优先],直接添加
+        if(CommUtil.isNull(before)
+                || ((BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, now.getLocation())|| BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, before.getLocation()))
+                && !sdtContextConfig.getMsModelFirst())){
             return now;
         }else{
             //获取两者的优先级
@@ -123,7 +132,7 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
             //返回优先级较高的一方
             else{
                 if(CommUtil.compare(beforeEnumPriorty.getEnumPriority(), nowEnumPriorty.getEnumPriority()) < 0){
-                    logger.info("Restricted type [{}] has lower priority than [{}] and should be removed", nowEnumPriorty.getEnumType(), beforeEnumPriorty.getEnumType());
+                    log.info("Restricted type [{}] has lower priority than [{}] and should be removed", now.getFullId(), before.getFullId());
                     return before;
                 }else{
                     return now;

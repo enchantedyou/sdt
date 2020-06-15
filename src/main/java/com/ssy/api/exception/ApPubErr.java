@@ -46,6 +46,6 @@ public class ApPubErr {
 
     /** 元数据模型的优先级未配置 **/
     public static SdtException E0008(String modelName) {
-        throw new SdtException("The priority of metadata model ["+modelName+"] is not configured", ErrCodeDef.DB_NO_RECORD);
+        throw new SdtException("The priority of metadata model ["+modelName+"] is not configured or not effective", ErrCodeDef.DB_NO_RECORD);
     }
 }

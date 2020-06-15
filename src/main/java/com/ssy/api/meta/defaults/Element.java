@@ -27,7 +27,7 @@ public class Element extends AbstractMetaData implements Serializable {
     private boolean isAllowSubType = false;
 
     public Element(String location, String id, String longName, AbstractRestrictionType type, String desc, String ref) {
-        super(location, id, longName, null);
+        super(location, id, longName, new String[]{});
         this.type = type;
         this.desc = desc;
         this.ref = ref;

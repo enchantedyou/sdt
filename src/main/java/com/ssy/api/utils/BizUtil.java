@@ -3,8 +3,7 @@ package com.ssy.api.utils;
 import com.ssy.api.entity.enums.E_STRGENTYPE;
 import com.ssy.api.entity.table.comm.ApbFieldNormal;
 import com.ssy.api.exception.ApPubErr;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StopWatch;
 
 import java.io.IOException;
@@ -23,9 +22,8 @@ import java.util.regex.Pattern;
  * @Author sunshaoyu
  * @Date 2020年06月11日-16:48
  */
+@Slf4j
 public class BizUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(BizUtil.class);
 
     /**
      * @Description 必输校验
@@ -61,13 +59,12 @@ public class BizUtil {
      * @Author sunshaoyu
      * @Date 2020/6/11-15:48
      * @param e
-     * @param logger
      */
-    public static void logError(Exception e, Logger logger) throws IOException {
+    public static void logError(Exception e) throws IOException {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter, true);
         e.printStackTrace(printWriter);
-        logger.error(stringWriter.toString());
+        log.error(stringWriter.toString());
 
         stringWriter.flush();
         printWriter.flush();
@@ -168,7 +165,7 @@ public class BizUtil {
      */
     public static void stoptStopWatch(StopWatch s, String msg){
         s.stop();
-        logger.info("{} finished,cost:[{}ms]", msg, s.getTotalTimeMillis());
+        log.info("{} finished,cost:[{}ms]", msg, s.getTotalTimeMillis());
     }
 
     /**

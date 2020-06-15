@@ -16,6 +16,8 @@ public class SdtConst {
     /** java资源文件目录 **/
     public static final String JAVA_RESOURCES_PATH =
             new StringBuffer("src").append(File.separator).append("main").append(File.separator).append("resources").toString();
+    /** 微服务模型的正则表达式 **/
+    public static final String MS_MODEL_REG = "^Ms.*?";
 
     /** 元数据模型文件后缀及节点名称 **/
     public static final String COMPLEX_TYPE_NODE_NAME = "complexType";

@@ -1,8 +1,12 @@
 package com.ssy.api.factory.loader.impl;
 
+import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.factory.loader.FileLoader;
+import com.ssy.api.utils.BizUtil;
 import com.ssy.api.utils.CommUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -15,7 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2020年05月28日-14:28
  */
 @Component
+@Slf4j
 public class DefaultFileLoader implements FileLoader {
+
+    @Autowired
+    private SdtContextConfig sdtContextConfig;
 
     @Override
     public Map<String, File> load(String path, boolean isLimitJavaReources, String... suffix) {
@@ -45,12 +53,16 @@ public class DefaultFileLoader implements FileLoader {
                 loadFile(map, subFile, isLimitJavaReources, suffix);
             }
         }else{
+            String fileName = file.getName();
             //排除非java资源目录
             if(isLimitJavaReources && !file.getPath().contains(SdtConst.JAVA_RESOURCES_PATH)){
                 return;
+            }else if(BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, fileName) && !sdtContextConfig.getMsModelFirst()){
+                //当前是微服务模型但是非微服务模型优先,不加载
+                log.info("The current file is [{}] but the microservice model priority indicator is [{}], so it is not loaded", fileName, sdtContextConfig.getMsModelFirst());
+                return;
             }
 
-            String fileName = file.getName();
             if(CommUtil.isNotNull(suffix)){
                 if(fileName.contains(".")){
                     String fileSuffix = fileName.substring(fileName.lastIndexOf("."));

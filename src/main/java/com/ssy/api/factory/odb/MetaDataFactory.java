@@ -9,8 +9,6 @@ import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.defaults.TableType;
 import com.ssy.api.utils.BizUtil;
 import com.ssy.api.utils.CommUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -31,8 +29,6 @@ public class MetaDataFactory {
     private static LoaderFactory loaderFactory;
     //上下文配置
     private static SdtContextConfig sdtContextConfig;
-    //log4j2日志
-    private static final Logger logger = LoggerFactory.getLogger(MetaDataFactory.class);
 
     //元数据容器
     private static Map<String, File> projectFileMap = new ConcurrentHashMap<>();

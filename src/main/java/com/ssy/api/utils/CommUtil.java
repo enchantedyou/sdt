@@ -27,7 +27,6 @@ public class CommUtil {
         if (null == obj){
             return true;
         } else if (obj instanceof String) {
-            obj = String.valueOf(obj);
             return ((String) obj).length() == 0 || ((String) obj).equals("null");
         } else if (obj instanceof Map) {
             obj = Map.class.cast(obj);

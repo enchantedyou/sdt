@@ -52,4 +52,8 @@ public abstract class AbstractRestrictionType extends AbstractMetaData implement
     public int getFractionDigits() {
         return fractionDigits;
     }
+
+    public String getFullId(){
+        return new StringBuffer(location).append(".").append(id).toString();
+    }
 }

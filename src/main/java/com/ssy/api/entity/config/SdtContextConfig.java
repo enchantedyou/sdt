@@ -16,6 +16,7 @@ public class SdtContextConfig {
 
     private String workSpacePath;
     private String intfExcelPath;
+    private Boolean msModelFirst;
 
     public String getWorkSpacePath() {
         return workSpacePath;
@@ -31,5 +32,13 @@ public class SdtContextConfig {
 
     public void setIntfExcelPath(String intfExcelPath) {
         this.intfExcelPath = intfExcelPath;
+    }
+
+    public Boolean getMsModelFirst() {
+        return msModelFirst;
+    }
+
+    public void setMsModelFirst(Boolean msModelFirst) {
+        this.msModelFirst = msModelFirst;
     }
 }

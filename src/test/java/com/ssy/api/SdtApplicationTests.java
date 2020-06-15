@@ -15,11 +15,7 @@ class SdtApplicationTests {
 
     @Test
     void contextLoads() {
-        TableType table = OdbFactory.searchTable("lna_loan");
-        System.out.println(table);
-        for(String key: table.getFieldMap().keySet()){
-            System.out.println(table.getFieldMap().get(key));
-        }
+        System.out.println(OdbFactory.searchDict("trxn_seq"));
     }
 
 }

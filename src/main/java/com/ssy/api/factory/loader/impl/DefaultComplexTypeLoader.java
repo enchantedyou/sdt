@@ -1,5 +1,6 @@
 package com.ssy.api.factory.loader.impl;
 
+import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.table.local.SdpDictPriorty;
 import com.ssy.api.exception.ApPubErr;
@@ -8,11 +9,11 @@ import com.ssy.api.factory.odb.OdbFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.ComplexType;
 import com.ssy.api.servicetype.ModulePriortyService;
+import com.ssy.api.utils.BizUtil;
 import com.ssy.api.utils.CommUtil;
 import com.ssy.api.utils.XmlUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,17 +29,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2020年06月11日-09:46
  */
 @Component
+@Slf4j
 public class DefaultComplexTypeLoader implements ComplexTypeLoader {
 
     @Autowired
     private ModulePriortyService modulePriortyService;
-    //log4j2日志
-    private static final Logger logger = LoggerFactory.getLogger(DefaultComplexTypeLoader.class);
+    @Autowired
+    private SdtContextConfig sdtContextConfig;
 
     @Override
     public Map<String, Map<String, ComplexType>> load(Map<String, File> fileMap) {
         Map<String, Map<String, ComplexType>> map = new ConcurrentHashMap<>();
-        Map<String, SdpDictPriorty> priority = modulePriortyService.getDictPriortyMap(false);
+        Map<String, SdpDictPriorty> priority = modulePriortyService.getDictPriortyMap(sdtContextConfig.getMsModelFirst());
         //已存在的复合类型元素集合,用于字典优先级校验
         Map<String, com.ssy.api.meta.defaults.Element> beforeElementMap = new HashMap<>();
 
@@ -140,8 +142,10 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
      * @return com.ssy.api.meta.defaults.Element
      */
     private com.ssy.api.meta.defaults.Element checkDictPriorty(Map<String, SdpDictPriorty> priority, com.ssy.api.meta.defaults.Element before, com.ssy.api.meta.defaults.Element now){
-        //之前的数据为空,直接添加
-        if(CommUtil.isNull(before)){
+        //之前的数据为空或[当前或之前是微服务模型但不是微服务模型优先],直接添加
+        if(CommUtil.isNull(before)
+                || ((BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, now.getLocation()) || BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, before.getLocation()))
+                && !sdtContextConfig.getMsModelFirst())){
             return now;
         }else{
             //获取两者的优先级
@@ -162,7 +166,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
             //返回优先级较高的一方
             else{
                 if(CommUtil.compare(beforeDictPriorty.getDictPriority(), nowDictPriorty.getDictPriority()) < 0){
-                    logger.info("Dict type [{}] has lower priority than [{}] and should be removed", nowDictPriorty.getDictType(), beforeDictPriorty.getDictType());
+                    log.info("Dict type [{}] has lower priority than [{}] and should be removed", now.getRef(), before.getRef());
                     return before;
                 }else{
                     return now;
