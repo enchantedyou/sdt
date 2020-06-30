@@ -1,6 +1,7 @@
 package com.ssy.api.factory.loader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -20,4 +21,14 @@ public interface FileLoader {
      * @return java.util.Map<java.lang.String,java.io.File>(文件名, 文件实体)
      */
     public Map<String, File> load(String path, boolean isLimitJavaReources, String... suffix);
+
+    /**
+     * @Description 加载文件内容并转化为字符串
+     * @Author sunshaoyu
+     * @Date 2020/6/22-21:03
+     * @param file  文件
+     * @param charset   字符集
+     * @return java.lang.String
+     */
+    public String loadContentToString(File file, String charset) throws IOException;
 }

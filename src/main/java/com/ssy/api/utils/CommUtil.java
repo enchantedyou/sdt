@@ -231,7 +231,7 @@ public class CommUtil {
      * @param fieldName 字段名
      * @return java.lang.String
      */
-    private static String buildGetterMethodName(String fieldName){
+    public static String buildGetterMethodName(String fieldName){
         StringBuffer buffer = new StringBuffer();
         return buffer.append("get").append(fieldName.substring(0, 1).toUpperCase()).append(fieldName.substring(1)).toString();
     }
@@ -259,4 +259,5 @@ public class CommUtil {
     public static <T extends Comparable> T getBigger(T o1, T o2){
         return compare(o1, o2) >= 0 ? o1 : o2;
     }
+
 }

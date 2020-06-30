@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -76,5 +78,23 @@ public class DefaultFileLoader implements FileLoader {
                 map.put(fileName, file);
             }
         }
+    }
+
+
+    public String loadContentToString(File file, String charset) throws IOException {
+        FileInputStream inputStream = null;
+        try{
+            inputStream = new FileInputStream(file);
+            byte[] buffer = new byte[(int) file.length()];
+            if(inputStream.read(buffer) > 0){
+                return new String(buffer, charset);
+            }
+        } finally {
+            //关闭流
+            if(inputStream != null){
+                inputStream.close();
+            }
+        }
+        return null;
     }
 }

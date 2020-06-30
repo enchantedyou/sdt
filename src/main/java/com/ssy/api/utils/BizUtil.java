@@ -1,5 +1,7 @@
 package com.ssy.api.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ssy.api.entity.enums.E_STRGENTYPE;
 import com.ssy.api.entity.table.comm.ApbFieldNormal;
 import com.ssy.api.exception.ApPubErr;
@@ -180,5 +182,17 @@ public class BizUtil {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
+    }
+
+    /**
+     * @Description 对象克隆
+     * @Author sunshaoyu
+     * @Date 2020/6/17-11:44
+     * @param clazz
+     * @param obj
+     * @return T
+     */
+    public static <T> T clone(Class<T> clazz, T obj){
+        return JSONObject.parseObject(JSONObject.toJSONString(obj), clazz);
     }
 }

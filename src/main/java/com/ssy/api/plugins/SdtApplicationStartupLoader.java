@@ -16,9 +16,9 @@ import org.springframework.util.StopWatch;
  */
 @Component
 @Order(value = 1)
-public class SdtApplicationStartupLoader extends MetaDataFactory implements ApplicationRunner {
+public class SdtApplicationStartupLoader extends MetaDataFactory /*implements ApplicationRunner*/ {
 
-    @Override
+    //@Override
     public void run(ApplicationArguments args) throws Exception {
         /** 初始化元数据 **/
         StopWatch s = BizUtil.startStopWatch();
