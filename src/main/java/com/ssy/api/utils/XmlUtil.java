@@ -8,9 +8,14 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -233,5 +238,50 @@ public class XmlUtil {
      */
     public static List<Element> searchTargetAllXmlElement(Element element,String elementName){
         return searchTargetAllXmlElement(null, element, elementName);
+    }
+
+    /**
+     * @Description 序列化xml
+     * @Author sunshaoyu
+     * @Date 2020/6/30-10:55
+     * @param entity
+     * @return java.lang.String
+     */
+    public static <T> String serializeXML(T entity) throws JAXBException, IOException {
+        StringWriter stringWriter = new StringWriter();
+        try{
+            JAXBContext jaxbContext = JAXBContext.newInstance(entity.getClass());
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(entity, stringWriter);
+            return stringWriter.toString();
+        }finally {
+            stringWriter.close();
+        }
+    }
+
+    /**
+     * @Description 反序列化xml
+     * @Author sunshaoyu
+     * @Date 2020/7/1-17:32
+     * @param xml
+     * @param clazz
+     * @return T
+     */
+    public static <T> T deserializeXML(String xml, Class<T> clazz) throws JAXBException, XMLStreamException {
+        XMLStreamReader xmlStreamReader = null;
+        try{
+            JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            StringReader reader = new StringReader(xml);
+            XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+
+            xmlStreamReader = xmlInputFactory.createXMLStreamReader(reader);
+            return unmarshaller.unmarshal(xmlStreamReader, clazz).getValue();
+        } finally {
+            if(xmlStreamReader != null){
+                xmlStreamReader.close();
+            }
+        }
     }
 }

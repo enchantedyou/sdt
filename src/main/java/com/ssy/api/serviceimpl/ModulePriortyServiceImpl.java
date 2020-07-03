@@ -5,6 +5,7 @@ import com.ssy.api.entity.table.local.SdpEnumPriorty;
 import com.ssy.api.serv.SdMetaPriorty;
 import com.ssy.api.servicetype.ModulePriortyService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @Date 2020年06月11日-16:45
  */
 @Service
-@Transactional
+@Transactional(propagation = Propagation.SUPPORTS)
 public class ModulePriortyServiceImpl implements ModulePriortyService {
 
     @Override

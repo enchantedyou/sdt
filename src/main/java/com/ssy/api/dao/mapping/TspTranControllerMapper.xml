@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.edsp.TspTranControllerMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.edsp.TspTranController">
+    <constructor>
+      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="corporate_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <idArg column="tran_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_chinese_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="execution_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rely_tran_list" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_run_conditions" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="reconnection_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="fail_interrupt_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="transactions_submit_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="data_split_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="job_execution_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="max_job_concurrency_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="log_level" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="job_split_condition" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_run_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_skip" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_batch_file" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ssy.api.entity.table.edsp.TspTranController">
+    <constructor>
+      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="corporate_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <idArg column="tran_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_chinese_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="execution_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rely_tran_list" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_run_conditions" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="reconnection_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="fail_interrupt_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="transactions_submit_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="data_split_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="job_execution_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="max_job_concurrency_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="log_level" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="job_split_condition" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_run_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_skip" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_batch_file" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_split_key" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    system_code, corporate_code, tran_group_id, step_id, tran_code, tran_chinese_name, 
+    execution_code, rely_tran_list, tran_run_conditions, reconnection_num, fail_interrupt_code, 
+    transactions_submit_num, data_split_mode, job_execution_mode, max_job_concurrency_num, 
+    log_level, job_split_condition, task_run_mode, is_skip, is_batch_file, tran_type
+  </sql>
+  <sql id="Blob_Column_List">
+    data_split_key
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tsp_tran_controller
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+      and step_id = #{stepId,jdbcType=INTEGER}
+      and tran_code = #{tranCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tsp_tran_controller
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+      and step_id = #{stepId,jdbcType=INTEGER}
+      and tran_code = #{tranCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.edsp.TspTranController">
+    insert into tsp_tran_controller (system_code, corporate_code, tran_group_id, 
+      step_id, tran_code, tran_chinese_name, 
+      execution_code, rely_tran_list, tran_run_conditions, 
+      reconnection_num, fail_interrupt_code, transactions_submit_num, 
+      data_split_mode, job_execution_mode, max_job_concurrency_num, 
+      log_level, job_split_condition, task_run_mode, 
+      is_skip, is_batch_file, tran_type, 
+      data_split_key)
+    values (#{systemCode,jdbcType=VARCHAR}, #{corporateCode,jdbcType=VARCHAR}, #{tranGroupId,jdbcType=VARCHAR}, 
+      #{stepId,jdbcType=INTEGER}, #{tranCode,jdbcType=VARCHAR}, #{tranChineseName,jdbcType=VARCHAR}, 
+      #{executionCode,jdbcType=VARCHAR}, #{relyTranList,jdbcType=VARCHAR}, #{tranRunConditions,jdbcType=VARCHAR}, 
+      #{reconnectionNum,jdbcType=INTEGER}, #{failInterruptCode,jdbcType=VARCHAR}, #{transactionsSubmitNum,jdbcType=INTEGER}, 
+      #{dataSplitMode,jdbcType=VARCHAR}, #{jobExecutionMode,jdbcType=VARCHAR}, #{maxJobConcurrencyNum,jdbcType=INTEGER}, 
+      #{logLevel,jdbcType=INTEGER}, #{jobSplitCondition,jdbcType=VARCHAR}, #{taskRunMode,jdbcType=VARCHAR}, 
+      #{isSkip,jdbcType=VARCHAR}, #{isBatchFile,jdbcType=VARCHAR}, #{tranType,jdbcType=VARCHAR}, 
+      #{dataSplitKey,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.edsp.TspTranController">
+    insert into tsp_tran_controller
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        system_code,
+      </if>
+      <if test="corporateCode != null">
+        corporate_code,
+      </if>
+      <if test="tranGroupId != null">
+        tran_group_id,
+      </if>
+      <if test="stepId != null">
+        step_id,
+      </if>
+      <if test="tranCode != null">
+        tran_code,
+      </if>
+      <if test="tranChineseName != null">
+        tran_chinese_name,
+      </if>
+      <if test="executionCode != null">
+        execution_code,
+      </if>
+      <if test="relyTranList != null">
+        rely_tran_list,
+      </if>
+      <if test="tranRunConditions != null">
+        tran_run_conditions,
+      </if>
+      <if test="reconnectionNum != null">
+        reconnection_num,
+      </if>
+      <if test="failInterruptCode != null">
+        fail_interrupt_code,
+      </if>
+      <if test="transactionsSubmitNum != null">
+        transactions_submit_num,
+      </if>
+      <if test="dataSplitMode != null">
+        data_split_mode,
+      </if>
+      <if test="jobExecutionMode != null">
+        job_execution_mode,
+      </if>
+      <if test="maxJobConcurrencyNum != null">
+        max_job_concurrency_num,
+      </if>
+      <if test="logLevel != null">
+        log_level,
+      </if>
+      <if test="jobSplitCondition != null">
+        job_split_condition,
+      </if>
+      <if test="taskRunMode != null">
+        task_run_mode,
+      </if>
+      <if test="isSkip != null">
+        is_skip,
+      </if>
+      <if test="isBatchFile != null">
+        is_batch_file,
+      </if>
+      <if test="tranType != null">
+        tran_type,
+      </if>
+      <if test="dataSplitKey != null">
+        data_split_key,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corporateCode != null">
+        #{corporateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tranGroupId != null">
+        #{tranGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="stepId != null">
+        #{stepId,jdbcType=INTEGER},
+      </if>
+      <if test="tranCode != null">
+        #{tranCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tranChineseName != null">
+        #{tranChineseName,jdbcType=VARCHAR},
+      </if>
+      <if test="executionCode != null">
+        #{executionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="relyTranList != null">
+        #{relyTranList,jdbcType=VARCHAR},
+      </if>
+      <if test="tranRunConditions != null">
+        #{tranRunConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="reconnectionNum != null">
+        #{reconnectionNum,jdbcType=INTEGER},
+      </if>
+      <if test="failInterruptCode != null">
+        #{failInterruptCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionsSubmitNum != null">
+        #{transactionsSubmitNum,jdbcType=INTEGER},
+      </if>
+      <if test="dataSplitMode != null">
+        #{dataSplitMode,jdbcType=VARCHAR},
+      </if>
+      <if test="jobExecutionMode != null">
+        #{jobExecutionMode,jdbcType=VARCHAR},
+      </if>
+      <if test="maxJobConcurrencyNum != null">
+        #{maxJobConcurrencyNum,jdbcType=INTEGER},
+      </if>
+      <if test="logLevel != null">
+        #{logLevel,jdbcType=INTEGER},
+      </if>
+      <if test="jobSplitCondition != null">
+        #{jobSplitCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="taskRunMode != null">
+        #{taskRunMode,jdbcType=VARCHAR},
+      </if>
+      <if test="isSkip != null">
+        #{isSkip,jdbcType=VARCHAR},
+      </if>
+      <if test="isBatchFile != null">
+        #{isBatchFile,jdbcType=VARCHAR},
+      </if>
+      <if test="tranType != null">
+        #{tranType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSplitKey != null">
+        #{dataSplitKey,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.edsp.TspTranController">
+    update tsp_tran_controller
+    <set>
+      <if test="tranChineseName != null">
+        tran_chinese_name = #{tranChineseName,jdbcType=VARCHAR},
+      </if>
+      <if test="executionCode != null">
+        execution_code = #{executionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="relyTranList != null">
+        rely_tran_list = #{relyTranList,jdbcType=VARCHAR},
+      </if>
+      <if test="tranRunConditions != null">
+        tran_run_conditions = #{tranRunConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="reconnectionNum != null">
+        reconnection_num = #{reconnectionNum,jdbcType=INTEGER},
+      </if>
+      <if test="failInterruptCode != null">
+        fail_interrupt_code = #{failInterruptCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionsSubmitNum != null">
+        transactions_submit_num = #{transactionsSubmitNum,jdbcType=INTEGER},
+      </if>
+      <if test="dataSplitMode != null">
+        data_split_mode = #{dataSplitMode,jdbcType=VARCHAR},
+      </if>
+      <if test="jobExecutionMode != null">
+        job_execution_mode = #{jobExecutionMode,jdbcType=VARCHAR},
+      </if>
+      <if test="maxJobConcurrencyNum != null">
+        max_job_concurrency_num = #{maxJobConcurrencyNum,jdbcType=INTEGER},
+      </if>
+      <if test="logLevel != null">
+        log_level = #{logLevel,jdbcType=INTEGER},
+      </if>
+      <if test="jobSplitCondition != null">
+        job_split_condition = #{jobSplitCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="taskRunMode != null">
+        task_run_mode = #{taskRunMode,jdbcType=VARCHAR},
+      </if>
+      <if test="isSkip != null">
+        is_skip = #{isSkip,jdbcType=VARCHAR},
+      </if>
+      <if test="isBatchFile != null">
+        is_batch_file = #{isBatchFile,jdbcType=VARCHAR},
+      </if>
+      <if test="tranType != null">
+        tran_type = #{tranType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSplitKey != null">
+        data_split_key = #{dataSplitKey,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+      and step_id = #{stepId,jdbcType=INTEGER}
+      and tran_code = #{tranCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ssy.api.entity.table.edsp.TspTranController">
+    update tsp_tran_controller
+    set tran_chinese_name = #{tranChineseName,jdbcType=VARCHAR},
+      execution_code = #{executionCode,jdbcType=VARCHAR},
+      rely_tran_list = #{relyTranList,jdbcType=VARCHAR},
+      tran_run_conditions = #{tranRunConditions,jdbcType=VARCHAR},
+      reconnection_num = #{reconnectionNum,jdbcType=INTEGER},
+      fail_interrupt_code = #{failInterruptCode,jdbcType=VARCHAR},
+      transactions_submit_num = #{transactionsSubmitNum,jdbcType=INTEGER},
+      data_split_mode = #{dataSplitMode,jdbcType=VARCHAR},
+      job_execution_mode = #{jobExecutionMode,jdbcType=VARCHAR},
+      max_job_concurrency_num = #{maxJobConcurrencyNum,jdbcType=INTEGER},
+      log_level = #{logLevel,jdbcType=INTEGER},
+      job_split_condition = #{jobSplitCondition,jdbcType=VARCHAR},
+      task_run_mode = #{taskRunMode,jdbcType=VARCHAR},
+      is_skip = #{isSkip,jdbcType=VARCHAR},
+      is_batch_file = #{isBatchFile,jdbcType=VARCHAR},
+      tran_type = #{tranType,jdbcType=VARCHAR},
+      data_split_key = #{dataSplitKey,jdbcType=LONGVARCHAR}
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+      and step_id = #{stepId,jdbcType=INTEGER}
+      and tran_code = #{tranCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.edsp.TspTranController">
+    update tsp_tran_controller
+    set tran_chinese_name = #{tranChineseName,jdbcType=VARCHAR},
+      execution_code = #{executionCode,jdbcType=VARCHAR},
+      rely_tran_list = #{relyTranList,jdbcType=VARCHAR},
+      tran_run_conditions = #{tranRunConditions,jdbcType=VARCHAR},
+      reconnection_num = #{reconnectionNum,jdbcType=INTEGER},
+      fail_interrupt_code = #{failInterruptCode,jdbcType=VARCHAR},
+      transactions_submit_num = #{transactionsSubmitNum,jdbcType=INTEGER},
+      data_split_mode = #{dataSplitMode,jdbcType=VARCHAR},
+      job_execution_mode = #{jobExecutionMode,jdbcType=VARCHAR},
+      max_job_concurrency_num = #{maxJobConcurrencyNum,jdbcType=INTEGER},
+      log_level = #{logLevel,jdbcType=INTEGER},
+      job_split_condition = #{jobSplitCondition,jdbcType=VARCHAR},
+      task_run_mode = #{taskRunMode,jdbcType=VARCHAR},
+      is_skip = #{isSkip,jdbcType=VARCHAR},
+      is_batch_file = #{isBatchFile,jdbcType=VARCHAR},
+      tran_type = #{tranType,jdbcType=VARCHAR}
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+      and step_id = #{stepId,jdbcType=INTEGER}
+      and tran_code = #{tranCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

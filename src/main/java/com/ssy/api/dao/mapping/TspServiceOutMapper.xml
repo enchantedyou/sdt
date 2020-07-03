@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.edsp.TspServiceOutMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.edsp.TspServiceOut">
+    <constructor>
+      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="sub_system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="service_invoke_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="inner_service_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="out_service_app" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="out_service_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="out_service_group" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="out_service_version" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="protocol_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="timeout" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="timeout_redo_counts" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="timeout_confirm" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="alias_mapping" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="regist_call_log" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    system_code, sub_system_code, service_invoke_id, inner_service_code, out_service_app, 
+    out_service_code, out_service_group, out_service_version, description, protocol_id, 
+    timeout, timeout_redo_counts, timeout_confirm, alias_mapping, regist_call_log
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tsp_service_out
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
+      and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tsp_service_out
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
+      and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.edsp.TspServiceOut">
+    insert into tsp_service_out (system_code, sub_system_code, service_invoke_id, 
+      inner_service_code, out_service_app, out_service_code, 
+      out_service_group, out_service_version, description, 
+      protocol_id, timeout, timeout_redo_counts, 
+      timeout_confirm, alias_mapping, regist_call_log
+      )
+    values (#{systemCode,jdbcType=VARCHAR}, #{subSystemCode,jdbcType=VARCHAR}, #{serviceInvokeId,jdbcType=VARCHAR}, 
+      #{innerServiceCode,jdbcType=VARCHAR}, #{outServiceApp,jdbcType=VARCHAR}, #{outServiceCode,jdbcType=VARCHAR}, 
+      #{outServiceGroup,jdbcType=VARCHAR}, #{outServiceVersion,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{protocolId,jdbcType=VARCHAR}, #{timeout,jdbcType=INTEGER}, #{timeoutRedoCounts,jdbcType=INTEGER}, 
+      #{timeoutConfirm,jdbcType=INTEGER}, #{aliasMapping,jdbcType=INTEGER}, #{registCallLog,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.edsp.TspServiceOut">
+    insert into tsp_service_out
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        system_code,
+      </if>
+      <if test="subSystemCode != null">
+        sub_system_code,
+      </if>
+      <if test="serviceInvokeId != null">
+        service_invoke_id,
+      </if>
+      <if test="innerServiceCode != null">
+        inner_service_code,
+      </if>
+      <if test="outServiceApp != null">
+        out_service_app,
+      </if>
+      <if test="outServiceCode != null">
+        out_service_code,
+      </if>
+      <if test="outServiceGroup != null">
+        out_service_group,
+      </if>
+      <if test="outServiceVersion != null">
+        out_service_version,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="protocolId != null">
+        protocol_id,
+      </if>
+      <if test="timeout != null">
+        timeout,
+      </if>
+      <if test="timeoutRedoCounts != null">
+        timeout_redo_counts,
+      </if>
+      <if test="timeoutConfirm != null">
+        timeout_confirm,
+      </if>
+      <if test="aliasMapping != null">
+        alias_mapping,
+      </if>
+      <if test="registCallLog != null">
+        regist_call_log,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subSystemCode != null">
+        #{subSystemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceInvokeId != null">
+        #{serviceInvokeId,jdbcType=VARCHAR},
+      </if>
+      <if test="innerServiceCode != null">
+        #{innerServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="outServiceApp != null">
+        #{outServiceApp,jdbcType=VARCHAR},
+      </if>
+      <if test="outServiceCode != null">
+        #{outServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="outServiceGroup != null">
+        #{outServiceGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="outServiceVersion != null">
+        #{outServiceVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="protocolId != null">
+        #{protocolId,jdbcType=VARCHAR},
+      </if>
+      <if test="timeout != null">
+        #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="timeoutRedoCounts != null">
+        #{timeoutRedoCounts,jdbcType=INTEGER},
+      </if>
+      <if test="timeoutConfirm != null">
+        #{timeoutConfirm,jdbcType=INTEGER},
+      </if>
+      <if test="aliasMapping != null">
+        #{aliasMapping,jdbcType=INTEGER},
+      </if>
+      <if test="registCallLog != null">
+        #{registCallLog,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.edsp.TspServiceOut">
+    update tsp_service_out
+    <set>
+      <if test="outServiceApp != null">
+        out_service_app = #{outServiceApp,jdbcType=VARCHAR},
+      </if>
+      <if test="outServiceCode != null">
+        out_service_code = #{outServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="outServiceGroup != null">
+        out_service_group = #{outServiceGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="outServiceVersion != null">
+        out_service_version = #{outServiceVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="protocolId != null">
+        protocol_id = #{protocolId,jdbcType=VARCHAR},
+      </if>
+      <if test="timeout != null">
+        timeout = #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="timeoutRedoCounts != null">
+        timeout_redo_counts = #{timeoutRedoCounts,jdbcType=INTEGER},
+      </if>
+      <if test="timeoutConfirm != null">
+        timeout_confirm = #{timeoutConfirm,jdbcType=INTEGER},
+      </if>
+      <if test="aliasMapping != null">
+        alias_mapping = #{aliasMapping,jdbcType=INTEGER},
+      </if>
+      <if test="registCallLog != null">
+        regist_call_log = #{registCallLog,jdbcType=INTEGER},
+      </if>
+    </set>
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
+      and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.edsp.TspServiceOut">
+    update tsp_service_out
+    set out_service_app = #{outServiceApp,jdbcType=VARCHAR},
+      out_service_code = #{outServiceCode,jdbcType=VARCHAR},
+      out_service_group = #{outServiceGroup,jdbcType=VARCHAR},
+      out_service_version = #{outServiceVersion,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      protocol_id = #{protocolId,jdbcType=VARCHAR},
+      timeout = #{timeout,jdbcType=INTEGER},
+      timeout_redo_counts = #{timeoutRedoCounts,jdbcType=INTEGER},
+      timeout_confirm = #{timeoutConfirm,jdbcType=INTEGER},
+      alias_mapping = #{aliasMapping,jdbcType=INTEGER},
+      regist_call_log = #{registCallLog,jdbcType=INTEGER}
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
+      and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

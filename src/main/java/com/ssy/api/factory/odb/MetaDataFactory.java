@@ -37,6 +37,7 @@ public class MetaDataFactory {
     private static Map<String, Map<String, ComplexType>> complexTypeMap = new ConcurrentHashMap<>();
     private static Map<String, Element> dictMap = new ConcurrentHashMap<>();
     private static Map<String, TableType> tableTypeMap = new ConcurrentHashMap<>();
+    private static Map<Object, Object> dataSourceMap = new ConcurrentHashMap<>();
 
     @Autowired
     public void setLoaderFactory(LoaderFactory loaderFactory) {
@@ -54,7 +55,7 @@ public class MetaDataFactory {
      * @Date 2020/6/13-16:07
      * @return java.util.Map<java.lang.String,java.io.File>
      */
-    public static Map<String, File> loadIntfWordFileMap(){
+    protected static Map<String, File> loadIntfWordFileMap(){
         if(CommUtil.isNull(intfExcelFileMap)){
             StopWatch s = BizUtil.startStopWatch();
             intfExcelFileMap = loaderFactory.getFileLoader().load(sdtContextConfig.getIntfExcelPath(), false, SdtConst.INTF_EXCEL_SUFFIX);
@@ -69,7 +70,7 @@ public class MetaDataFactory {
      * @Date 2020/6/13-16:15
      * @return java.util.Map<java.lang.String,java.io.File>
      */
-    private static Map<String, File> loadProjectFileMap(){
+    protected static Map<String, File> loadProjectFileMap(){
         if(CommUtil.isNull(projectFileMap)){
             StopWatch s = BizUtil.startStopWatch();
             projectFileMap = loaderFactory.getFileLoader().load(sdtContextConfig.getWorkSpacePath(), true, SdtConst.PROJECT_FILE_SUFFIX);
@@ -84,7 +85,7 @@ public class MetaDataFactory {
      * @Date 2020/6/13-17:38
      * @return java.util.Map<java.lang.String,java.util.Map<java.lang.String,com.ssy.api.meta.abstracts.AbstractRestrictionType>>
      */
-    public static Map<String, Map<String, AbstractRestrictionType>> loadRestrictionTypeMap(){
+    protected static Map<String, Map<String, AbstractRestrictionType>> loadRestrictionTypeMap(){
         if(CommUtil.isNull(restrictionTypeMap)){
             Map<String, File> map = loadProjectFileMap();
             StopWatch s = BizUtil.startStopWatch();
@@ -100,7 +101,7 @@ public class MetaDataFactory {
      * @Date 2020/6/13-17:40
      * @return java.util.Map<java.lang.String,java.util.Map<java.lang.String,com.ssy.api.meta.defaults.ComplexType>>
      */
-    public static Map<String, Map<String, ComplexType>> loadComplexTypeMap(){
+    protected static Map<String, Map<String, ComplexType>> loadComplexTypeMap(){
         if(CommUtil.isNull(complexTypeMap)){
             StopWatch s = BizUtil.startStopWatch();
             Map<String, File> map = loadProjectFileMap();
@@ -116,7 +117,7 @@ public class MetaDataFactory {
      * @Date 2020/6/13-17:50
      * @return java.util.Map<java.lang.String,com.ssy.api.meta.defaults.Element>
      */
-    public static Map<String, Element> loadDictMap(){
+    protected static Map<String, Element> loadDictMap(){
         if(CommUtil.isNull(dictMap)){
             StopWatch s = BizUtil.startStopWatch();
             Map<String, Map<String, ComplexType>> map = loadComplexTypeMap();
@@ -141,7 +142,7 @@ public class MetaDataFactory {
      * @Date 2020/6/14-14:11
      * @return java.util.Map<java.lang.String,com.ssy.api.meta.defaults.TableType>
      */
-    public static Map<String, TableType> loadTableTypeMap(){
+    protected static Map<String, TableType> loadTableTypeMap(){
         if(CommUtil.isNull(tableTypeMap)){
             StopWatch s = BizUtil.startStopWatch();
             Map<String, File> map = loadProjectFileMap();
@@ -149,5 +150,33 @@ public class MetaDataFactory {
             BizUtil.stoptStopWatch(s, "Load table model into containers");
         }
         return tableTypeMap;
+    }
+
+    /**
+     * @Description 刷新动态数据源(每次必定取最新的数据源)
+     * @Author sunshaoyu
+     * @Date 2020/7/3-13:23
+     * @return java.util.Map<java.lang.Object,java.lang.Object>
+     */
+    protected static Map<Object, Object> refreshDynamicDataSource(){
+        StopWatch s = BizUtil.startStopWatch();
+        dataSourceMap = loaderFactory.getDataSourceLoader().initDynamicDataSource();
+        BizUtil.stoptStopWatch(s, "Refresh the dynamic data source");
+        return dataSourceMap;
+    }
+
+    /**
+     * @Description 加载动态数据源(优先从缓存中获取)
+     * @Author sunshaoyu
+     * @Date 2020/7/3-13:25
+     * @return java.util.Map<java.lang.Object,java.lang.Object>
+     */
+    protected static Map<Object, Object> loadDynamicDataSource(){
+        if(CommUtil.isNull(dataSourceMap)){
+            StopWatch s = BizUtil.startStopWatch();
+            dataSourceMap = loaderFactory.getDataSourceLoader().initDynamicDataSource();
+            BizUtil.stoptStopWatch(s, "Load the dynamic data source");
+        }
+        return dataSourceMap;
     }
 }

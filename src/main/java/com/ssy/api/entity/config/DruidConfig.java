@@ -2,7 +2,7 @@ package com.ssy.api.entity.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.ssy.api.entity.constant.SdtConst;
-import com.ssy.api.plugins.DynamicDataSource;
+import com.ssy.api.plugins.DBContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
@@ -58,7 +58,7 @@ public class DruidConfig {
      */
     @Bean(name = SdtConst.DYNAMIC_DATASOURCE)
     public DataSource dynamicDataSource() {
-        DynamicDataSource dynamicDataSource = new DynamicDataSource();
+        DBContextHolder dynamicDataSource = new DBContextHolder();
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(SdtConst.MASTER_DATASOURCE, masterDataSource());
         dynamicDataSource.setTargetDataSources(targetDataSources);
@@ -72,17 +72,16 @@ public class DruidConfig {
      * @Date 2020/6/15-14:47
      * @return org.mybatis.spring.SqlSessionFactoryBean
      */
-    @Bean(value = "sqlSessionFactoryBeanDynamic")
+    @Bean(value = SdtConst.DYNAMIC_SQL_SESSION_FACTORY)
     public SqlSessionFactoryBean sqlSessionFactoryBean() throws IOException {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dynamicDataSource());
-        sqlSessionFactoryBean.setConfiguration(mybatisProperties.getConfiguration());
-
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Resource[] resources = resolver.getResources(mapperLocation);
         sqlSessionFactoryBean.setMapperLocations(resources);
-        return sqlSessionFactoryBean;
 
+        sqlSessionFactoryBean.setConfiguration(mybatisProperties.getConfiguration());
+        sqlSessionFactoryBean.setDataSource(dynamicDataSource());
+        return sqlSessionFactoryBean;
     }
 
     /**

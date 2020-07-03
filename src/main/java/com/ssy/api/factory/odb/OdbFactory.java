@@ -6,6 +6,7 @@ import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.defaults.TableType;
 import com.ssy.api.utils.CommUtil;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -119,5 +120,36 @@ public class OdbFactory {
      */
     public static TableType searchTable(String tableId){
         return MetaDataFactory.loadTableTypeMap().get(tableId);
+    }
+
+    /**
+     * @Description 搜索文件
+     * @Author sunshaoyu
+     * @Date 2020/6/30-11:28
+     * @param fileName
+     * @return java.io.File
+     */
+    public static File searchFile(String fileName){
+        return MetaDataFactory.loadProjectFileMap().get(fileName);
+    }
+
+    /**
+     * @Description 获取动态数据源的map
+     * @Author sunshaoyu
+     * @Date 2020/7/3-15:01
+     * @return java.util.Map<java.lang.Object,java.lang.Object>
+     */
+    public static Map<Object, Object> getDataSourceMap(){
+        return MetaDataFactory.loadDynamicDataSource();
+    }
+
+    /**
+     * @Description 刷新动态数据源
+     * @Author sunshaoyu
+     * @Date 2020/7/3-16:02
+     * @return java.util.Map<java.lang.Object,java.lang.Object>
+     */
+    public static Map<Object, Object> refreshDynamicDataSource(){
+        return MetaDataFactory.refreshDynamicDataSource();
     }
 }

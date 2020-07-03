@@ -20,6 +20,8 @@ public class DefaultLoaderFactory implements LoaderFactory {
     private DefaultComplexTypeLoader defaultComplexTypeLoader;
     @Autowired
     private DefaultTableLoader defaultTableLoader;
+    @Autowired
+    private DefaultDataSourceLoader defaultDataSourceLoader;
 
     @Override
     public FileLoader getFileLoader() {
@@ -39,5 +41,10 @@ public class DefaultLoaderFactory implements LoaderFactory {
     @Override
     public TableTypeLoader getTableTypeLoader() {
         return defaultTableLoader;
+    }
+
+    @Override
+    public DataSourceLoader getDataSourceLoader() {
+        return defaultDataSourceLoader;
     }
 }

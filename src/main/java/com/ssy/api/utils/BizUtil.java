@@ -1,9 +1,9 @@
 package com.ssy.api.utils;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ssy.api.entity.enums.E_DATECYCLE;
 import com.ssy.api.entity.enums.E_STRGENTYPE;
-import com.ssy.api.entity.table.comm.ApbFieldNormal;
+import com.ssy.api.entity.table.ap.ApbFieldNormal;
 import com.ssy.api.exception.ApPubErr;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StopWatch;
@@ -11,11 +11,9 @@ import org.springframework.util.StopWatch;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,7 +104,7 @@ public class BizUtil {
      * @param newData
      * @return int
      */
-    public static int auditOnUpdate(Object oldData,Object newData) {
+    public static int auditOnUpdate(Object oldData, Object newData) {
         if(null == oldData || null == newData){
             return 0;
         }else if(!oldData.getClass().equals(newData.getClass())){
@@ -167,7 +165,7 @@ public class BizUtil {
      */
     public static void stoptStopWatch(StopWatch s, String msg){
         s.stop();
-        log.info("{} finished,cost:[{}ms]", msg, s.getTotalTimeMillis());
+        log.info("{} finished,cost: {}ms", msg, s.getTotalTimeMillis());
     }
 
     /**
@@ -194,5 +192,49 @@ public class BizUtil {
      */
     public static <T> T clone(Class<T> clazz, T obj){
         return JSONObject.parseObject(JSONObject.toJSONString(obj), clazz);
+    }
+
+    /**
+     * @Description 日期相加减
+     * @Author sunshaoyu
+     * @Date 2020/7/2-14:55
+     * @param dateType  日期类型
+     * @param date  基准日期
+     * @param num   基准数,为正表示日期增加,为负表示日期减少
+     * @return java.lang.String
+     */
+    public static String dataAdd(E_DATECYCLE dateType, String date, int num){
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(simpleDateFormat.parse(date));
+            calendar.add(dateType.getValue(), num);
+            return simpleDateFormat.format(calendar.getTime());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @Description 第一个日期减第二个日期,返回两者相差的天数
+     * @Author sunshaoyu
+     * @Date 2020/7/2-15:25
+     * @param laterDate 较晚的日期
+     * @param earlierDate   较早的日期
+     * @return int
+     */
+    public static int dataDiff(String laterDate, String earlierDate){
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(simpleDateFormat.parse(laterDate));
+            long laterMillis = calendar.getTimeInMillis();
+
+            calendar.setTime(simpleDateFormat.parse(earlierDate));
+            long earlierMillis = calendar.getTimeInMillis();
+            return (int) ((laterMillis - earlierMillis) / (1000L * 60L * 60L * 24L));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

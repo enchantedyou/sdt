@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.edsp.TspParamVersionInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.edsp.TspParamVersionInfo">
+    <constructor>
+      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="corporate_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="param_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="param_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="data_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="data_update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="tmtamp" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    system_code, corporate_code, param_code, param_version, data_create_time, data_update_time, 
+    tmtamp
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tsp_param_version_info
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and param_code = #{paramCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tsp_param_version_info
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and param_code = #{paramCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.edsp.TspParamVersionInfo">
+    insert into tsp_param_version_info (system_code, corporate_code, param_code, 
+      param_version, data_create_time, data_update_time, 
+      tmtamp)
+    values (#{systemCode,jdbcType=VARCHAR}, #{corporateCode,jdbcType=VARCHAR}, #{paramCode,jdbcType=VARCHAR}, 
+      #{paramVersion,jdbcType=INTEGER}, #{dataCreateTime,jdbcType=TIMESTAMP}, #{dataUpdateTime,jdbcType=TIMESTAMP}, 
+      #{tmtamp,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.edsp.TspParamVersionInfo">
+    insert into tsp_param_version_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        system_code,
+      </if>
+      <if test="corporateCode != null">
+        corporate_code,
+      </if>
+      <if test="paramCode != null">
+        param_code,
+      </if>
+      <if test="paramVersion != null">
+        param_version,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="tmtamp != null">
+        tmtamp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corporateCode != null">
+        #{corporateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramCode != null">
+        #{paramCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramVersion != null">
+        #{paramVersion,jdbcType=INTEGER},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tmtamp != null">
+        #{tmtamp,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.edsp.TspParamVersionInfo">
+    update tsp_param_version_info
+    <set>
+      <if test="paramVersion != null">
+        param_version = #{paramVersion,jdbcType=INTEGER},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tmtamp != null">
+        tmtamp = #{tmtamp,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and param_code = #{paramCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.edsp.TspParamVersionInfo">
+    update tsp_param_version_info
+    set param_version = #{paramVersion,jdbcType=INTEGER},
+      data_create_time = #{dataCreateTime,jdbcType=TIMESTAMP},
+      data_update_time = #{dataUpdateTime,jdbcType=TIMESTAMP},
+      tmtamp = #{tmtamp,jdbcType=TIMESTAMP}
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and param_code = #{paramCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

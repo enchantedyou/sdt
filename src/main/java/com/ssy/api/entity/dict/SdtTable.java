@@ -13,6 +13,8 @@ public class SdtTable {
 
         sdp_dict_priority("SdpDictPriority", "dict priority", "字典优先级"),
         sdp_enum_priority("SdpEnumPriority", "enum priority", "枚举优先级"),
+        msp_organization("MspOrganization", "business organization indicator", "组织机构"),
+        app_date("AppDate", "transaction date", "交易日期"),
         ;
 
         private String id;
@@ -36,7 +38,7 @@ public class SdtTable {
         }
 
         @Override
-        public String getLongName() {
+        public final String getLongName() {
             return this.longname;
         }
 

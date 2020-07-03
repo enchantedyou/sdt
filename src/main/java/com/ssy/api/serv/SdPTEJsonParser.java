@@ -47,13 +47,12 @@ public class SdPTEJsonParser {
      * @Author sunshaoyu
      * @Date 2020/6/22-20:47
      */
-    public static void parsePTEJsonByModule() throws IOException {
+    protected static void parsePTEJsonByModule() throws IOException {
         //加载所有的json文件
         Map<String, File> fileMap = fileLoader.load(sdtContextConfig.getSumpResourcePath(), false, ".json");
 
         for(String fileName : fileMap.keySet()){
             String jsonStr = fileLoader.loadContentToString(fileMap.get(fileName), SdtConst.DEFAULT_ENCODING);
-            //System.out.println(fileMap.get(fileName));
 
             if(JSONObject.isValidObject(jsonStr)){
                 try{
@@ -88,6 +87,7 @@ public class SdPTEJsonParser {
      * @param jsonName  json文件名
      * @return com.ssy.api.entity.sump.component.PTEComponent
      */
+    @Deprecated
     public static PTEComponent searchOne(String jsonName) throws IOException {
         checkPTEInitialize();
         return pteComponentMap.get(jsonName);

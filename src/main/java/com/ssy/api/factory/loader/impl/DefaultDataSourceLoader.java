@@ -1,10 +1,12 @@
-package com.ssy.api.utils;
+package com.ssy.api.factory.loader.impl;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.table.local.SdpDatasource;
-import com.ssy.api.plugins.DynamicDataSource;
+import com.ssy.api.factory.loader.DataSourceLoader;
+import com.ssy.api.plugins.DBContextHolder;
 import com.ssy.api.servicetype.DataSourceService;
+import com.ssy.api.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,67 +16,46 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @Description
+ * @Description 默认数据源加载器
  * @Author sunshaoyu
- * @Date 2020年06月15日-14:48
+ * @Date 2020年07月03日-13:09
  */
-@Slf4j
 @Component
-public class DataSourceUtil {
+@Slf4j
+public class DefaultDataSourceLoader implements DataSourceLoader {
 
     /** 数据源容器,存放所有的数据源 **/
-    public static final Map<Object, Object> dataSourceMap = new ConcurrentHashMap<>();
-    private static DataSourceService dataSourceService;
-
+    private final Map<Object, Object> dataSourceMap = new ConcurrentHashMap<>();
     @Autowired
-    public void setDataSourceService(DataSourceService dataSourceService) {
-        DataSourceUtil.dataSourceService = dataSourceService;
-    }
+    private DataSourceService dataSourceService;
 
-    /**
-     * @Description 初始化动态数据源
-     * @Author sunshaoyu
-     * @Date 2020/6/15-15:27
-     */
-    public static void initDynamicDataSource() {
+    @Override
+    public Map<Object, Object> initDynamicDataSource() {
         //初始化主数据源
         DruidDataSource masterDataSource = (DruidDataSource) SpringContextUtil.getBean(SdtConst.MASTER_DATASOURCE);
         addDataSource(SdtConst.MASTER_DATASOURCE, masterDataSource);
-        //初始化其他数据源
-        initOthersDataSource();
+        //加载化其他数据源
+        loadDataSource();
 
         //刷新数据源
         flushDataSource();
+        return dataSourceMap;
     }
 
-    /**
-     * @Description 刷新数据源
-     * @Author sunshaoyu
-     * @Date 2020/6/15-15:26
-     */
-    public static void flushDataSource() {
-        DynamicDataSource dynamicDataSource = (DynamicDataSource) SpringContextUtil.getBean(SdtConst.DYNAMIC_DATASOURCE);
+    @Override
+    public void flushDataSource() {
+        DBContextHolder dynamicDataSource = (DBContextHolder) SpringContextUtil.getBean(SdtConst.DYNAMIC_DATASOURCE);
         dynamicDataSource.setTargetDataSources(dataSourceMap);
         dynamicDataSource.afterPropertiesSet();
     }
 
-    /**
-     * @Description 添加数据源
-     * @Author sunshaoyu
-     * @Date 2020/6/15-15:27
-     * @param key
-     * @param dataSource
-     */
-    public static void addDataSource(String key, DruidDataSource dataSource) {
+    @Override
+    public void addDataSource(String key, DruidDataSource dataSource) {
         dataSourceMap.put(key, dataSource);
     }
 
-    /**
-     * @Description 初始化其他数据源
-     * @Author sunshaoyu
-     * @Date 2020/6/15-15:47
-     */
-    private static void initOthersDataSource() {
+    @Override
+    public void loadDataSource() {
         List<SdpDatasource> datasourceList = dataSourceService.queryDataSourceList();
         for(SdpDatasource db : datasourceList){
             DruidDataSource druidDataSource = new DruidDataSource();
@@ -84,7 +65,7 @@ public class DataSourceUtil {
             druidDataSource.setDriverClassName(db.getDatasourceDriver());
             druidDataSource.setUrl(db.getDatasourceUrl());
             addDataSource(db.getDatasourceId(), druidDataSource);
-            log.info("Initialize dynamic data source [{}]", db.getDatasourceId());
+            log.info("Load dynamic data source {{}-{}}", db.getDatasourceId(), db.getDatasourceDesc());
         }
     }
 }

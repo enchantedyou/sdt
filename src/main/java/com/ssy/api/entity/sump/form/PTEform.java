@@ -22,9 +22,17 @@ public class PTEform {
     @JSONField(ordinal = 15)
     private List<PTEcontrolsGroup> controlsGroup;
 
+    @JSONField(ordinal = 20)
     private List<Map<String, PTEcontrol>> controls;
+    @JSONField(ordinal = 25)
     private Boolean bringBack;
+
+    @JSONField(ordinal = 30)
     private PTEdoRequest doRequest;
+    @JSONField(ordinal = 35)
+    private Integer foldLineNumber;
+    @JSONField(ordinal = 40)
+    private Boolean isInitSearch;
 
     public List<PTEbtns> getBtns() {
         return btns;
@@ -80,5 +88,21 @@ public class PTEform {
 
     public void setDoRequest(PTEdoRequest doRequest) {
         this.doRequest = doRequest;
+    }
+
+    public Integer getFoldLineNumber() {
+        return foldLineNumber;
+    }
+
+    public void setFoldLineNumber(Integer foldLineNumber) {
+        this.foldLineNumber = foldLineNumber;
+    }
+
+    public Boolean getInitSearch() {
+        return isInitSearch;
+    }
+
+    public void setInitSearch(Boolean initSearch) {
+        isInitSearch = initSearch;
     }
 }

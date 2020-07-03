@@ -2,7 +2,6 @@ package com.ssy.api.plugins;
 
 import com.ssy.api.factory.odb.MetaDataFactory;
 import com.ssy.api.utils.BizUtil;
-import com.ssy.api.utils.DataSourceUtil;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
@@ -16,9 +15,9 @@ import org.springframework.util.StopWatch;
  */
 @Component
 @Order(value = 1)
-public class SdtApplicationStartupLoader extends MetaDataFactory /*implements ApplicationRunner*/ {
+public class SdtApplicationStartupLoader extends MetaDataFactory implements ApplicationRunner {
 
-    //@Override
+    @Override
     public void run(ApplicationArguments args) throws Exception {
         /** 初始化元数据 **/
         StopWatch s = BizUtil.startStopWatch();
@@ -33,9 +32,9 @@ public class SdtApplicationStartupLoader extends MetaDataFactory /*implements Ap
         loadDictMap();
         //初始化表模型
         loadTableTypeMap();
-        BizUtil.stoptStopWatch(s, "Load all metadata");
 
         /** 初始化动态数据源 **/
-        DataSourceUtil.initDynamicDataSource();
+        loadDynamicDataSource();
+        BizUtil.stoptStopWatch(s, "Load all metadata");
     }
 }

@@ -39,4 +39,5 @@ public class SdtConst {
     /** 动态数据源配置 **/
     public static final String MASTER_DATASOURCE = "masterDS";
     public static final String DYNAMIC_DATASOURCE = "dynamicDS";
+    public static final String DYNAMIC_SQL_SESSION_FACTORY = "sqlSessionFactoryBeanDynamic";
 }

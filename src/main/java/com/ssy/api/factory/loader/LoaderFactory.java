@@ -18,4 +18,7 @@ public interface LoaderFactory {
 
     //默认表类型加载器
     public TableTypeLoader getTableTypeLoader();
+
+    //默认数据源加载器
+    public DataSourceLoader getDataSourceLoader();
 }

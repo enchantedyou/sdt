@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.edsp.TspTaskMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.edsp.TspTask">
+    <constructor>
+      <idArg column="sub_system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="task_num" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="corporate_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_exe_num" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_commit_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="transaction_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_flow_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="flow_step_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="total_cost" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="tran_state" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_exe_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_interrupt_flag" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_commit_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_priority" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="tran_start_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_start_timestamp" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="tran_end_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_end_timestamp" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="vm_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="ip_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="server_host_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="start_flow_step_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="start_execution_no" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="start_tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="start_step_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="service_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ssy.api.entity.table.edsp.TspTask">
+    <constructor>
+      <idArg column="sub_system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="task_num" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="corporate_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_exe_num" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_commit_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="transaction_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_flow_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="flow_step_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="total_cost" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="tran_state" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_exe_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_interrupt_flag" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_commit_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_priority" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="tran_start_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_start_timestamp" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="tran_end_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_end_timestamp" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="vm_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="ip_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="server_host_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="start_flow_step_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="start_execution_no" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="start_tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="start_step_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="service_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_area" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+      <arg column="error_message" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+      <arg column="error_stack" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    sub_system_code, task_num, system_code, corporate_code, task_exe_num, task_commit_date, 
+    tran_date, transaction_date, tran_flow_id, flow_step_num, tran_group_id, tran_id, 
+    total_cost, tran_state, task_exe_mode, task_interrupt_flag, task_commit_time, task_priority, 
+    tran_start_time, tran_start_timestamp, tran_end_time, tran_end_timestamp, vm_id, 
+    ip_address, server_host_name, start_flow_step_num, start_execution_no, start_tran_group_id, 
+    start_step_num, service_code
+  </sql>
+  <sql id="Blob_Column_List">
+    data_area, error_message, error_stack
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tsp_task
+    where sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and task_num = #{taskNum,jdbcType=VARCHAR}
+      and system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tsp_task
+    where sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and task_num = #{taskNum,jdbcType=VARCHAR}
+      and system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.edsp.TspTask">
+    insert into tsp_task (sub_system_code, task_num, system_code, 
+      corporate_code, task_exe_num, task_commit_date, 
+      tran_date, transaction_date, tran_flow_id, 
+      flow_step_num, tran_group_id, tran_id, 
+      total_cost, tran_state, task_exe_mode, 
+      task_interrupt_flag, task_commit_time, task_priority, 
+      tran_start_time, tran_start_timestamp, tran_end_time, 
+      tran_end_timestamp, vm_id, ip_address, 
+      server_host_name, start_flow_step_num, start_execution_no, 
+      start_tran_group_id, start_step_num, service_code, 
+      data_area, error_message, error_stack
+      )
+    values (#{subSystemCode,jdbcType=VARCHAR}, #{taskNum,jdbcType=VARCHAR}, #{systemCode,jdbcType=VARCHAR}, 
+      #{corporateCode,jdbcType=VARCHAR}, #{taskExeNum,jdbcType=VARCHAR}, #{taskCommitDate,jdbcType=VARCHAR}, 
+      #{tranDate,jdbcType=DATE}, #{transactionDate,jdbcType=VARCHAR}, #{tranFlowId,jdbcType=VARCHAR}, 
+      #{flowStepNum,jdbcType=INTEGER}, #{tranGroupId,jdbcType=VARCHAR}, #{tranId,jdbcType=VARCHAR}, 
+      #{totalCost,jdbcType=BIGINT}, #{tranState,jdbcType=VARCHAR}, #{taskExeMode,jdbcType=VARCHAR}, 
+      #{taskInterruptFlag,jdbcType=VARCHAR}, #{taskCommitTime,jdbcType=VARCHAR}, #{taskPriority,jdbcType=INTEGER}, 
+      #{tranStartTime,jdbcType=VARCHAR}, #{tranStartTimestamp,jdbcType=BIGINT}, #{tranEndTime,jdbcType=VARCHAR}, 
+      #{tranEndTimestamp,jdbcType=BIGINT}, #{vmId,jdbcType=VARCHAR}, #{ipAddress,jdbcType=VARCHAR}, 
+      #{serverHostName,jdbcType=VARCHAR}, #{startFlowStepNum,jdbcType=INTEGER}, #{startExecutionNo,jdbcType=INTEGER}, 
+      #{startTranGroupId,jdbcType=VARCHAR}, #{startStepNum,jdbcType=INTEGER}, #{serviceCode,jdbcType=VARCHAR}, 
+      #{dataArea,jdbcType=LONGVARCHAR}, #{errorMessage,jdbcType=LONGVARCHAR}, #{errorStack,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.edsp.TspTask">
+    insert into tsp_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="subSystemCode != null">
+        sub_system_code,
+      </if>
+      <if test="taskNum != null">
+        task_num,
+      </if>
+      <if test="systemCode != null">
+        system_code,
+      </if>
+      <if test="corporateCode != null">
+        corporate_code,
+      </if>
+      <if test="taskExeNum != null">
+        task_exe_num,
+      </if>
+      <if test="taskCommitDate != null">
+        task_commit_date,
+      </if>
+      <if test="tranDate != null">
+        tran_date,
+      </if>
+      <if test="transactionDate != null">
+        transaction_date,
+      </if>
+      <if test="tranFlowId != null">
+        tran_flow_id,
+      </if>
+      <if test="flowStepNum != null">
+        flow_step_num,
+      </if>
+      <if test="tranGroupId != null">
+        tran_group_id,
+      </if>
+      <if test="tranId != null">
+        tran_id,
+      </if>
+      <if test="totalCost != null">
+        total_cost,
+      </if>
+      <if test="tranState != null">
+        tran_state,
+      </if>
+      <if test="taskExeMode != null">
+        task_exe_mode,
+      </if>
+      <if test="taskInterruptFlag != null">
+        task_interrupt_flag,
+      </if>
+      <if test="taskCommitTime != null">
+        task_commit_time,
+      </if>
+      <if test="taskPriority != null">
+        task_priority,
+      </if>
+      <if test="tranStartTime != null">
+        tran_start_time,
+      </if>
+      <if test="tranStartTimestamp != null">
+        tran_start_timestamp,
+      </if>
+      <if test="tranEndTime != null">
+        tran_end_time,
+      </if>
+      <if test="tranEndTimestamp != null">
+        tran_end_timestamp,
+      </if>
+      <if test="vmId != null">
+        vm_id,
+      </if>
+      <if test="ipAddress != null">
+        ip_address,
+      </if>
+      <if test="serverHostName != null">
+        server_host_name,
+      </if>
+      <if test="startFlowStepNum != null">
+        start_flow_step_num,
+      </if>
+      <if test="startExecutionNo != null">
+        start_execution_no,
+      </if>
+      <if test="startTranGroupId != null">
+        start_tran_group_id,
+      </if>
+      <if test="startStepNum != null">
+        start_step_num,
+      </if>
+      <if test="serviceCode != null">
+        service_code,
+      </if>
+      <if test="dataArea != null">
+        data_area,
+      </if>
+      <if test="errorMessage != null">
+        error_message,
+      </if>
+      <if test="errorStack != null">
+        error_stack,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="subSystemCode != null">
+        #{subSystemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskNum != null">
+        #{taskNum,jdbcType=VARCHAR},
+      </if>
+      <if test="systemCode != null">
+        #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corporateCode != null">
+        #{corporateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskExeNum != null">
+        #{taskExeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="taskCommitDate != null">
+        #{taskCommitDate,jdbcType=VARCHAR},
+      </if>
+      <if test="tranDate != null">
+        #{tranDate,jdbcType=DATE},
+      </if>
+      <if test="transactionDate != null">
+        #{transactionDate,jdbcType=VARCHAR},
+      </if>
+      <if test="tranFlowId != null">
+        #{tranFlowId,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStepNum != null">
+        #{flowStepNum,jdbcType=INTEGER},
+      </if>
+      <if test="tranGroupId != null">
+        #{tranGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="tranId != null">
+        #{tranId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCost != null">
+        #{totalCost,jdbcType=BIGINT},
+      </if>
+      <if test="tranState != null">
+        #{tranState,jdbcType=VARCHAR},
+      </if>
+      <if test="taskExeMode != null">
+        #{taskExeMode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskInterruptFlag != null">
+        #{taskInterruptFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="taskCommitTime != null">
+        #{taskCommitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="taskPriority != null">
+        #{taskPriority,jdbcType=INTEGER},
+      </if>
+      <if test="tranStartTime != null">
+        #{tranStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tranStartTimestamp != null">
+        #{tranStartTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="tranEndTime != null">
+        #{tranEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tranEndTimestamp != null">
+        #{tranEndTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="vmId != null">
+        #{vmId,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null">
+        #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="serverHostName != null">
+        #{serverHostName,jdbcType=VARCHAR},
+      </if>
+      <if test="startFlowStepNum != null">
+        #{startFlowStepNum,jdbcType=INTEGER},
+      </if>
+      <if test="startExecutionNo != null">
+        #{startExecutionNo,jdbcType=INTEGER},
+      </if>
+      <if test="startTranGroupId != null">
+        #{startTranGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="startStepNum != null">
+        #{startStepNum,jdbcType=INTEGER},
+      </if>
+      <if test="serviceCode != null">
+        #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dataArea != null">
+        #{dataArea,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="errorMessage != null">
+        #{errorMessage,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="errorStack != null">
+        #{errorStack,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.edsp.TspTask">
+    update tsp_task
+    <set>
+      <if test="taskExeNum != null">
+        task_exe_num = #{taskExeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="taskCommitDate != null">
+        task_commit_date = #{taskCommitDate,jdbcType=VARCHAR},
+      </if>
+      <if test="tranDate != null">
+        tran_date = #{tranDate,jdbcType=DATE},
+      </if>
+      <if test="transactionDate != null">
+        transaction_date = #{transactionDate,jdbcType=VARCHAR},
+      </if>
+      <if test="tranFlowId != null">
+        tran_flow_id = #{tranFlowId,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStepNum != null">
+        flow_step_num = #{flowStepNum,jdbcType=INTEGER},
+      </if>
+      <if test="tranGroupId != null">
+        tran_group_id = #{tranGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="tranId != null">
+        tran_id = #{tranId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCost != null">
+        total_cost = #{totalCost,jdbcType=BIGINT},
+      </if>
+      <if test="tranState != null">
+        tran_state = #{tranState,jdbcType=VARCHAR},
+      </if>
+      <if test="taskExeMode != null">
+        task_exe_mode = #{taskExeMode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskInterruptFlag != null">
+        task_interrupt_flag = #{taskInterruptFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="taskCommitTime != null">
+        task_commit_time = #{taskCommitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="taskPriority != null">
+        task_priority = #{taskPriority,jdbcType=INTEGER},
+      </if>
+      <if test="tranStartTime != null">
+        tran_start_time = #{tranStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tranStartTimestamp != null">
+        tran_start_timestamp = #{tranStartTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="tranEndTime != null">
+        tran_end_time = #{tranEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tranEndTimestamp != null">
+        tran_end_timestamp = #{tranEndTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="vmId != null">
+        vm_id = #{vmId,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null">
+        ip_address = #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="serverHostName != null">
+        server_host_name = #{serverHostName,jdbcType=VARCHAR},
+      </if>
+      <if test="startFlowStepNum != null">
+        start_flow_step_num = #{startFlowStepNum,jdbcType=INTEGER},
+      </if>
+      <if test="startExecutionNo != null">
+        start_execution_no = #{startExecutionNo,jdbcType=INTEGER},
+      </if>
+      <if test="startTranGroupId != null">
+        start_tran_group_id = #{startTranGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="startStepNum != null">
+        start_step_num = #{startStepNum,jdbcType=INTEGER},
+      </if>
+      <if test="serviceCode != null">
+        service_code = #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dataArea != null">
+        data_area = #{dataArea,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="errorMessage != null">
+        error_message = #{errorMessage,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="errorStack != null">
+        error_stack = #{errorStack,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and task_num = #{taskNum,jdbcType=VARCHAR}
+      and system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ssy.api.entity.table.edsp.TspTask">
+    update tsp_task
+    set task_exe_num = #{taskExeNum,jdbcType=VARCHAR},
+      task_commit_date = #{taskCommitDate,jdbcType=VARCHAR},
+      tran_date = #{tranDate,jdbcType=DATE},
+      transaction_date = #{transactionDate,jdbcType=VARCHAR},
+      tran_flow_id = #{tranFlowId,jdbcType=VARCHAR},
+      flow_step_num = #{flowStepNum,jdbcType=INTEGER},
+      tran_group_id = #{tranGroupId,jdbcType=VARCHAR},
+      tran_id = #{tranId,jdbcType=VARCHAR},
+      total_cost = #{totalCost,jdbcType=BIGINT},
+      tran_state = #{tranState,jdbcType=VARCHAR},
+      task_exe_mode = #{taskExeMode,jdbcType=VARCHAR},
+      task_interrupt_flag = #{taskInterruptFlag,jdbcType=VARCHAR},
+      task_commit_time = #{taskCommitTime,jdbcType=VARCHAR},
+      task_priority = #{taskPriority,jdbcType=INTEGER},
+      tran_start_time = #{tranStartTime,jdbcType=VARCHAR},
+      tran_start_timestamp = #{tranStartTimestamp,jdbcType=BIGINT},
+      tran_end_time = #{tranEndTime,jdbcType=VARCHAR},
+      tran_end_timestamp = #{tranEndTimestamp,jdbcType=BIGINT},
+      vm_id = #{vmId,jdbcType=VARCHAR},
+      ip_address = #{ipAddress,jdbcType=VARCHAR},
+      server_host_name = #{serverHostName,jdbcType=VARCHAR},
+      start_flow_step_num = #{startFlowStepNum,jdbcType=INTEGER},
+      start_execution_no = #{startExecutionNo,jdbcType=INTEGER},
+      start_tran_group_id = #{startTranGroupId,jdbcType=VARCHAR},
+      start_step_num = #{startStepNum,jdbcType=INTEGER},
+      service_code = #{serviceCode,jdbcType=VARCHAR},
+      data_area = #{dataArea,jdbcType=LONGVARCHAR},
+      error_message = #{errorMessage,jdbcType=LONGVARCHAR},
+      error_stack = #{errorStack,jdbcType=LONGVARCHAR}
+    where sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and task_num = #{taskNum,jdbcType=VARCHAR}
+      and system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.edsp.TspTask">
+    update tsp_task
+    set task_exe_num = #{taskExeNum,jdbcType=VARCHAR},
+      task_commit_date = #{taskCommitDate,jdbcType=VARCHAR},
+      tran_date = #{tranDate,jdbcType=DATE},
+      transaction_date = #{transactionDate,jdbcType=VARCHAR},
+      tran_flow_id = #{tranFlowId,jdbcType=VARCHAR},
+      flow_step_num = #{flowStepNum,jdbcType=INTEGER},
+      tran_group_id = #{tranGroupId,jdbcType=VARCHAR},
+      tran_id = #{tranId,jdbcType=VARCHAR},
+      total_cost = #{totalCost,jdbcType=BIGINT},
+      tran_state = #{tranState,jdbcType=VARCHAR},
+      task_exe_mode = #{taskExeMode,jdbcType=VARCHAR},
+      task_interrupt_flag = #{taskInterruptFlag,jdbcType=VARCHAR},
+      task_commit_time = #{taskCommitTime,jdbcType=VARCHAR},
+      task_priority = #{taskPriority,jdbcType=INTEGER},
+      tran_start_time = #{tranStartTime,jdbcType=VARCHAR},
+      tran_start_timestamp = #{tranStartTimestamp,jdbcType=BIGINT},
+      tran_end_time = #{tranEndTime,jdbcType=VARCHAR},
+      tran_end_timestamp = #{tranEndTimestamp,jdbcType=BIGINT},
+      vm_id = #{vmId,jdbcType=VARCHAR},
+      ip_address = #{ipAddress,jdbcType=VARCHAR},
+      server_host_name = #{serverHostName,jdbcType=VARCHAR},
+      start_flow_step_num = #{startFlowStepNum,jdbcType=INTEGER},
+      start_execution_no = #{startExecutionNo,jdbcType=INTEGER},
+      start_tran_group_id = #{startTranGroupId,jdbcType=VARCHAR},
+      start_step_num = #{startStepNum,jdbcType=INTEGER},
+      service_code = #{serviceCode,jdbcType=VARCHAR}
+    where sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and task_num = #{taskNum,jdbcType=VARCHAR}
+      and system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

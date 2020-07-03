@@ -20,7 +20,13 @@ public class SdtServError {
     }
 
     /** 查询表的记录不存在 **/
-    public static SdtException E0003(String tableDesc) {
-        throw new SdtException("The record of the query table ["+tableDesc+"] does not exist", ErrCodeDef.DB_NO_RECORD);
+    public static SdtException E0003(String tableDesc, String... params) {
+        StringBuffer buffer = new StringBuffer();
+        for(String p : params){
+            buffer.append(p).append("-");
+        }
+        String errorParamStr = buffer.substring(0, buffer.lastIndexOf("-"));
+
+        throw new SdtException(String.format("Fail to retreive data from table [%s], record not found, [%s]", tableDesc, errorParamStr), ErrCodeDef.DB_NO_RECORD);
     }
 }

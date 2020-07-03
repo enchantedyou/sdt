@@ -1,4 +1,4 @@
-package com.ssy.api.entity.table.comm;
+package com.ssy.api.entity.table.ap;
 
 /**
  * @Description 公共字段

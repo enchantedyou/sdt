@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.ap.AppDateMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ap.AppDate">
+    <constructor>
+      <idArg column="busi_org_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="last_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trxn_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="next_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="bal_sheet_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    busi_org_id, last_date, trxn_date, next_date, bal_sheet_date, data_create_time, data_update_time, 
+    data_create_user, data_update_user, data_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from app_date
+    where busi_org_id = #{busiOrgId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from app_date
+    where busi_org_id = #{busiOrgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.ap.AppDate">
+    insert into app_date (busi_org_id, last_date, trxn_date, 
+      next_date, bal_sheet_date, data_create_time, 
+      data_update_time, data_create_user, data_update_user, 
+      data_version)
+    values (#{busiOrgId,jdbcType=VARCHAR}, #{lastDate,jdbcType=VARCHAR}, #{trxnDate,jdbcType=VARCHAR}, 
+      #{nextDate,jdbcType=VARCHAR}, #{balSheetDate,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, 
+      #{dataUpdateTime,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, 
+      #{dataVersion,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ap.AppDate">
+    insert into app_date
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="busiOrgId != null">
+        busi_org_id,
+      </if>
+      <if test="lastDate != null">
+        last_date,
+      </if>
+      <if test="trxnDate != null">
+        trxn_date,
+      </if>
+      <if test="nextDate != null">
+        next_date,
+      </if>
+      <if test="balSheetDate != null">
+        bal_sheet_date,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user,
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="busiOrgId != null">
+        #{busiOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastDate != null">
+        #{lastDate,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnDate != null">
+        #{trxnDate,jdbcType=VARCHAR},
+      </if>
+      <if test="nextDate != null">
+        #{nextDate,jdbcType=VARCHAR},
+      </if>
+      <if test="balSheetDate != null">
+        #{balSheetDate,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ap.AppDate">
+    update app_date
+    <set>
+      <if test="lastDate != null">
+        last_date = #{lastDate,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnDate != null">
+        trxn_date = #{trxnDate,jdbcType=VARCHAR},
+      </if>
+      <if test="nextDate != null">
+        next_date = #{nextDate,jdbcType=VARCHAR},
+      </if>
+      <if test="balSheetDate != null">
+        bal_sheet_date = #{balSheetDate,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </set>
+    where busi_org_id = #{busiOrgId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ap.AppDate">
+    update app_date
+    set last_date = #{lastDate,jdbcType=VARCHAR},
+      trxn_date = #{trxnDate,jdbcType=VARCHAR},
+      next_date = #{nextDate,jdbcType=VARCHAR},
+      bal_sheet_date = #{balSheetDate,jdbcType=VARCHAR},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=BIGINT}
+    where busi_org_id = #{busiOrgId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.edsp.TspServiceInMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.edsp.TspServiceIn">
+    <constructor>
+      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="sub_system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="out_service_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="inner_service_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="inner_service_impl_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="service_category" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="route_keys" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="service_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="protocol_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_enable" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="transaction_mode" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="log_level" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="timeout" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="alias_mapping" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="force_unused_odb_cache" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="register_mode" javaType="java.lang.String" jdbcType="CHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    system_code, sub_system_code, out_service_code, inner_service_code, inner_service_impl_code, 
+    description, service_category, route_keys, service_type, protocol_id, is_enable, 
+    transaction_mode, log_level, timeout, alias_mapping, force_unused_odb_cache, register_mode
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tsp_service_in
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and out_service_code = #{outServiceCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tsp_service_in
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and out_service_code = #{outServiceCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.edsp.TspServiceIn">
+    insert into tsp_service_in (system_code, sub_system_code, out_service_code, 
+      inner_service_code, inner_service_impl_code, 
+      description, service_category, route_keys, 
+      service_type, protocol_id, is_enable, 
+      transaction_mode, log_level, timeout, 
+      alias_mapping, force_unused_odb_cache, register_mode
+      )
+    values (#{systemCode,jdbcType=VARCHAR}, #{subSystemCode,jdbcType=VARCHAR}, #{outServiceCode,jdbcType=VARCHAR}, 
+      #{innerServiceCode,jdbcType=VARCHAR}, #{innerServiceImplCode,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{serviceCategory,jdbcType=CHAR}, #{routeKeys,jdbcType=VARCHAR}, 
+      #{serviceType,jdbcType=VARCHAR}, #{protocolId,jdbcType=VARCHAR}, #{isEnable,jdbcType=INTEGER}, 
+      #{transactionMode,jdbcType=CHAR}, #{logLevel,jdbcType=VARCHAR}, #{timeout,jdbcType=INTEGER}, 
+      #{aliasMapping,jdbcType=INTEGER}, #{forceUnusedOdbCache,jdbcType=INTEGER}, #{registerMode,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.edsp.TspServiceIn">
+    insert into tsp_service_in
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        system_code,
+      </if>
+      <if test="subSystemCode != null">
+        sub_system_code,
+      </if>
+      <if test="outServiceCode != null">
+        out_service_code,
+      </if>
+      <if test="innerServiceCode != null">
+        inner_service_code,
+      </if>
+      <if test="innerServiceImplCode != null">
+        inner_service_impl_code,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="serviceCategory != null">
+        service_category,
+      </if>
+      <if test="routeKeys != null">
+        route_keys,
+      </if>
+      <if test="serviceType != null">
+        service_type,
+      </if>
+      <if test="protocolId != null">
+        protocol_id,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+      <if test="transactionMode != null">
+        transaction_mode,
+      </if>
+      <if test="logLevel != null">
+        log_level,
+      </if>
+      <if test="timeout != null">
+        timeout,
+      </if>
+      <if test="aliasMapping != null">
+        alias_mapping,
+      </if>
+      <if test="forceUnusedOdbCache != null">
+        force_unused_odb_cache,
+      </if>
+      <if test="registerMode != null">
+        register_mode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subSystemCode != null">
+        #{subSystemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="outServiceCode != null">
+        #{outServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="innerServiceCode != null">
+        #{innerServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="innerServiceImplCode != null">
+        #{innerServiceImplCode,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCategory != null">
+        #{serviceCategory,jdbcType=CHAR},
+      </if>
+      <if test="routeKeys != null">
+        #{routeKeys,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="protocolId != null">
+        #{protocolId,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=INTEGER},
+      </if>
+      <if test="transactionMode != null">
+        #{transactionMode,jdbcType=CHAR},
+      </if>
+      <if test="logLevel != null">
+        #{logLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="timeout != null">
+        #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="aliasMapping != null">
+        #{aliasMapping,jdbcType=INTEGER},
+      </if>
+      <if test="forceUnusedOdbCache != null">
+        #{forceUnusedOdbCache,jdbcType=INTEGER},
+      </if>
+      <if test="registerMode != null">
+        #{registerMode,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.edsp.TspServiceIn">
+    update tsp_service_in
+    <set>
+      <if test="innerServiceCode != null">
+        inner_service_code = #{innerServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="innerServiceImplCode != null">
+        inner_service_impl_code = #{innerServiceImplCode,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCategory != null">
+        service_category = #{serviceCategory,jdbcType=CHAR},
+      </if>
+      <if test="routeKeys != null">
+        route_keys = #{routeKeys,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceType != null">
+        service_type = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="protocolId != null">
+        protocol_id = #{protocolId,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=INTEGER},
+      </if>
+      <if test="transactionMode != null">
+        transaction_mode = #{transactionMode,jdbcType=CHAR},
+      </if>
+      <if test="logLevel != null">
+        log_level = #{logLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="timeout != null">
+        timeout = #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="aliasMapping != null">
+        alias_mapping = #{aliasMapping,jdbcType=INTEGER},
+      </if>
+      <if test="forceUnusedOdbCache != null">
+        force_unused_odb_cache = #{forceUnusedOdbCache,jdbcType=INTEGER},
+      </if>
+      <if test="registerMode != null">
+        register_mode = #{registerMode,jdbcType=CHAR},
+      </if>
+    </set>
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and out_service_code = #{outServiceCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.edsp.TspServiceIn">
+    update tsp_service_in
+    set inner_service_code = #{innerServiceCode,jdbcType=VARCHAR},
+      inner_service_impl_code = #{innerServiceImplCode,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      service_category = #{serviceCategory,jdbcType=CHAR},
+      route_keys = #{routeKeys,jdbcType=VARCHAR},
+      service_type = #{serviceType,jdbcType=VARCHAR},
+      protocol_id = #{protocolId,jdbcType=VARCHAR},
+      is_enable = #{isEnable,jdbcType=INTEGER},
+      transaction_mode = #{transactionMode,jdbcType=CHAR},
+      log_level = #{logLevel,jdbcType=VARCHAR},
+      timeout = #{timeout,jdbcType=INTEGER},
+      alias_mapping = #{aliasMapping,jdbcType=INTEGER},
+      force_unused_odb_cache = #{forceUnusedOdbCache,jdbcType=INTEGER},
+      register_mode = #{registerMode,jdbcType=CHAR}
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+      and out_service_code = #{outServiceCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.edsp.TspTranGroupControllerMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.edsp.TspTranGroupController">
+    <constructor>
+      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="corporate_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tran_group_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_run_conditions" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_run_callback_service" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    system_code, corporate_code, tran_group_id, tran_group_desc, task_run_conditions, 
+    task_run_callback_service
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tsp_tran_group_controller
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tsp_tran_group_controller
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.edsp.TspTranGroupController">
+    insert into tsp_tran_group_controller (system_code, corporate_code, tran_group_id, 
+      tran_group_desc, task_run_conditions, task_run_callback_service
+      )
+    values (#{systemCode,jdbcType=VARCHAR}, #{corporateCode,jdbcType=VARCHAR}, #{tranGroupId,jdbcType=VARCHAR}, 
+      #{tranGroupDesc,jdbcType=VARCHAR}, #{taskRunConditions,jdbcType=VARCHAR}, #{taskRunCallbackService,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.edsp.TspTranGroupController">
+    insert into tsp_tran_group_controller
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        system_code,
+      </if>
+      <if test="corporateCode != null">
+        corporate_code,
+      </if>
+      <if test="tranGroupId != null">
+        tran_group_id,
+      </if>
+      <if test="tranGroupDesc != null">
+        tran_group_desc,
+      </if>
+      <if test="taskRunConditions != null">
+        task_run_conditions,
+      </if>
+      <if test="taskRunCallbackService != null">
+        task_run_callback_service,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="systemCode != null">
+        #{systemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="corporateCode != null">
+        #{corporateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tranGroupId != null">
+        #{tranGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="tranGroupDesc != null">
+        #{tranGroupDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="taskRunConditions != null">
+        #{taskRunConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="taskRunCallbackService != null">
+        #{taskRunCallbackService,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.edsp.TspTranGroupController">
+    update tsp_tran_group_controller
+    <set>
+      <if test="tranGroupDesc != null">
+        tran_group_desc = #{tranGroupDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="taskRunConditions != null">
+        task_run_conditions = #{taskRunConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="taskRunCallbackService != null">
+        task_run_callback_service = #{taskRunCallbackService,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.edsp.TspTranGroupController">
+    update tsp_tran_group_controller
+    set tran_group_desc = #{tranGroupDesc,jdbcType=VARCHAR},
+      task_run_conditions = #{taskRunConditions,jdbcType=VARCHAR},
+      task_run_callback_service = #{taskRunCallbackService,jdbcType=VARCHAR}
+    where system_code = #{systemCode,jdbcType=VARCHAR}
+      and corporate_code = #{corporateCode,jdbcType=VARCHAR}
+      and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
+  </update>
+</mapper>

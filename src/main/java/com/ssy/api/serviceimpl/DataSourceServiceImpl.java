@@ -4,6 +4,8 @@ import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.serv.SdDynamicDs;
 import com.ssy.api.servicetype.DataSourceService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
  * @Date 2020年06月15日-15:32
  */
 @Service
+@Transactional(propagation = Propagation.SUPPORTS)
 public class DataSourceServiceImpl implements DataSourceService {
 
     @Override

@@ -17,6 +17,12 @@ public class SdtDict {
         enum_priority("enumPriority", "enum priority", "枚举优先级", 3, 0),
         is_enabled("isEnabled", "is enabled", "是否优先", 1, 0),
         group_id("groupId", "group id", "组号", 2, 0),
+        trxn_date("trxnDate", "transaction date", "交易日期", 8, 0),
+        data_create_user("dataCreateUser", "data create user", "数据创建者", 32, 0),
+        data_create_time("dataCreateTime", "data create time", "数据创建时间", 32, 0),
+        data_update_user("dataUpdateUser", "data update user", "数据更新者", 32, 0),
+        data_update_time("dataUpdateTime", "data update time", "数据更新时间", 32, 0),
+        data_version("dataVersion", "data version", "数据版本号", 19, 0),
         ;
 
         private String id;

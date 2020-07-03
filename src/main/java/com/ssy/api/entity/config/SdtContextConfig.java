@@ -19,6 +19,8 @@ public class SdtContextConfig {
     private Boolean msModelFirst;
     private String sumpResourcePath;
 
+    private String defaultTrxnDate;
+
     public String getWorkSpacePath() {
         return workSpacePath;
     }
@@ -49,5 +51,13 @@ public class SdtContextConfig {
 
     public void setSumpResourcePath(String sumpResourcePath) {
         this.sumpResourcePath = sumpResourcePath;
+    }
+
+    public String getDefaultTrxnDate() {
+        return defaultTrxnDate;
+    }
+
+    public void setDefaultTrxnDate(String defaultTrxnDate) {
+        this.defaultTrxnDate = defaultTrxnDate;
     }
 }

@@ -46,7 +46,7 @@ public class SdMetaPriorty {
      * @return java.util.List<com.ssy.api.entity.db.local.SdpDictPriorty>
      */
     public static List<SdpDictPriorty> queryEffectDictPriortyList(){
-        return sdpDictPriortyMapper.selectAll_odb1();
+        return sdpDictPriortyMapper.selectAll_odb1(true);
     }
 
     /**
@@ -56,7 +56,7 @@ public class SdMetaPriorty {
      * @return java.util.List<com.ssy.api.entity.db.local.SdpEnumPriorty>
      */
     public static List<SdpEnumPriorty> queryEffectEnumPriortyList(){
-        return sdpEnumPriortyMapper.selectAll_odb1();
+        return sdpEnumPriortyMapper.selectAll_odb1(true);
     }
 
     /**
@@ -90,8 +90,7 @@ public class SdMetaPriorty {
      * @param sdpDictPriorty
      */
     public static void modifyDictPriorty(SdpDictPriorty sdpDictPriorty){
-        SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType());
-        SdtBusiUtil.checkExistenceFromTableQry(oldData, SdtTable.A.sdp_dict_priority.getLongName());
+        SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType(), true);
 
         if(!CommUtil.equals(oldData.getDataVersion(), sdpDictPriorty.getDataVersion())){
             ApPubErr.E0005(SdtTable.A.sdp_dict_priority.getLongName());
@@ -109,7 +108,7 @@ public class SdMetaPriorty {
      * @param sdpEnumPriorty
      */
     public static void modifyEnumPriorty(SdpEnumPriorty sdpEnumPriorty){
-        SdpEnumPriorty oldData = sdpEnumPriortyMapper.selectByPrimaryKey(sdpEnumPriorty.getEnumType());
+        SdpEnumPriorty oldData = sdpEnumPriortyMapper.selectByPrimaryKey(sdpEnumPriorty.getEnumType(), true);
         SdtBusiUtil.checkExistenceFromTableQry(oldData, SdtTable.A.sdp_enum_priority.getLongName());
 
         if(!CommUtil.equals(oldData.getDataVersion(), sdpEnumPriorty.getDataVersion())){
@@ -128,7 +127,7 @@ public class SdMetaPriorty {
      * @param sdpDictPriorty
      */
     public static void addDictPriorty(SdpDictPriorty sdpDictPriorty) {
-        SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType());
+        SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType(), true);
         if(CommUtil.isNotNull(oldData)){
             ApPubErr.E0006(SdtTable.A.sdp_dict_priority.getLongName(), SdtBusiUtil.parseStrArrayToSingle(sdpDictPriorty.getDictType()));
         }
@@ -142,7 +141,7 @@ public class SdMetaPriorty {
      * @param sdpEnumPriorty
      */
     public static void addEnumPriorty(SdpEnumPriorty sdpEnumPriorty) {
-        SdpEnumPriorty oldData = sdpEnumPriortyMapper.selectByPrimaryKey(sdpEnumPriorty.getEnumType());
+        SdpEnumPriorty oldData = sdpEnumPriortyMapper.selectByPrimaryKey(sdpEnumPriorty.getEnumType(), true);
         if(CommUtil.isNotNull(oldData)){
             ApPubErr.E0006(SdtTable.A.sdp_enum_priority.getLongName(), SdtBusiUtil.parseStrArrayToSingle(sdpEnumPriorty.getEnumType()));
         }

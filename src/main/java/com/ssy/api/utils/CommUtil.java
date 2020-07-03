@@ -2,12 +2,19 @@ package com.ssy.api.utils;
 
 import com.ssy.api.entity.enums.E_STRGENTYPE;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @Description 公共工具类
@@ -237,6 +244,18 @@ public class CommUtil {
     }
 
     /**
+     * @Description 构建setter方法名
+     * @Author sunshaoyu
+     * @Date 2020/7/2-17:23
+     * @param fieldName
+     * @return java.lang.String
+     */
+    public static String buildSetterMethodName(String fieldName){
+        StringBuffer buffer = new StringBuffer();
+        return buffer.append("set").append(fieldName.substring(0, 1).toUpperCase()).append(fieldName.substring(1)).toString();
+    }
+
+    /**
      * @Description 获取两个对象更小的一方
      * @Author sunshaoyu
      * @Date 2020/6/13-0:39
@@ -260,4 +279,18 @@ public class CommUtil {
         return compare(o1, o2) >= 0 ? o1 : o2;
     }
 
+    /**
+     * @Description 数组转list
+     * @Author sunshaoyu
+     * @Date 2020/7/3-13:00
+     * @param a
+     * @return java.util.List<T>
+     */
+    public static <T> List<T> asList(T... a){
+        List<T> list = new ArrayList<>();
+        for(T t : a){
+            list.add(t);
+        }
+        return list;
+    }
 }
