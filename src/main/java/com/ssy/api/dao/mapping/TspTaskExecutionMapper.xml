@@ -469,4 +469,14 @@
       and system_code = #{systemCode,jdbcType=VARCHAR}
       and corporate_code = #{corporateCode,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectOne_odb1" parameterType="map" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tsp_task_execution
+    where task_num = #{taskNum,jdbcType=VARCHAR}
+    and system_code = #{systemCode,jdbcType=VARCHAR}
+  </select>
 </mapper>

@@ -1,7 +1,7 @@
 package com.ssy.api.serviceimpl;
 
 import com.ssy.api.entity.table.local.SdpDatasource;
-import com.ssy.api.serv.SdDynamicDs;
+import com.ssy.api.logic.local.SdDynamicDs;
 import com.ssy.api.servicetype.DataSourceService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

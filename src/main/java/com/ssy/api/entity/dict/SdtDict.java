@@ -23,6 +23,11 @@ public class SdtDict {
         data_update_user("dataUpdateUser", "data update user", "数据更新者", 32, 0),
         data_update_time("dataUpdateTime", "data update time", "数据更新时间", 32, 0),
         data_version("dataVersion", "data version", "数据版本号", 19, 0),
+        flow_group("flowGroup", "batch flow group", "批量流程组", 20, 0),
+        batch_call_mode("batchCallMode", "batch call mode", "批量唤醒模式", 4, 0),
+        end_date("endDate", "end date", "结束日期", 8, 0),
+        assign_days("assignDays", "assign days", "指定天数", 19, 0),
+        datasource_id("datasourceId", "datasource identity", "数据源编号", 50, 0),
         ;
 
         private String id;

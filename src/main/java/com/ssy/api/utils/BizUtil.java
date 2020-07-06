@@ -8,7 +8,6 @@ import com.ssy.api.exception.ApPubErr;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StopWatch;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.ParseException;
@@ -60,16 +59,11 @@ public class BizUtil {
      * @Date 2020/6/11-15:48
      * @param e
      */
-    public static void logError(Exception e) throws IOException {
+    public static void logError(Exception e) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter, true);
         e.printStackTrace(printWriter);
         log.error(stringWriter.toString());
-
-        stringWriter.flush();
-        printWriter.flush();
-        stringWriter.close();
-        printWriter.close();
     }
 
     /**
@@ -236,5 +230,64 @@ public class BizUtil {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * @Description 检查日期字符串是否yyyyMMdd格式的日期
+     * @Author sunshaoyu
+     * @Date 2020/7/5-16:19
+     * @param date
+     * @return boolean
+     */
+    public static boolean isDateString(String date) {
+        return isDateString(date, "yyyyMMdd");
+    }
+
+    /**
+     * @Description 检查日期字符串是否指定格式的日期
+     * @Author sunshaoyu
+     * @Date 2020/7/5-16:19
+     * @param date
+     * @param format
+     * @return boolean
+     */
+    public static boolean isDateString(String date, String format) {
+        boolean bool = false;
+        if(CommUtil.isNotNull(date)){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            try {
+                bool = CommUtil.equals(date, simpleDateFormat.format(parseToDate(date, format)));
+            } catch (ParseException e) {
+                BizUtil.logError(e);
+            }
+        }
+        return bool;
+    }
+
+    /**
+     * @Description 将日期字符串按指定格式转换为Date对象
+     * @Author sunshaoyu
+     * @Date 2020/7/5-16:13
+     * @param date
+     * @param format
+     * @return java.util.Date
+     */
+    public static Date parseToDate(String date, String format) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        return simpleDateFormat.parse(date);
+    }
+
+    /**
+     * @Description 系统暂停
+     * @Author sunshaoyu
+     * @Date 2020/7/5-18:17
+     * @param mills
+     */
+    public static void systemPause(long mills) {
+        try{
+            Thread.sleep(mills);
+        }catch(InterruptedException e) {
+            logError(e);
+        };
     }
 }

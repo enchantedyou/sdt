@@ -21,7 +21,7 @@ public interface SdpEnumPriortyMapper {
 
     int updateByPrimaryKey(SdpEnumPriorty record);
 
-    //查询有效的枚举优先级列表
     @EnableNotNull
+    /** 查询有效的枚举优先级列表 **/
     List<SdpEnumPriorty> selectAll_odb1(boolean nullException);
 }

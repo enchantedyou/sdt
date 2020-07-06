@@ -1,4 +1,4 @@
-package com.ssy.api.serv;
+package com.ssy.api.logic.local;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;

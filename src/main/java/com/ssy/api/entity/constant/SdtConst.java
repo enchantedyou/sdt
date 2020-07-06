@@ -36,8 +36,16 @@ public class SdtConst {
     public static final String INTF_EXCEL_SUFFIX = ".xlsx";
     public static final String[] PROJECT_FILE_SUFFIX = {".xml"};
 
-    /** 动态数据源配置 **/
+    /** 动态数据源 **/
     public static final String MASTER_DATASOURCE = "masterDS";
     public static final String DYNAMIC_DATASOURCE = "dynamicDS";
     public static final String DYNAMIC_SQL_SESSION_FACTORY = "sqlSessionFactoryBeanDynamic";
+
+    /** 日终批量 **/
+    public static final String EXE_GROUP_SPLIT_TOKEN = ";";
+    public static final String DAY_SWITCH_FLOW_ID = "Switch";
+    public static final String BATCH_EXECUTE_MODE = "1";//按批量交易流程执行
+
+    /** 参数相关 **/
+    public static final String DEFAULT_TELLER = "DEFAULT_TELLER";
 }

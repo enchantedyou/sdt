@@ -348,4 +348,13 @@
       and step_id = #{stepId,jdbcType=INTEGER}
       and tran_code = #{tranCode,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAll_odb1" parameterType="map" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tsp_tran_controller
+    where execution_code = '1' and tran_group_id = #{tranGroupId,jdbcType=VARCHAR} and tran_group_id in (select tran_group_id from tsp_flow_step_controller) order by CAST(tran_group_id AS signed), step_id
+  </select>
 </mapper>

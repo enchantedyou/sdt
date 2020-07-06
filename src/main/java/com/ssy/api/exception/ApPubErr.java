@@ -53,4 +53,9 @@ public class ApPubErr {
     public static SdtException E0009(String dataSource) {
         throw new SdtException("Dynamic data source ["+dataSource+"] does not exist", ErrCodeDef.DB_NO_RECORD);
     }
+
+    /** 信息域格式不合法 **/
+    public static SdtException E0010(String date, String longname) {
+        throw new SdtException("Invalid format for the field "+longname+":["+date+"]", ErrCodeDef.FIELD_INVALID_FORMAT);
+    }
 }

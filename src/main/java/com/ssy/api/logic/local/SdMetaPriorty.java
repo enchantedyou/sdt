@@ -1,4 +1,4 @@
-package com.ssy.api.serv;
+package com.ssy.api.logic.local;
 
 import com.ssy.api.dao.mapper.local.SdpDictPriortyMapper;
 import com.ssy.api.dao.mapper.local.SdpEnumPriortyMapper;

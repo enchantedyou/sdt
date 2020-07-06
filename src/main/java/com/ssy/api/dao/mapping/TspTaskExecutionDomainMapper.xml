@@ -254,4 +254,14 @@
       and corporate_code = #{corporateCode,jdbcType=VARCHAR}
       and tran_execution_domain_code = #{tranExecutionDomainCode,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectOne_odb1" parameterType="map" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tsp_task_execution_domain
+    where corporate_code = #{corporateCode,jdbcType=VARCHAR}
+    and tran_execution_domain_code = #{tranExecutionDomainCode,jdbcType=VARCHAR} limit 1
+  </select>
 </mapper>

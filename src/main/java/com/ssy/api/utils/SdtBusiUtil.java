@@ -1,8 +1,12 @@
 package com.ssy.api.utils;
 
+import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.exception.SdtServError;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @Description 开发工具助手业务类检查
@@ -36,6 +40,32 @@ public class SdtBusiUtil {
     public static void checkAmountNotNegate(BigDecimal amount, String fielddesc) {
         if (CommUtil.isNotNull(amount) && CommUtil.compare(amount, BigDecimal.ZERO) < 0) {
             SdtServError.E0001(amount.toString(), fielddesc);
+        }
+    }
+
+    /**
+     * @Description 检查日期是否合法
+     * @Author sunshaoyu
+     * @Date 2020/7/5-16:25
+     * @param date
+     * @param longname
+     */
+    public static void checkDateValid(String date, String longname) {
+        if(CommUtil.isNotNull(date) && !BizUtil.isDateString(date)){
+            ApPubErr.E0010(date, longname);
+        }
+    }
+
+    /**
+     * @Description 检查整型是否合法
+     * @Author sunshaoyu
+     * @Date 2020/7/5-16:38
+     * @param intValue
+     * @param longname
+     */
+    public static void checkIntegerValid(Object intValue, String longname) {
+        if(CommUtil.isNotNull(intValue) && !BizUtil.isRegexMatches("^[-\\+]?[\\d]*$", String.valueOf(intValue))){
+            ApPubErr.E0010(String.valueOf(intValue), longname);
         }
     }
 

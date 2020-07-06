@@ -18,7 +18,7 @@ public class DBContextHolder extends AbstractRoutingDataSource {
     /** 存储当前线程的数据源 **/
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();
     /** 存储当前的动态数据源(排除主数据源) **/
-    //TO-DO 从session获取当前动态数据源
+    //TODO 从session获取当前动态数据源
     private static final ThreadLocal<String> excptMasterHolder = new ThreadLocal<String>();
 
     /**
@@ -27,7 +27,7 @@ public class DBContextHolder extends AbstractRoutingDataSource {
      * @Date 2020/6/15-15:08
      * @param dataSource
      */
-    public synchronized static void switchToDataSource(String dataSource) throws Exception {
+    public synchronized static void switchToDataSource(String dataSource) {
         if (OdbFactory.getDataSourceMap().containsKey(dataSource)) {
             log.debug("The current data source is switched to [{}]", dataSource);
             contextHolder.set(dataSource);
@@ -41,7 +41,7 @@ public class DBContextHolder extends AbstractRoutingDataSource {
     }
 
     /**
-     * @Description 获取
+     * @Description 获取当前数据源
      * @Author sunshaoyu
      * @Date 2020/6/15-14:58
      * @return java.lang.String

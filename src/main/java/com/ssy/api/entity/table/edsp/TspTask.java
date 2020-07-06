@@ -1,7 +1,5 @@
 package com.ssy.api.entity.table.edsp;
 
-import java.util.Date;
-
 public class TspTask {
     private String subSystemCode;
 
@@ -15,7 +13,7 @@ public class TspTask {
 
     private String taskCommitDate;
 
-    private Date tranDate;
+    private String tranDate;
 
     private String transactionDate;
 
@@ -69,7 +67,7 @@ public class TspTask {
 
     private String errorStack;
 
-    public TspTask(String subSystemCode, String taskNum, String systemCode, String corporateCode, String taskExeNum, String taskCommitDate, Date tranDate, String transactionDate, String tranFlowId, Integer flowStepNum, String tranGroupId, String tranId, Long totalCost, String tranState, String taskExeMode, String taskInterruptFlag, String taskCommitTime, Integer taskPriority, String tranStartTime, Long tranStartTimestamp, String tranEndTime, Long tranEndTimestamp, String vmId, String ipAddress, String serverHostName, Integer startFlowStepNum, Integer startExecutionNo, String startTranGroupId, Integer startStepNum, String serviceCode) {
+    public TspTask(String subSystemCode, String taskNum, String systemCode, String corporateCode, String taskExeNum, String taskCommitDate, String tranDate, String transactionDate, String tranFlowId, Integer flowStepNum, String tranGroupId, String tranId, Long totalCost, String tranState, String taskExeMode, String taskInterruptFlag, String taskCommitTime, Integer taskPriority, String tranStartTime, Long tranStartTimestamp, String tranEndTime, Long tranEndTimestamp, String vmId, String ipAddress, String serverHostName, Integer startFlowStepNum, Integer startExecutionNo, String startTranGroupId, Integer startStepNum, String serviceCode) {
         this.subSystemCode = subSystemCode;
         this.taskNum = taskNum;
         this.systemCode = systemCode;
@@ -102,7 +100,7 @@ public class TspTask {
         this.serviceCode = serviceCode;
     }
 
-    public TspTask(String subSystemCode, String taskNum, String systemCode, String corporateCode, String taskExeNum, String taskCommitDate, Date tranDate, String transactionDate, String tranFlowId, Integer flowStepNum, String tranGroupId, String tranId, Long totalCost, String tranState, String taskExeMode, String taskInterruptFlag, String taskCommitTime, Integer taskPriority, String tranStartTime, Long tranStartTimestamp, String tranEndTime, Long tranEndTimestamp, String vmId, String ipAddress, String serverHostName, Integer startFlowStepNum, Integer startExecutionNo, String startTranGroupId, Integer startStepNum, String serviceCode, String dataArea, String errorMessage, String errorStack) {
+    public TspTask(String subSystemCode, String taskNum, String systemCode, String corporateCode, String taskExeNum, String taskCommitDate, String tranDate, String transactionDate, String tranFlowId, Integer flowStepNum, String tranGroupId, String tranId, Long totalCost, String tranState, String taskExeMode, String taskInterruptFlag, String taskCommitTime, Integer taskPriority, String tranStartTime, Long tranStartTimestamp, String tranEndTime, Long tranEndTimestamp, String vmId, String ipAddress, String serverHostName, Integer startFlowStepNum, Integer startExecutionNo, String startTranGroupId, Integer startStepNum, String serviceCode, String dataArea, String errorMessage, String errorStack) {
         this.subSystemCode = subSystemCode;
         this.taskNum = taskNum;
         this.systemCode = systemCode;
@@ -190,11 +188,11 @@ public class TspTask {
         this.taskCommitDate = taskCommitDate == null ? null : taskCommitDate.trim();
     }
 
-    public Date getTranDate() {
+    public String getTranDate() {
         return tranDate;
     }
 
-    public void setTranDate(Date tranDate) {
+    public void setTranDate(String tranDate) {
         this.tranDate = tranDate;
     }
 

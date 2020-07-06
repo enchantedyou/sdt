@@ -1,8 +1,9 @@
 package com.ssy.api.dao.mapper.edsp;
 
 import com.ssy.api.entity.table.edsp.TspTaskExecution;
-import java.util.Date;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 
 public interface TspTaskExecutionMapper {
     int deleteByPrimaryKey(@Param("taskNum") String taskNum, @Param("taskExeNum") String taskExeNum, @Param("tranDate") Date tranDate, @Param("subSystemCode") String subSystemCode, @Param("systemCode") String systemCode, @Param("corporateCode") String corporateCode);
@@ -18,4 +19,6 @@ public interface TspTaskExecutionMapper {
     int updateByPrimaryKeyWithBLOBs(TspTaskExecution record);
 
     int updateByPrimaryKey(TspTaskExecution record);
+
+    TspTaskExecution selectOne_odb1(@Param("taskNum") String taskNum, @Param("systemCode") String systemCode);
 }

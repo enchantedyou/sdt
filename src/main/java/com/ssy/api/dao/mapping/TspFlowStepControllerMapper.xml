@@ -128,4 +128,11 @@
       and execution_no = #{executionNo,jdbcType=INTEGER}
       and tran_group_id = #{tranGroupId,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List" />
+  from tsp_flow_step_controller
+  where tran_group_id = #{tranGroupId,jdbcType=VARCHAR} order by cast(tran_group_id as signed)
+</select>
 </mapper>

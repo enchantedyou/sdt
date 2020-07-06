@@ -21,7 +21,7 @@ public interface SdpDictPriortyMapper {
 
     int updateByPrimaryKey(SdpDictPriorty record);
 
-    //查询有效的字典优先级列表
     @EnableNotNull
+    /** 查询有效的字典优先级列表 **/
     List<SdpDictPriorty> selectAll_odb1(boolean nullException);
 }

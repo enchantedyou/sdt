@@ -7,7 +7,7 @@ package com.ssy.api.entity.constant;
  */
 public class ErrCodeDef {
 
-    /** 交易成功 **/
+    /** 处理成功 **/
     public static final String SUCCESS = "0000";
     /** 重复的请求 **/
     public static final String REPEATE_REQUEST = "1006";
@@ -43,6 +43,8 @@ public class ErrCodeDef {
     public static final String DECRYPT_FAILURE = "9018";
     /** xml文件处理失败 **/
     public static final String XML_DEAL_FAILURE = "9020";
+    /** 批量任务处理失败 **/
+    public static final String BATCH_TASK_ERROR = "9030";
     /** 未知错误 **/
     public static final String UNKNOWN_ERROR = "9999";
 }

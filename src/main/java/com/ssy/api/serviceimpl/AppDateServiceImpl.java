@@ -24,15 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class AppDateServiceImpl implements AppDateService {
 
     @Autowired
-    private MspOrganizationMapper mspOrganizationMapper;
-    @Autowired
     private AppDateMapper appDateMapper;
     @Autowired
     private SdtContextConfig sdtContextConfig;
 
     private AppDate queryAppDate() {
-        MspOrganization mspOrganization = mspOrganizationMapper.selectFirst_odb1();
-        return appDateMapper.selectByPrimaryKey(mspOrganization.getBusiOrgId(), true);
+        return appDateMapper.selectByPrimaryKey(sdtContextConfig.getBusiOrgId(), true);
     }
 
     @Override

@@ -29,4 +29,19 @@ public class SdtServError {
 
         throw new SdtException(String.format("Fail to retreive data from table [%s], record not found, [%s]", tableDesc, errorParamStr), ErrCodeDef.DB_NO_RECORD);
     }
+
+    /** A必须大于B **/
+    public static SdtException E0004(String realName, Object realValue, String limitName, Object limitValue) {
+        throw new SdtException(realName + "["+realValue+"] must be greater than "+limitName+"["+limitValue+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
+
+    /** A必须大于或等于B **/
+    public static SdtException E0005(String realName, Object realValue, String limitName, Object limitValue) {
+        throw new SdtException(realName + "["+realValue+"] must be greater than or euqal to "+limitName+"["+limitValue+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
+
+    /** 批量任务处理失败 **/
+    public static SdtException E0006(String systemCode) {
+        throw new SdtException("Batch task of system ["+systemCode+"] processing failed", ErrCodeDef.BATCH_TASK_ERROR);
+    }
 }
