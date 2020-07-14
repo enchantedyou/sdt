@@ -9,8 +9,12 @@ public class ErrCodeDef {
 
     /** 处理成功 **/
     public static final String SUCCESS = "0000";
+    /** 登录失效 **/
+    public static final String LOGIN_EXPIRED = "1001";
     /** 重复的请求 **/
     public static final String REPEATE_REQUEST = "1006";
+    /** 非法的请求 **/
+    public static final String INVALID_REQUEST = "1007";
     /** 数字或金额不合法 **/
     public static final String INVALID_NUMBER = "1010";
     /** 数据未改变，不能维护 **/

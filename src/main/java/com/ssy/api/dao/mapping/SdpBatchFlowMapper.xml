@@ -181,7 +181,7 @@
     select
     <include refid="Base_Column_List" />
     from sdp_batch_flow
-    where flowGroup = #{flowGroup,jdbcType=VARCHAR}
+    where flow_group = #{flowGroup,jdbcType=VARCHAR}
     and is_enabled = 1 order by flow_order
   </select>
 </mapper>

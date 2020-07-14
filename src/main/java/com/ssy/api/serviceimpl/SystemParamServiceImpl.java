@@ -2,9 +2,7 @@ package com.ssy.api.serviceimpl;
 
 import com.ssy.api.dao.mapper.local.SdpSystemParameterMapper;
 import com.ssy.api.entity.constant.SdtConst;
-import com.ssy.api.entity.table.local.SdpSystemParameter;
 import com.ssy.api.servicetype.SystemParamService;
-import com.ssy.api.utils.CommUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

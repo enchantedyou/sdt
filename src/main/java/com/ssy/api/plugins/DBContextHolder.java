@@ -3,7 +3,7 @@ package com.ssy.api.plugins;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.factory.odb.OdbFactory;
-import com.ssy.api.utils.CommUtil;
+import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 

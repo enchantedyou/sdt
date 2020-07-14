@@ -6,8 +6,9 @@ import com.alibaba.fastjson.parser.Feature;
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.sump.component.PTEComponent;
+import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.FileLoader;
-import com.ssy.api.utils.CommUtil;
+import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -76,7 +77,7 @@ public class SdPTEJsonParser {
                 parsePTEJsonByModule();
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to initialize PTE json file");
+            throw new SdtException("Failed to initialize PTE json file", e);
         }
     }
 

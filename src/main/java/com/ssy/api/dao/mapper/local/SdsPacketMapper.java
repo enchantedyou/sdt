@@ -13,5 +13,7 @@ public interface SdsPacketMapper {
 
     int updateByPrimaryKeySelective(SdsPacket record);
 
+    int updateByPrimaryKeyWithBLOBs(SdsPacket record);
+
     int updateByPrimaryKey(SdsPacket record);
 }

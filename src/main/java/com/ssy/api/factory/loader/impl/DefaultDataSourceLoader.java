@@ -6,7 +6,7 @@ import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.factory.loader.DataSourceLoader;
 import com.ssy.api.plugins.DBContextHolder;
 import com.ssy.api.servicetype.DataSourceService;
-import com.ssy.api.utils.SpringContextUtil;
+import com.ssy.api.utils.system.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

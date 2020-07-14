@@ -9,7 +9,7 @@
       <idArg column="corporate_code" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="task_exe_num" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="task_commit_date" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="tran_date" javaType="java.util.Date" jdbcType="VARCHAR" />
+      <arg column="tran_date" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="transaction_date" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="tran_flow_id" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="flow_step_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -43,7 +43,7 @@
       <idArg column="corporate_code" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="task_exe_num" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="task_commit_date" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="tran_date" javaType="java.util.Date" jdbcType="VARCHAR" />
+      <arg column="tran_date" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="transaction_date" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="tran_flow_id" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="flow_step_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -116,7 +116,7 @@
       )
     values (#{subSystemCode,jdbcType=VARCHAR}, #{taskNum,jdbcType=VARCHAR}, #{systemCode,jdbcType=VARCHAR}, 
       #{corporateCode,jdbcType=VARCHAR}, #{taskExeNum,jdbcType=VARCHAR}, #{taskCommitDate,jdbcType=VARCHAR}, 
-      #{tranDate,jdbcType=DATE}, #{transactionDate,jdbcType=VARCHAR}, #{tranFlowId,jdbcType=VARCHAR}, 
+      #{tranDate,jdbcType=VARCHAR}, #{transactionDate,jdbcType=VARCHAR}, #{tranFlowId,jdbcType=VARCHAR},
       #{flowStepNum,jdbcType=INTEGER}, #{tranGroupId,jdbcType=VARCHAR}, #{tranId,jdbcType=VARCHAR}, 
       #{totalCost,jdbcType=BIGINT}, #{tranState,jdbcType=VARCHAR}, #{taskExeMode,jdbcType=VARCHAR}, 
       #{taskInterruptFlag,jdbcType=VARCHAR}, #{taskCommitTime,jdbcType=VARCHAR}, #{taskPriority,jdbcType=INTEGER}, 
@@ -250,7 +250,7 @@
         #{taskCommitDate,jdbcType=VARCHAR},
       </if>
       <if test="tranDate != null">
-        #{tranDate,jdbcType=DATE},
+        #{tranDate,jdbcType=VARCHAR},
       </if>
       <if test="transactionDate != null">
         #{transactionDate,jdbcType=VARCHAR},
@@ -505,7 +505,7 @@
     <include refid="Blob_Column_List" />
     from tsp_task
     where transaction_date = #{transactionDate,jdbcType=VARCHAR} and tran_state in ('failure','processing')
-    and tran_group_id in (select tran_group_id from tsp_flow_step_controller)
+    and tran_flow_id in (select tran_flow_id from tsp_flow_step_controller)
   </select>
 
   <select id="selectOne_odb2" parameterType="map" resultMap="ResultMapWithBLOBs">

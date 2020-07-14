@@ -22,5 +22,6 @@ public interface SdpDatasourceMapper {
 
     int updateByPrimaryKey(SdpDatasource record);
 
+    /** 查询数据源列表 **/
     List<SdpDatasource> selectAll_odb1();
 }

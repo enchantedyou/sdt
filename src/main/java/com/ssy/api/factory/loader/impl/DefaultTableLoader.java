@@ -6,8 +6,8 @@ import com.ssy.api.factory.loader.TableTypeLoader;
 import com.ssy.api.factory.odb.OdbFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.TableType;
-import com.ssy.api.utils.CommUtil;
-import com.ssy.api.utils.XmlUtil;
+import com.ssy.api.utils.system.CommUtil;
+import com.ssy.api.utils.parse.XmlUtil;
 import org.dom4j.Element;
 import org.springframework.stereotype.Component;
 

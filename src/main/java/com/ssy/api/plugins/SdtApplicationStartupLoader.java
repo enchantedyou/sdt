@@ -1,7 +1,7 @@
 package com.ssy.api.plugins;
 
 import com.ssy.api.factory.odb.MetaDataFactory;
-import com.ssy.api.utils.BizUtil;
+import com.ssy.api.utils.system.BizUtil;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
@@ -19,8 +19,20 @@ public class SdtApplicationStartupLoader extends MetaDataFactory implements Appl
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        /** 初始化元数据 **/
         StopWatch s = BizUtil.startStopWatch();
+        /** 初始化元数据 **/
+        //loadMetaData();
+        /** 初始化动态数据源 **/
+        loadDynamicDataSource();
+        BizUtil.stoptStopWatch(s, "Load all metadata");
+    }
+
+    /**
+     * @Description 初始化加载元数据
+     * @Author sunshaoyu
+     * @Date 2020/7/8-15:57
+     */
+    private void loadMetaData() {
         //初始化接口文档文件
         loadIntfWordFileMap();
         //初始化限制类型
@@ -32,9 +44,5 @@ public class SdtApplicationStartupLoader extends MetaDataFactory implements Appl
         loadDictMap();
         //初始化表模型
         loadTableTypeMap();
-
-        /** 初始化动态数据源 **/
-        loadDynamicDataSource();
-        BizUtil.stoptStopWatch(s, "Load all metadata");
     }
 }

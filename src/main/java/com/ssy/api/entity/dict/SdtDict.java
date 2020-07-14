@@ -28,6 +28,8 @@ public class SdtDict {
         end_date("endDate", "end date", "结束日期", 8, 0),
         assign_days("assignDays", "assign days", "指定天数", 19, 0),
         datasource_id("datasourceId", "datasource identity", "数据源编号", 50, 0),
+        user_acct("userAcct", "user account", "用户账号", 50, 0),
+        user_pwd("userPwd", "user password", "用户密码", 50, 0),
         ;
 
         private String id;

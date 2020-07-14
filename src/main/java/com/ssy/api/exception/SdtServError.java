@@ -44,4 +44,29 @@ public class SdtServError {
     public static SdtException E0006(String systemCode) {
         throw new SdtException("Batch task of system ["+systemCode+"] processing failed", ErrCodeDef.BATCH_TASK_ERROR);
     }
+
+    /** 字段值设置非法,必须为指定值 **/
+    public static SdtException E0007(String longname, Object originalValue, Object limitValue) {
+        throw new SdtException("Invalid value of field "+longname+" ["+originalValue+"], must be: ["+limitValue+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
+
+    /** 批量执行编号{}的执行状态是{},无法再次执行 **/
+    public static SdtException E0008(String batchRunNo, String tranState) {
+        throw new SdtException("The execution status of batch execution number ["+batchRunNo+"] is ["+tranState+"] and cannot be executed again", ErrCodeDef.BATCH_TASK_ERROR);
+    }
+
+    /** 登录失效 **/
+    public static SdtException E0009() {
+        throw new SdtException("Login is invalid, please log in again", ErrCodeDef.LOGIN_EXPIRED);
+    }
+
+    /** 用户{}不存在 **/
+    public static SdtException E0010(String userAcct) {
+        throw new SdtException("Account ["+userAcct+"] does not exist", ErrCodeDef.NOTHINGNESS_ACCT);
+    }
+
+    /** 用户xx的密码不正确 **/
+    public static SdtException E0011(String userAcct) {
+        throw new SdtException("Incorrect password for user account [" + userAcct + "]", ErrCodeDef.WRONG_PASSWD);
+    }
 }

@@ -2,9 +2,10 @@ package com.ssy.api.factory.loader.impl;
 
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.FileLoader;
-import com.ssy.api.utils.BizUtil;
-import com.ssy.api.utils.CommUtil;
+import com.ssy.api.utils.system.BizUtil;
+import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class DefaultFileLoader implements FileLoader {
            File file = new File(path);
            loadFile(map, file, isLimitJavaReources, suffix);
        }catch(Exception e){
-           throw new RuntimeException("An unexpected exception occurred while loading the file", e);
+           throw new SdtException("An unexpected exception occurred while loading the file", e);
        }
        return map;
     }

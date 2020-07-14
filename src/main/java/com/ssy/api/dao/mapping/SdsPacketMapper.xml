@@ -4,14 +4,12 @@
   <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdsPacket">
     <constructor>
       <idArg column="trxn_seq" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trxn_date" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="trxn_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="request" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="response" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="begin_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="end_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="used_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="error_text" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="error_stack" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="host_ip" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -20,14 +18,38 @@
       <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ssy.api.entity.table.local.SdsPacket">
+    <constructor>
+      <idArg column="trxn_seq" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trxn_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trxn_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="begin_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="end_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="used_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="error_text" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="host_ip" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="request" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+      <arg column="response" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+      <arg column="error_stack" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
   <sql id="Base_Column_List">
-    trxn_seq, trxn_desc, request, response, begin_time, end_time, used_time, error_text, 
-    error_stack, host_ip, data_create_user, data_create_time, data_update_user, data_update_time, 
-    data_version
+    trxn_seq, trxn_date, trxn_desc, begin_time, end_time, used_time, error_text, host_ip, 
+    data_create_user, data_create_time, data_update_user, data_update_time, data_version
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    request, response, error_stack
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from sds_packet
     where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
   </select>
@@ -36,18 +58,18 @@
     where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdsPacket">
-    insert into sds_packet (trxn_seq, trxn_desc, request, 
-      response, begin_time, end_time, 
-      used_time, error_text, error_stack, 
-      host_ip, data_create_user, data_create_time, 
-      data_update_user, data_update_time, data_version
-      )
-    values (#{trxnSeq,jdbcType=VARCHAR}, #{trxnDesc,jdbcType=VARCHAR}, #{request,jdbcType=VARCHAR}, 
-      #{response,jdbcType=VARCHAR}, #{beginTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, 
-      #{usedTime,jdbcType=VARCHAR}, #{errorText,jdbcType=VARCHAR}, #{errorStack,jdbcType=VARCHAR}, 
-      #{hostIp,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, 
-      #{dataUpdateUser,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER}
-      )
+    insert into sds_packet (trxn_seq, trxn_date, trxn_desc, 
+      begin_time, end_time, used_time, 
+      error_text, host_ip, data_create_user, 
+      data_create_time, data_update_user, data_update_time, 
+      data_version, request, response, 
+      error_stack)
+    values (#{trxnSeq,jdbcType=VARCHAR}, #{trxnDate,jdbcType=VARCHAR}, #{trxnDesc,jdbcType=VARCHAR}, 
+      #{beginTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, #{usedTime,jdbcType=VARCHAR}, 
+      #{errorText,jdbcType=VARCHAR}, #{hostIp,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, 
+      #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, 
+      #{dataVersion,jdbcType=INTEGER}, #{request,jdbcType=LONGVARCHAR}, #{response,jdbcType=LONGVARCHAR}, 
+      #{errorStack,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdsPacket">
     insert into sds_packet
@@ -55,14 +77,11 @@
       <if test="trxnSeq != null">
         trxn_seq,
       </if>
+      <if test="trxnDate != null">
+        trxn_date,
+      </if>
       <if test="trxnDesc != null">
         trxn_desc,
-      </if>
-      <if test="request != null">
-        request,
-      </if>
-      <if test="response != null">
-        response,
       </if>
       <if test="beginTime != null">
         begin_time,
@@ -75,9 +94,6 @@
       </if>
       <if test="errorText != null">
         error_text,
-      </if>
-      <if test="errorStack != null">
-        error_stack,
       </if>
       <if test="hostIp != null">
         host_ip,
@@ -97,19 +113,25 @@
       <if test="dataVersion != null">
         data_version,
       </if>
+      <if test="request != null">
+        request,
+      </if>
+      <if test="response != null">
+        response,
+      </if>
+      <if test="errorStack != null">
+        error_stack,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="trxnSeq != null">
         #{trxnSeq,jdbcType=VARCHAR},
       </if>
+      <if test="trxnDate != null">
+        #{trxnDate,jdbcType=VARCHAR},
+      </if>
       <if test="trxnDesc != null">
         #{trxnDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="request != null">
-        #{request,jdbcType=VARCHAR},
-      </if>
-      <if test="response != null">
-        #{response,jdbcType=VARCHAR},
       </if>
       <if test="beginTime != null">
         #{beginTime,jdbcType=VARCHAR},
@@ -122,9 +144,6 @@
       </if>
       <if test="errorText != null">
         #{errorText,jdbcType=VARCHAR},
-      </if>
-      <if test="errorStack != null">
-        #{errorStack,jdbcType=VARCHAR},
       </if>
       <if test="hostIp != null">
         #{hostIp,jdbcType=VARCHAR},
@@ -144,19 +163,25 @@
       <if test="dataVersion != null">
         #{dataVersion,jdbcType=INTEGER},
       </if>
+      <if test="request != null">
+        #{request,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="response != null">
+        #{response,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="errorStack != null">
+        #{errorStack,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdsPacket">
     update sds_packet
     <set>
+      <if test="trxnDate != null">
+        trxn_date = #{trxnDate,jdbcType=VARCHAR},
+      </if>
       <if test="trxnDesc != null">
         trxn_desc = #{trxnDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="request != null">
-        request = #{request,jdbcType=VARCHAR},
-      </if>
-      <if test="response != null">
-        response = #{response,jdbcType=VARCHAR},
       </if>
       <if test="beginTime != null">
         begin_time = #{beginTime,jdbcType=VARCHAR},
@@ -169,9 +194,6 @@
       </if>
       <if test="errorText != null">
         error_text = #{errorText,jdbcType=VARCHAR},
-      </if>
-      <if test="errorStack != null">
-        error_stack = #{errorStack,jdbcType=VARCHAR},
       </if>
       <if test="hostIp != null">
         host_ip = #{hostIp,jdbcType=VARCHAR},
@@ -191,19 +213,45 @@
       <if test="dataVersion != null">
         data_version = #{dataVersion,jdbcType=INTEGER},
       </if>
+      <if test="request != null">
+        request = #{request,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="response != null">
+        response = #{response,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="errorStack != null">
+        error_stack = #{errorStack,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdsPacket">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ssy.api.entity.table.local.SdsPacket">
     update sds_packet
-    set trxn_desc = #{trxnDesc,jdbcType=VARCHAR},
-      request = #{request,jdbcType=VARCHAR},
-      response = #{response,jdbcType=VARCHAR},
+    set trxn_date = #{trxnDate,jdbcType=VARCHAR},
+      trxn_desc = #{trxnDesc,jdbcType=VARCHAR},
       begin_time = #{beginTime,jdbcType=VARCHAR},
       end_time = #{endTime,jdbcType=VARCHAR},
       used_time = #{usedTime,jdbcType=VARCHAR},
       error_text = #{errorText,jdbcType=VARCHAR},
-      error_stack = #{errorStack,jdbcType=VARCHAR},
+      host_ip = #{hostIp,jdbcType=VARCHAR},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=INTEGER},
+      request = #{request,jdbcType=LONGVARCHAR},
+      response = #{response,jdbcType=LONGVARCHAR},
+      error_stack = #{errorStack,jdbcType=LONGVARCHAR}
+    where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdsPacket">
+    update sds_packet
+    set trxn_date = #{trxnDate,jdbcType=VARCHAR},
+      trxn_desc = #{trxnDesc,jdbcType=VARCHAR},
+      begin_time = #{beginTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      used_time = #{usedTime,jdbcType=VARCHAR},
+      error_text = #{errorText,jdbcType=VARCHAR},
       host_ip = #{hostIp,jdbcType=VARCHAR},
       data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
       data_create_time = #{dataCreateTime,jdbcType=VARCHAR},

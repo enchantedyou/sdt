@@ -32,6 +32,6 @@
         </javaClientGenerator>
         
         <!-- 表与实体间的映射 -->
-        <table tableName="sdp_batch_step" domainObjectName="SdpBatchStep" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" delimitAllColumns=""/>
+        <table tableName="sds_packet" domainObjectName="SdsPacket" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" delimitAllColumns=""/>
     </context>
 </generatorConfiguration>

@@ -1,17 +1,19 @@
 package com.ssy.api.thread;
 
-import com.ssy.api.entity.config.SdtContextConfig;
+import com.ssy.api.dao.mapper.local.SdbBatchSubExecutionMapper;
+import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_BATCHEXESTATUS;
 import com.ssy.api.entity.table.edsp.TspTaskExecution;
+import com.ssy.api.entity.table.local.SdbBatchSubExecution;
 import com.ssy.api.entity.table.local.SdpBatchFlow;
 import com.ssy.api.entity.table.local.SdpBatchStep;
 import com.ssy.api.entity.type.edsp.SdCallBatchIn;
-import com.ssy.api.entity.type.edsp.SdCallBatchOut;
-import com.ssy.api.exception.SdtException;
 import com.ssy.api.logic.batch.SdEODBatchHelper;
-import com.ssy.api.utils.CommUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ssy.api.utils.system.BizUtil;
+import com.ssy.api.utils.system.CommUtil;
+import com.ssy.api.utils.system.SpringContextUtil;
 
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 /**
@@ -19,12 +21,7 @@ import java.util.concurrent.Callable;
  * @Author sunshaoyu
  * @Date 2020年07月05日-19:54
  */
-public class BatchCallable implements Callable<SdCallBatchOut> {
-
-    @Autowired
-    private SdEODBatchHelper batchHelper;
-    @Autowired
-    private SdtContextConfig contextConfig;
+public class BatchCallable extends SdEODBatchHelper implements Callable<Boolean> {
 
     private SdCallBatchIn callBatchIn;
     private SdpBatchFlow batchFlow;
@@ -37,28 +34,47 @@ public class BatchCallable implements Callable<SdCallBatchOut> {
     }
 
     @Override
-    public SdCallBatchOut call() {
-        SdCallBatchOut callBatchOut = new SdCallBatchOut();
+    public Boolean call() {
         try{
-            TspTaskExecution taskExecution = batchHelper.tryCallSubSystemBatchTask(callBatchIn, batchStep, batchFlow);
+            TspTaskExecution taskExecution = tryCallSubSystemBatchTask(callBatchIn, batchStep, batchFlow);
+            registerBatchSubExecuteion(null, taskExecution, batchStep, batchFlow);
             if(CommUtil.isNotNull(taskExecution)){
-                callBatchOut.setSystemCode(taskExecution.getSystemCode());
-                callBatchOut.setBusiOrgId(taskExecution.getCorporateCode());
-                callBatchOut.setTranFlowId(taskExecution.getTranFlowId());
-                callBatchOut.setTrxnDate(taskExecution.getTransactionDate());
-
-                callBatchOut.setBatchExeStatus(E_BATCHEXESTATUS.valueOf(taskExecution.getTranState()));
-                callBatchOut.setTranGroupId(taskExecution.getTranGroupId());
-                callBatchOut.setErrorMessage(taskExecution.getErrorMessage());
-            }else{
-                callBatchOut.setSystemCode(batchFlow.getSystemCode());
-                callBatchOut.setBusiOrgId(contextConfig.getBusiOrgId());
-                callBatchOut.setTranFlowId(batchStep.getFlowStepId());
-                callBatchOut.setTranGroupId(batchStep.getFlowStepGroup());
+                return CommUtil.equals(taskExecution.getTranState(), E_BATCHEXESTATUS.success.getValue());
             }
-        }catch (SdtException e){
-            callBatchOut.setErrorMessage(e.getMessage());
+            return true;
+        }catch (Exception e){
+            registerBatchSubExecuteion(e, null, batchStep, batchFlow);
         }
-        return callBatchOut;
+        return false;
+    }
+
+    /**
+     * @Description 登记批量允许登记簿子表
+     * @Author sunshaoyu
+     * @Date 2020/7/6-18:52
+     * @param e
+     * @param taskExecution
+     * @param batchStep
+     * @param batchFlow
+     */
+    private void registerBatchSubExecuteion(Throwable e, TspTaskExecution taskExecution, SdpBatchStep batchStep, SdpBatchFlow batchFlow){
+        SdbBatchSubExecution batchSubExecution = new SdbBatchSubExecution();
+        //batchSubExecution.setTrxnSeq(BizUtil.getRunEnvs().getTrxnSeq());
+        batchSubExecution.setTrxnSeq(BizUtil.buildTrxnSeq(SdtConst.TRXN_SEQ_LENGTH));
+        batchSubExecution.setSystemCode(batchFlow.getSystemCode());
+        batchSubExecution.setFlowStepId(batchStep.getFlowStepId());
+
+        if(CommUtil.isNotNull(taskExecution)){
+            batchSubExecution.setTrxnDate(taskExecution.getTransactionDate());
+            batchSubExecution.setTranState(taskExecution.getTranState());
+            batchSubExecution.setErrorMessage(taskExecution.getErrorMessage());
+            batchSubExecution.setErrorStack(taskExecution.getErrorStack());
+            batchSubExecution.setTranGroupId(taskExecution.getTranGroupId());
+        }else if(CommUtil.isNotNull(e)){
+            batchSubExecution.setErrorMessage(e.getMessage());
+            batchSubExecution.setErrorStack(Arrays.toString(e.getStackTrace()));
+            batchSubExecution.setTranGroupId(batchStep.getFlowStepGroup());
+        }
+        SpringContextUtil.getBean(SdbBatchSubExecutionMapper.class).insert(batchSubExecution);
     }
 }

@@ -1,11 +1,18 @@
 package com.ssy.api;
 
+import com.alibaba.fastjson.JSON;
 import com.ssy.api.dao.mapper.edsp.TspServiceInMapper;
-import com.ssy.api.plugins.DBContextHolder;
-import com.ssy.api.plugins.SdtBatchScanner;
+import com.ssy.api.dao.mapper.local.SdbUserMapper;
+import com.ssy.api.entity.lang.ResponseData;
+import com.ssy.api.entity.table.local.SdbUser;
+import com.ssy.api.logic.batch.SdEODBatchHelper;
 import com.ssy.api.servicetype.AppDateService;
 import com.ssy.api.servicetype.DataSourceService;
 import com.ssy.api.servicetype.ModulePriortyService;
+import com.ssy.api.utils.security.AesEnDecrypt;
+import com.ssy.api.utils.security.Md5Encrypt;
+import com.ssy.api.utils.system.BizUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = SdtApplication.class)
+@Slf4j
 class SdtApplicationTests {
 
     protected static final Logger logger = LoggerFactory.getLogger(SdtApplicationTests.class);
@@ -25,19 +33,29 @@ class SdtApplicationTests {
     private AppDateService appDateService;
     @Autowired
     private TspServiceInMapper tspServiceInMapper;
+    @Autowired
+    private SdEODBatchHelper batchHelper;
+    @Autowired
+    private SdbUserMapper userMapper;
+
 
     @Test
     void contextLoads() throws Exception {
+        /*SdCallBatchIn callBatchIn = new SdCallBatchIn();
+        callBatchIn.setBatchCallMode(E_BATCHCALLMODE.DAYS);
+        callBatchIn.setAssignDays(1);
+        callBatchIn.setFlowGroup("dev");
+        callBatchIn.setBatchRunNo("CoreEOD_1594110765867");
+        batchHelper.asyncCallBatch(callBatchIn);*/
 
-        DBContextHolder.switchToDataSource("ln_dev");
-
-        System.out.println(appDateService.queryCurrentDate());
-        System.out.println("字典优先级数量:"+modulePriortyService.queryEffectDictPriortyList().size());
-        System.out.println("服务接入表:"+tspServiceInMapper.selectByPrimaryKey("102", "1021", "326020").hashCode());
-        System.out.println("动态数据源数量:"+dataSourceService.queryDataSourceList().size());
-
-        for(int i = 0;i < 10;i++){
-            new Thread(() -> System.out.println(SdtBatchScanner.getInstance().hashCode())).start();
-        }
+        /*String[] dbs = {"ln_dev","dp_dev","cm_dev"};
+        for(String db : dbs){
+            DBContextHolder.switchToDataSource(db);
+            appDateService.resetCurrentDate("20191107");
+        }*/
+        SdbUser user = userMapper.selectByPrimaryKey("admin");
+        user.setLoginIp("127.0.0.1");
+        user.setLoginTime(BizUtil.getCurSysTime());
+        userMapper.updateByPrimaryKey(user);
     }
 }

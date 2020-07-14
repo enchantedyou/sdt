@@ -7,9 +7,9 @@ import com.ssy.api.entity.dict.SdtTable;
 import com.ssy.api.entity.table.local.SdpDictPriorty;
 import com.ssy.api.entity.table.local.SdpEnumPriorty;
 import com.ssy.api.exception.ApPubErr;
-import com.ssy.api.utils.BizUtil;
-import com.ssy.api.utils.CommUtil;
-import com.ssy.api.utils.SdtBusiUtil;
+import com.ssy.api.utils.system.BizUtil;
+import com.ssy.api.utils.system.CommUtil;
+import com.ssy.api.utils.business.SdtBusiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

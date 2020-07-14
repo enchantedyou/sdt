@@ -3,11 +3,9 @@ package com.ssy.api.entity.table.local;
 public class SdsPacket {
     private String trxnSeq;
 
+    private String trxnDate;
+
     private String trxnDesc;
-
-    private String request;
-
-    private String response;
 
     private String beginTime;
 
@@ -16,8 +14,6 @@ public class SdsPacket {
     private String usedTime;
 
     private String errorText;
-
-    private String errorStack;
 
     private String hostIp;
 
@@ -31,22 +27,45 @@ public class SdsPacket {
 
     private Integer dataVersion;
 
-    public SdsPacket(String trxnSeq, String trxnDesc, String request, String response, String beginTime, String endTime, String usedTime, String errorText, String errorStack, String hostIp, String dataCreateUser, String dataCreateTime, String dataUpdateUser, String dataUpdateTime, Integer dataVersion) {
+    private String request;
+
+    private String response;
+
+    private String errorStack;
+
+    public SdsPacket(String trxnSeq, String trxnDate, String trxnDesc, String beginTime, String endTime, String usedTime, String errorText, String hostIp, String dataCreateUser, String dataCreateTime, String dataUpdateUser, String dataUpdateTime, Integer dataVersion) {
         this.trxnSeq = trxnSeq;
+        this.trxnDate = trxnDate;
         this.trxnDesc = trxnDesc;
-        this.request = request;
-        this.response = response;
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.usedTime = usedTime;
         this.errorText = errorText;
-        this.errorStack = errorStack;
         this.hostIp = hostIp;
         this.dataCreateUser = dataCreateUser;
         this.dataCreateTime = dataCreateTime;
         this.dataUpdateUser = dataUpdateUser;
         this.dataUpdateTime = dataUpdateTime;
         this.dataVersion = dataVersion;
+    }
+
+    public SdsPacket(String trxnSeq, String trxnDate, String trxnDesc, String beginTime, String endTime, String usedTime, String errorText, String hostIp, String dataCreateUser, String dataCreateTime, String dataUpdateUser, String dataUpdateTime, Integer dataVersion, String request, String response, String errorStack) {
+        this.trxnSeq = trxnSeq;
+        this.trxnDate = trxnDate;
+        this.trxnDesc = trxnDesc;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
+        this.usedTime = usedTime;
+        this.errorText = errorText;
+        this.hostIp = hostIp;
+        this.dataCreateUser = dataCreateUser;
+        this.dataCreateTime = dataCreateTime;
+        this.dataUpdateUser = dataUpdateUser;
+        this.dataUpdateTime = dataUpdateTime;
+        this.dataVersion = dataVersion;
+        this.request = request;
+        this.response = response;
+        this.errorStack = errorStack;
     }
 
     public SdsPacket() {
@@ -61,28 +80,20 @@ public class SdsPacket {
         this.trxnSeq = trxnSeq == null ? null : trxnSeq.trim();
     }
 
+    public String getTrxnDate() {
+        return trxnDate;
+    }
+
+    public void setTrxnDate(String trxnDate) {
+        this.trxnDate = trxnDate == null ? null : trxnDate.trim();
+    }
+
     public String getTrxnDesc() {
         return trxnDesc;
     }
 
     public void setTrxnDesc(String trxnDesc) {
         this.trxnDesc = trxnDesc == null ? null : trxnDesc.trim();
-    }
-
-    public String getRequest() {
-        return request;
-    }
-
-    public void setRequest(String request) {
-        this.request = request == null ? null : request.trim();
-    }
-
-    public String getResponse() {
-        return response;
-    }
-
-    public void setResponse(String response) {
-        this.response = response == null ? null : response.trim();
     }
 
     public String getBeginTime() {
@@ -115,14 +126,6 @@ public class SdsPacket {
 
     public void setErrorText(String errorText) {
         this.errorText = errorText == null ? null : errorText.trim();
-    }
-
-    public String getErrorStack() {
-        return errorStack;
-    }
-
-    public void setErrorStack(String errorStack) {
-        this.errorStack = errorStack == null ? null : errorStack.trim();
     }
 
     public String getHostIp() {
@@ -173,6 +176,30 @@ public class SdsPacket {
         this.dataVersion = dataVersion;
     }
 
+    public String getRequest() {
+        return request;
+    }
+
+    public void setRequest(String request) {
+        this.request = request == null ? null : request.trim();
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response == null ? null : response.trim();
+    }
+
+    public String getErrorStack() {
+        return errorStack;
+    }
+
+    public void setErrorStack(String errorStack) {
+        this.errorStack = errorStack == null ? null : errorStack.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -180,20 +207,21 @@ public class SdsPacket {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", trxnSeq=").append(trxnSeq);
+        sb.append(", trxnDate=").append(trxnDate);
         sb.append(", trxnDesc=").append(trxnDesc);
-        sb.append(", request=").append(request);
-        sb.append(", response=").append(response);
         sb.append(", beginTime=").append(beginTime);
         sb.append(", endTime=").append(endTime);
         sb.append(", usedTime=").append(usedTime);
         sb.append(", errorText=").append(errorText);
-        sb.append(", errorStack=").append(errorStack);
         sb.append(", hostIp=").append(hostIp);
         sb.append(", dataCreateUser=").append(dataCreateUser);
         sb.append(", dataCreateTime=").append(dataCreateTime);
         sb.append(", dataUpdateUser=").append(dataUpdateUser);
         sb.append(", dataUpdateTime=").append(dataUpdateTime);
         sb.append(", dataVersion=").append(dataVersion);
+        sb.append(", request=").append(request);
+        sb.append(", response=").append(response);
+        sb.append(", errorStack=").append(errorStack);
         sb.append("]");
         return sb.toString();
     }

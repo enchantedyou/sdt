@@ -2,6 +2,8 @@ package com.ssy.api.logic.batch;
 
 import com.alibaba.fastjson.JSON;
 import com.ssy.api.dao.mapper.edsp.*;
+import com.ssy.api.dao.mapper.local.SdbBatchExecutionMapper;
+import com.ssy.api.dao.mapper.local.SdbBatchSubExecutionMapper;
 import com.ssy.api.dao.mapper.local.SdpBatchFlowMapper;
 import com.ssy.api.dao.mapper.local.SdpBatchStepMapper;
 import com.ssy.api.entity.config.SdtContextConfig;
@@ -9,28 +11,33 @@ import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.enums.E_BATCHCALLMODE;
 import com.ssy.api.entity.enums.E_BATCHEXESTATUS;
+import com.ssy.api.entity.enums.E_ODBOPERATE;
 import com.ssy.api.entity.lang.Params;
 import com.ssy.api.entity.table.edsp.*;
+import com.ssy.api.entity.table.local.SdbBatchExecution;
+import com.ssy.api.entity.table.local.SdbBatchSubExecution;
 import com.ssy.api.entity.table.local.SdpBatchFlow;
 import com.ssy.api.entity.table.local.SdpBatchStep;
 import com.ssy.api.entity.type.edsp.SdCallBatchIn;
+import com.ssy.api.exception.SdtException;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.plugins.DBContextHolder;
 import com.ssy.api.plugins.SdtBatchScanner;
 import com.ssy.api.servicetype.AppDateService;
 import com.ssy.api.servicetype.SystemParamService;
-import com.ssy.api.thread.BatchCallable;
-import com.ssy.api.utils.BizUtil;
-import com.ssy.api.utils.CommUtil;
-import com.ssy.api.utils.SdtBusiUtil;
+import com.ssy.api.utils.system.BizUtil;
+import com.ssy.api.utils.system.CommUtil;
+import com.ssy.api.utils.business.SdtBusiUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
 
 /**
  * @Description
@@ -48,9 +55,9 @@ public class SdEODBatchHelper {
     @Autowired
     private SdpBatchStepMapper sdpBatchStepMapper;
     @Autowired
-    private SystemParamService systemParamService;
+    private SdbBatchExecutionMapper sdbBatchExecutionMapper;
     @Autowired
-    private AppDateService appDateService;
+    private SdbBatchSubExecutionMapper sdbBatchSubExecutionMapper;
     @Autowired
     private TspTaskExecutionDomainMapper tspTaskExecutionDomainMapper;
     @Autowired
@@ -61,6 +68,11 @@ public class SdEODBatchHelper {
     private TspTaskExecutionMapper tspTaskExecutionMapper;
     @Autowired
     private TspTranControllerMapper tspTranControllerMapper;
+
+    @Autowired
+    private SystemParamService systemParamService;
+    @Autowired
+    private AppDateService appDateService;
 
     /**
      * @Description 获取批量流程列表
@@ -140,7 +152,7 @@ public class SdEODBatchHelper {
         Params input = new Params();
         input.add("flowid", batchStep.getFlowStepId()).add("emanad", currentDate).add("corpno", contextConfig.getBusiOrgId());
         Params commReq = new Params();
-        input.add("corporate_code", contextConfig.getBusiOrgId()).add("sponsor_system", batchFlow.getSystemCode()).add("jiaoyirq", currentDate)
+        commReq.add("corporate_code", contextConfig.getBusiOrgId()).add("sponsor_system", batchFlow.getSystemCode()).add("jiaoyirq", currentDate)
                 .add("channel_id", contextConfig.getBatchChannelId()).add("initiator_system", batchFlow.getSystemCode()).add("trxn_teller", systemParamService.getValue(SdtConst.DEFAULT_TELLER));
 
         Params sys = new Params();
@@ -160,6 +172,11 @@ public class SdEODBatchHelper {
         BizUtil.fieldNotNull(callBatchIn.getFlowGroup(), SdtDict.A.flow_group.getId(), SdtDict.A.flow_group.getLongName());
         BizUtil.fieldNotNull(callBatchIn.getBatchCallMode(), SdtDict.A.batch_call_mode.getId(), SdtDict.A.batch_call_mode.getLongName());
 
+        SdbBatchExecution batchExecution = sdbBatchExecutionMapper.selectByPrimaryKey(contextConfig.getBusiOrgId(), contextConfig.getEodDomainCode(), callBatchIn.getBatchRunNo());
+        if(CommUtil.isNotNull(batchExecution)){
+            throw SdtServError.E0008(batchExecution.getBatchRunNo(), batchExecution.getTranState());
+        }
+
         String currentDate = appDateService.queryCurrentDate();
         if(callBatchIn.getBatchCallMode() == E_BATCHCALLMODE.DATE){
             BizUtil.fieldNotNull(callBatchIn.getEndDate(), SdtDict.A.end_date.getId(), SdtDict.A.end_date.getLongName());
@@ -173,6 +190,11 @@ public class SdEODBatchHelper {
             BizUtil.fieldNotNull(callBatchIn.getAssignDays(), SdtDict.A.assign_days.getId(), SdtDict.A.assign_days.getLongName());
             SdtBusiUtil.checkIntegerValid(callBatchIn.getAssignDays(), SdtDict.A.assign_days.getLongName());
             SdtBusiUtil.checkAmountPositive(new BigDecimal(callBatchIn.getAssignDays()), SdtDict.A.assign_days.getLongName());
+
+            final int limitDays = 1;
+            if(callBatchIn.getAssignDays() != limitDays){
+                SdtServError.E0007(SdtDict.A.assign_days.getLongName(), callBatchIn.getAssignDays(), limitDays);
+            }
         }
     }
 
@@ -183,17 +205,59 @@ public class SdEODBatchHelper {
      * @param callBatchIn
      */
     public void asyncCallBatch(SdCallBatchIn callBatchIn) {
+        BizUtil.fieldNotNull(callBatchIn.getFlowGroup(), SdtDict.A.flow_group.getId(), SdtDict.A.flow_group.getLongName());
         List<SdpBatchStep> batchStepList = queryBatchStepList();
         List<SdpBatchFlow> batchFlowList = queryBatchFlowList(callBatchIn.getFlowGroup());
 
         for(SdpBatchStep batchStep : batchStepList){
+            SdbBatchExecution batchExecution = refreshBatchExecuteion(callBatchIn, batchFlowList.get(0), batchStep);
             //对每个子系统执行当前批量组(Switch、High、Middle、General、Low、Clear、Finish)
             for(SdpBatchFlow batchFlow : batchFlowList){
-                SdtBatchScanner.submitTask(new BatchCallable(callBatchIn, batchFlow, batchStep));
+                SdtBatchScanner.submitTask(new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() throws Exception {
+                        return SdEODBatchHelper.this.call(callBatchIn, batchStep, batchFlow, batchExecution);
+                    }
+                });
             }
 
-            if(!SdtBatchScanner.checkCurrentCallResult()){
+            boolean result = SdtBatchScanner.checkCurrentCallResult();
+            refreshBatchExecuteion(callBatchIn, batchFlowList.get(0), batchStep);
+            //当前组处理失败,跳过后续组
+            if(!result){
+                log.info("The current batch group [{}-{}] has failed batch tasks, skip the execution of subsequent groups", batchStep.getFlowStepGroup(), batchStep.getFlowStepId());
                 break;
+            }
+        }
+    }
+
+    /**
+     * @Description 供Callable调用
+     * @Author sunshaoyu
+     * @Date 2020/7/7-13:25
+     * @param callBatchIn
+     * @param batchStep
+     * @param batchFlow
+     * @param batchExecution
+     * @return java.lang.Boolean
+     */
+    private Boolean call(SdCallBatchIn callBatchIn, SdpBatchStep batchStep, SdpBatchFlow batchFlow, SdbBatchExecution batchExecution) {
+        Throwable error = null;
+        TspTaskExecution taskExecution = null;
+
+        try{
+            taskExecution = tryCallSubSystemBatchTask(callBatchIn, batchStep, batchFlow);
+            if(CommUtil.isNotNull(taskExecution)){
+                return CommUtil.equals(taskExecution.getTranState(), E_BATCHEXESTATUS.success.getValue());
+            }
+            return true;
+        }
+        catch (Exception e){
+            error = e;
+            throw new SdtException(e);
+        }finally {
+            if(!(error instanceof SdtException)){
+                refreshBatchSubExecuteion(error, taskExecution, batchStep, batchFlow, batchExecution);
             }
         }
     }
@@ -207,7 +271,7 @@ public class SdEODBatchHelper {
      * @param batchFlow
      * @return com.ssy.api.entity.table.edsp.TspTaskExecution
      */
-    public TspTaskExecution tryCallSubSystemBatchTask(SdCallBatchIn callBatchIn, SdpBatchStep batchStep, SdpBatchFlow batchFlow) {
+    protected TspTaskExecution tryCallSubSystemBatchTask(SdCallBatchIn callBatchIn, SdpBatchStep batchStep, SdpBatchFlow batchFlow) {
         //数据源编号检查
         BizUtil.fieldNotNull(batchFlow.getDatasourceId(), SdtDict.A.datasource_id.getId(), SdtDict.A.datasource_id.getLongName());
         //数据源切换并检查输入域
@@ -222,23 +286,23 @@ public class SdEODBatchHelper {
                 log.info("Transaction date jumps to {}", callBatchIn.getEndDate());
                 appDateService.resetCurrentDate(callBatchIn.getEndDate());
             }
-        }else{
-            List<TspTranController> tspTranControllerList = tspTranControllerMapper.selectAll_odb1(batchStep.getFlowStepGroup());
-            if(CommUtil.isNotNull(tspTranControllerList)){
-                //启动批量
-                String taskNum = buildTaskNum(batchStep);
-                TspTask tspTask = tspTaskMapper.selectOne_odb2(taskNum, false);
+        }
 
-                TspTaskExecution taskExecution = tryStartupTask(tspTask, taskNum, batchStep, batchFlow);
-                if(CommUtil.isNull(taskExecution)){
-                    throw SdtServError.E0006(batchFlow.getSystemCode());
-                }else if(!CommUtil.equals(taskExecution.getTranState(), E_BATCHEXESTATUS.success.getValue())){
-                    log.info("The execution result of batch flow [{}] is [{}], and the subsequent flows are skipped", batchStep.getFlowStepId(), taskExecution.getTranState());
-                }
-                return taskExecution;
-            }else{
-                log.info("There are no executable batch transactions under the flow step [{}], so skip the flow", batchStep.getFlowStepId());
+        List<TspTranController> tspTranControllerList = tspTranControllerMapper.selectAll_odb1(batchStep.getFlowStepGroup());
+        if(CommUtil.isNotNull(tspTranControllerList)){
+            //启动批量
+            String taskNum = buildTaskNum(batchStep);
+            TspTask tspTask = tspTaskMapper.selectOne_odb2(taskNum, false);
+
+            TspTaskExecution taskExecution = tryStartupTask(tspTask, taskNum, batchStep, batchFlow);
+            if(CommUtil.isNull(taskExecution)){
+                throw SdtServError.E0006(batchFlow.getSystemCode());
+            }else if(!CommUtil.equals(taskExecution.getTranState(), E_BATCHEXESTATUS.success.getValue())){
+                log.info("The execution result of batch flow [{}] is [{}], and the subsequent flows are skipped", batchStep.getFlowStepId(), taskExecution.getTranState());
             }
+            return taskExecution;
+        }else{
+            log.info("There are no executable batch transactions under the flow step [{}], so skip the flow", batchStep.getFlowStepId());
         }
         return null;
     }
@@ -275,7 +339,7 @@ public class SdEODBatchHelper {
 
             tspTask.setTranFlowId(batchStep.getFlowStepId());
             tspTaskMapper.insert(tspTask);
-            log.info("Add batch task [%s] and suspend", taskNum);
+            log.info("Add batch task [{}] and suspend", taskNum);
         }
         //不成功则重新挂起
         else if(!CommUtil.equals(tspTask.getTranState(), E_BATCHEXESTATUS.success.getValue())){
@@ -283,11 +347,15 @@ public class SdEODBatchHelper {
             tspTask.setTranState(E_BATCHEXESTATUS.onprocess.getValue());
             tspTaskMapper.updateByPrimaryKey(tspTask);
         }
+        //成功则直接返回
+        else if(CommUtil.equals(tspTask.getTranState(), E_BATCHEXESTATUS.success.getValue())){
+            log.info("The execution status of the current batch task[{}] is [{}], skip", taskNum, tspTask.getTranState());
+            return CommUtil.copyToTargetObject(tspTask, TspTaskExecution.class);
+        }
 
         //开启监听
         return batchTaskProcessListener(taskNum, batchFlow);
     }
-
 
     /**
      * @Description 监听批量任务执行过程
@@ -323,5 +391,102 @@ public class SdEODBatchHelper {
             }
         }
         return null;
+    }
+
+    /**
+     * @Description 登记批量允许登记簿子表
+     * @Author sunshaoyu
+     * @Date 2020/7/6-18:52
+     * @param e
+     * @param taskExecution
+     * @param batchStep
+     * @param batchFlow
+     */
+    private synchronized void refreshBatchSubExecuteion(Throwable e, TspTaskExecution taskExecution, SdpBatchStep batchStep, SdpBatchFlow batchFlow, SdbBatchExecution batchExecution){
+        SdbBatchSubExecution batchSubExecution = sdbBatchSubExecutionMapper.selectByPrimaryKey(batchExecution.getTrxnSeq(), batchFlow.getSystemCode(), batchStep.getFlowStepId());
+        E_ODBOPERATE odbOperate = E_ODBOPERATE.UPDATE;
+        //设置主键部分
+        if(CommUtil.isNull(batchSubExecution)){
+            batchSubExecution = new SdbBatchSubExecution();
+            batchSubExecution.setTrxnSeq(batchExecution.getTrxnSeq());
+            batchSubExecution.setSystemCode(batchFlow.getSystemCode());
+            batchSubExecution.setFlowStepId(batchStep.getFlowStepId());
+            odbOperate = E_ODBOPERATE.INSERT;
+        }
+        //更新非主键部分
+        if(CommUtil.isNotNull(taskExecution)){
+            batchSubExecution.setTrxnDate(taskExecution.getTransactionDate());
+            batchSubExecution.setTranState(taskExecution.getTranState());
+            batchSubExecution.setTranGroupId(taskExecution.getCurrentTranGroupId());
+
+            if(CommUtil.equals(batchExecution.getTranState(), E_BATCHEXESTATUS.success.getValue())){
+                //批量执行成功则清空错误信息
+                batchSubExecution.setErrorMessage(null);
+                batchSubExecution.setErrorStack(null);
+            }else{
+                batchSubExecution.setErrorMessage(taskExecution.getErrorMessage());
+                batchSubExecution.setErrorStack(taskExecution.getErrorStack());
+            }
+        }else if(CommUtil.isNotNull(e)){
+            batchSubExecution.setTranState(E_BATCHEXESTATUS.failure.getValue());
+            batchSubExecution.setErrorMessage(CommUtil.nvl(e.getMessage(), e.toString()));
+            batchSubExecution.setErrorStack(Arrays.toString(e.getStackTrace()));
+            batchSubExecution.setTranGroupId(batchStep.getFlowStepGroup());
+        }
+
+        //更新至数据库
+        if(odbOperate == E_ODBOPERATE.INSERT){
+            sdbBatchSubExecutionMapper.insert(batchSubExecution);
+        }else if(odbOperate == E_ODBOPERATE.UPDATE){
+            sdbBatchSubExecutionMapper.updateByPrimaryKeyWithBLOBs(batchSubExecution);
+        }
+    }
+
+    /**
+     * @Description 刷新批量任务执行表
+     * @Author sunshaoyu
+     * @Date 2020/7/7-13:06
+     * @param callBatchIn
+     * @param batchFlow
+     * @param batchStep
+     * @return com.ssy.api.entity.table.local.SdbBatchExecution
+     */
+    private synchronized SdbBatchExecution refreshBatchExecuteion(SdCallBatchIn callBatchIn, SdpBatchFlow batchFlow, SdpBatchStep batchStep){
+        SdbBatchExecution batchExecution = sdbBatchExecutionMapper.selectByPrimaryKey(contextConfig.getBusiOrgId(), contextConfig.getEodDomainCode(), callBatchIn.getBatchRunNo());
+        if(CommUtil.isNull(batchExecution)){
+            batchExecution = new SdbBatchExecution();
+            batchExecution.setTrxnSeq(BizUtil.buildTrxnSeq(SdtConst.TRXN_SEQ_LENGTH));
+            batchExecution.setTranFlowId(contextConfig.getEodDomainCode());
+            batchExecution.setBatchRunNo(new StringBuffer(contextConfig.getEodDomainCode()).append("_").append(System.currentTimeMillis()).toString());
+
+            batchExecution.setBusiOrgId(contextConfig.getBusiOrgId());
+            //切换数据源查询当前日期
+            DBContextHolder.switchToDataSource(batchFlow.getDatasourceId());
+            batchExecution.setDayendManageDate(appDateService.queryCurrentDate());
+            batchExecution.setTranState(E_BATCHEXESTATUS.onprocess.getValue());
+            batchExecution.setTranGroupId(batchStep.getFlowStepGroup());
+            sdbBatchExecutionMapper.insert(batchExecution);
+            callBatchIn.setBatchRunNo(batchExecution.getBatchRunNo());
+        }else{
+            //获取执行状态
+            List<SdbBatchSubExecution> subExecutionList = sdbBatchSubExecutionMapper.selectAll_odb1(batchExecution.getTrxnSeq(), batchStep.getFlowStepId());
+            if(CommUtil.isNull(subExecutionList)){
+                batchExecution.setTranState(E_BATCHEXESTATUS.processing.getValue());
+            }else{
+                String status = E_BATCHEXESTATUS.success.getValue();
+                for(SdbBatchSubExecution e : subExecutionList){
+                    //未成功,跳出循环更新当前状态
+                    if(CommUtil.isNotNull(e.getTranState()) && !CommUtil.equals(E_BATCHEXESTATUS.success.getValue(), e.getTranState())){
+                        status = e.getTranState();
+                        break;
+                    }
+                }
+                batchExecution.setTranState(status);
+            }
+
+            batchExecution.setTranGroupId(batchStep.getFlowStepGroup());
+            sdbBatchExecutionMapper.updateByPrimaryKey(batchExecution);
+        }
+        return batchExecution;
     }
 }

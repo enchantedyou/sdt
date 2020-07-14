@@ -58,4 +58,9 @@ public class ApPubErr {
     public static SdtException E0010(String date, String longname) {
         throw new SdtException("Invalid format for the field "+longname+":["+date+"]", ErrCodeDef.FIELD_INVALID_FORMAT);
     }
+
+    /** 非法的请求 **/
+    public static SdtException E0011() {
+        throw new SdtException("Invalid request", ErrCodeDef.INVALID_REQUEST);
+    }
 }

@@ -13,6 +13,7 @@ public class SdCallBatchIn {
     private String flowGroup;
     private String endDate;
     private int assignDays;
+    private String batchRunNo;
 
     public E_BATCHCALLMODE getBatchCallMode() {
         return batchCallMode;
@@ -44,5 +45,13 @@ public class SdCallBatchIn {
 
     public void setAssignDays(int assignDays) {
         this.assignDays = assignDays;
+    }
+
+    public String getBatchRunNo() {
+        return batchRunNo;
+    }
+
+    public void setBatchRunNo(String batchRunNo) {
+        this.batchRunNo = batchRunNo;
     }
 }

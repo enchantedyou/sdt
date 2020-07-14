@@ -4,7 +4,7 @@ import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.ComplexType;
 import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.defaults.TableType;
-import com.ssy.api.utils.CommUtil;
+import com.ssy.api.utils.system.CommUtil;
 
 import java.io.File;
 import java.util.Map;
