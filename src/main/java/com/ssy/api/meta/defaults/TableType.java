@@ -1,5 +1,6 @@
 package com.ssy.api.meta.defaults;
 
+import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_TABLETYPE;
 import com.ssy.api.meta.abstracts.AbstractMetaData;
 
@@ -22,11 +23,10 @@ public class TableType extends AbstractMetaData implements Serializable {
     private Map<String, Element> fieldMap;
     private boolean isVirtual = false;
     private boolean isAbstract = false;
-    private final static String[] defaultSuffix = new String[]{".tables.xml"};
 
     public TableType(String location, String id, String longName, String tableName,
                      String tableType, String category, String extension, Map<String, Element> fieldMap) {
-        super(location, id, longName, defaultSuffix);
+        super(location, id, longName, SdtConst.TABLE_SUFFIX);
         this.tableName = tableName;
         try{
             this.tableType = E_TABLETYPE.valueOf(tableType.toUpperCase());

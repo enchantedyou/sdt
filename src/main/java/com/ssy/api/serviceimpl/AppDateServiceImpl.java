@@ -36,6 +36,11 @@ public class AppDateServiceImpl implements AppDateService {
     }
 
     @Override
+    public AppDate queryCurrentAppDateBean() {
+        return queryAppDate();
+    }
+
+    @Override
     public void resetCurrentDate(String trxnDate) {
         BizUtil.fieldNotNull(trxnDate, SdtDict.A.trxn_date.getId(), SdtDict.A.trxn_date.getLongName());
         AppDate appDate = queryAppDate();

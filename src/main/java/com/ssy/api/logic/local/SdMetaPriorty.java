@@ -7,9 +7,9 @@ import com.ssy.api.entity.dict.SdtTable;
 import com.ssy.api.entity.table.local.SdpDictPriorty;
 import com.ssy.api.entity.table.local.SdpEnumPriorty;
 import com.ssy.api.exception.ApPubErr;
+import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
-import com.ssy.api.utils.business.SdtBusiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -161,7 +161,11 @@ public class SdMetaPriorty {
 
         if(CommUtil.isNotNull(dictPriortyList)){
             for(SdpDictPriorty s : dictPriortyList){
-                map.put(s.getDictType(), s);
+                if(SdtBusiUtil.isMsModel(s.getDictType()) && !supportMsInd){
+                    continue;
+                }else{
+                    map.put(s.getDictType(), s);
+                }
             }
         }
 
@@ -185,13 +189,12 @@ public class SdMetaPriorty {
 
         if(CommUtil.isNotNull(enumPriortyList)){
             for(SdpEnumPriorty s : enumPriortyList){
-                map.put(s.getEnumType(), s);
+                if(SdtBusiUtil.isMsModel(s.getEnumType()) && !supportMsInd){
+                    continue;
+                }else{
+                    map.put(s.getEnumType(), s);
+                }
             }
-        }
-
-        //如果不支持ms优先,则移除ms的优先级
-        if(!supportMsInd){
-            map.remove("MsEnumType");
         }
         return map;
     }

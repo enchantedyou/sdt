@@ -179,4 +179,23 @@ public class MetaDataFactory {
         }
         return dataSourceMap;
     }
+
+    /**
+     * @Description 初始化加载元数据
+     * @Author sunshaoyu
+     * @Date 2020/7/8-15:57
+     */
+    protected static void loadMetaDataInitially() {
+        //初始化接口文档文件
+        loadIntfWordFileMap();
+        //初始化限制类型
+        loadRestrictionTypeMap();
+
+        //初始化复合类型
+        loadComplexTypeMap();
+        //初始化项目字典
+        loadDictMap();
+        //初始化表模型
+        loadTableTypeMap();
+    }
 }

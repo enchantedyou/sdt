@@ -43,6 +43,8 @@ public class PTEthread {
 
     @JSONField(ordinal = 50)
     private Boolean showColumn;
+    @JSONField(ordinal = 55)
+    private Params format;
 
     public E_THREADTYPE getType() {
         return type;
@@ -130,5 +132,13 @@ public class PTEthread {
 
     public void setShowColumn(Boolean showColumn) {
         this.showColumn = showColumn;
+    }
+
+    public Params getFormat() {
+        return format;
+    }
+
+    public void setFormat(Params format) {
+        this.format = format;
     }
 }

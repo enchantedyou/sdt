@@ -8,6 +8,7 @@ import com.ssy.api.plugins.SdtArgumentResolver;
 import com.ssy.api.plugins.SysContextInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -52,7 +53,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //系统拦截器,用于初始化流水和基础路径
         registry.addInterceptor(sysContextInterceptor).addPathPatterns("/**");
         //权限拦截器
-        registry.addInterceptor(authorityInterceptor).addPathPatterns("/select/*");
+        registry.addInterceptor(authorityInterceptor)
+                .addPathPatterns("/index")
+                .addPathPatterns("/local/*").excludePathPatterns("/local/login");
     }
 
     /**

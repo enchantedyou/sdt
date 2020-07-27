@@ -1,5 +1,6 @@
 package com.ssy.api.meta.defaults;
 
+import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_RESTRICTION;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 
@@ -13,11 +14,10 @@ import java.util.Arrays;
  */
 public class DefaultBaseType extends AbstractRestrictionType implements Serializable {
 
-    private final static String defaultSuffix = ".u_schema.xml";
     private final static E_RESTRICTION defaultRestriction = E_RESTRICTION.BASETYPE;
 
     public DefaultBaseType(String location, String id, String longName, String base, int maxLength, int fractionDigits) {
-        super(location, defaultSuffix, id, longName, base, defaultRestriction, maxLength, fractionDigits ,null);
+        super(location, SdtConst.REUSABLE_SUFFIX, id, longName, base, defaultRestriction, maxLength, fractionDigits ,null);
     }
 
     @Override

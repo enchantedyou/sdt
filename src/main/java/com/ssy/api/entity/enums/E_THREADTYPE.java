@@ -12,7 +12,10 @@ public enum E_THREADTYPE implements DefaultEnum<String> {
     selection("selection", "selection", "selection"),
     radio("radio", "radio", "radio"),
     index("index", "index", "index"),
-    expand("expand", "expand", "expand");
+    expand("expand", "expand", "expand"),
+    dateTimePicker("dateTimePicker", "dateTimePicker", "dateTimePicker"),
+    timePicker("timePicker", "timePicker", "timePicker"),
+    ;
 
     private String id;
     private String value;

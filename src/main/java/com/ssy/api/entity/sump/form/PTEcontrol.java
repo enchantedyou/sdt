@@ -14,6 +14,8 @@ import java.util.List;
 public class PTEcontrol {
     @JSONField(ordinal = 0)
     private String label;
+    @JSONField(ordinal = 1)
+    private E_CONTROL control;
     @JSONField(ordinal = 5)
     private Boolean disabled;
 
@@ -21,9 +23,6 @@ public class PTEcontrol {
     private String compute;
     @JSONField(ordinal = 15)
     private List<PTErule> rules;
-
-    @JSONField(ordinal = 20)
-    private E_CONTROL control;
     @JSONField(ordinal = 25)
     private Boolean edit;
 
@@ -85,7 +84,7 @@ public class PTEcontrol {
     @JSONField(ordinal = 140)
     private Character thousand;
     @JSONField(ordinal = 145)
-    private Long max;
+    private Integer max;
 
     @JSONField(ordinal = 150)
     private Long step;
@@ -350,11 +349,11 @@ public class PTEcontrol {
         this.thousand = thousand;
     }
 
-    public Long getMax() {
+    public Integer getMax() {
         return max;
     }
 
-    public void setMax(Long max) {
+    public void setMax(Integer max) {
         this.max = max;
     }
 

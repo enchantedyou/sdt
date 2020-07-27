@@ -14,9 +14,18 @@ import java.util.Map;
 public class PTEform {
     @JSONField(ordinal = 0)
     private List<PTEbtns> btns;
+    @JSONField(ordinal = 1)
+    private Integer foldLineNumber;
+    @JSONField(ordinal = 2)
+    private PTEdoRequest doRequest;
+
+    @JSONField(ordinal = 3)
+    private Boolean isInitSearch;
     @JSONField(ordinal = 5)
     private String scope;
 
+    @JSONField(ordinal = 6)
+    private Boolean bringBack;
     @JSONField(ordinal = 10)
     private String initRequest;
     @JSONField(ordinal = 15)
@@ -24,15 +33,6 @@ public class PTEform {
 
     @JSONField(ordinal = 20)
     private List<Map<String, PTEcontrol>> controls;
-    @JSONField(ordinal = 25)
-    private Boolean bringBack;
-
-    @JSONField(ordinal = 30)
-    private PTEdoRequest doRequest;
-    @JSONField(ordinal = 35)
-    private Integer foldLineNumber;
-    @JSONField(ordinal = 40)
-    private Boolean isInitSearch;
 
     public List<PTEbtns> getBtns() {
         return btns;

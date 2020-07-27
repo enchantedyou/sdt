@@ -21,28 +21,9 @@ public class SdtApplicationStartupLoader extends MetaDataFactory implements Appl
     public void run(ApplicationArguments args) throws Exception {
         StopWatch s = BizUtil.startStopWatch();
         /** 初始化元数据 **/
-        //loadMetaData();
+        loadMetaDataInitially();
         /** 初始化动态数据源 **/
         loadDynamicDataSource();
         BizUtil.stoptStopWatch(s, "Load all metadata");
-    }
-
-    /**
-     * @Description 初始化加载元数据
-     * @Author sunshaoyu
-     * @Date 2020/7/8-15:57
-     */
-    private void loadMetaData() {
-        //初始化接口文档文件
-        loadIntfWordFileMap();
-        //初始化限制类型
-        loadRestrictionTypeMap();
-
-        //初始化复合类型
-        loadComplexTypeMap();
-        //初始化项目字典
-        loadDictMap();
-        //初始化表模型
-        loadTableTypeMap();
     }
 }

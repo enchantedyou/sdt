@@ -11,6 +11,17 @@ public class RunEnvs {
     private String requestStartTime;
     private String requestParams;
 
+    private int currentPage;
+    private int pageSize;
+    private int totalCount;
+
+    public RunEnvs(String trxnSeq, String requestStartTime, int currentPage, int pageSize) {
+        this.trxnSeq = trxnSeq;
+        this.requestStartTime = requestStartTime;
+        this.currentPage = currentPage;
+        this.pageSize = pageSize;
+    }
+
     public RunEnvs(String trxnSeq, String requestStartTime) {
         this.trxnSeq = trxnSeq;
         this.requestStartTime = requestStartTime;
@@ -38,5 +49,29 @@ public class RunEnvs {
 
     public void setRequestParams(String requestParams) {
         this.requestParams = requestParams;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
     }
 }

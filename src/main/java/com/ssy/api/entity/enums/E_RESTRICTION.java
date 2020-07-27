@@ -10,7 +10,8 @@ import com.ssy.api.meta.enums.DefaultEnum;
 public enum E_RESTRICTION implements DefaultEnum<String> {
 
     BASETYPE("BASETYPE", "B", "base type"),
-    ENUMTYPE("ENUMTYPE", "E", "enum type");
+    ENUMTYPE("ENUMTYPE", "E", "enum type"),
+    COMPLEXTYPE("COMPLEXTYPE", "C", "complex type");
 
     private String id;
     private String value;

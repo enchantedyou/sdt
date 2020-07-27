@@ -3,6 +3,7 @@ package com.ssy.api.serviceimpl;
 import com.ssy.api.dao.mapper.local.SdbUserMapper;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
+import com.ssy.api.entity.session.UserInfo;
 import com.ssy.api.entity.table.local.SdbUser;
 import com.ssy.api.entity.type.local.SdLoginIn;
 import com.ssy.api.entity.type.local.SdLoginOut;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
     public SdLoginOut login(SdLoginIn loginIn) {
         BizUtil.fieldNotNull(loginIn.getUserAcct(), SdtDict.A.user_acct.getId(), SdtDict.A.user_acct.getLongName());
         BizUtil.fieldNotNull(loginIn.getUserPwd(), SdtDict.A.user_pwd.getId(), SdtDict.A.user_pwd.getLongName());
+        BizUtil.fieldNotNull(loginIn.getDatasourceId(), SdtDict.A.datasource_id.getId(), SdtDict.A.datasource_id.getLongName());
 
         SdbUser user = userMapper.selectByPrimaryKey(loginIn.getUserAcct());
         if(CommUtil.isNull(user)){
@@ -46,7 +48,7 @@ public class UserServiceImpl implements UserService {
         }else{
             //设置session信息
             HttpSession session = SpringContextUtil.getRequest().getSession();
-            session.setAttribute(SdtConst.CURRENT_USER, user);
+            session.setAttribute(SdtConst.USER_INFO, new UserInfo(user.getUserAcct(), loginIn.getDatasourceId()));
             session.setMaxInactiveInterval(SdtConst.userMaxInactiveInterval);
 
             //更新用户信息
@@ -54,6 +56,7 @@ public class UserServiceImpl implements UserService {
             user.setLoginIp(requestIp);
             user.setLoginTime(BizUtil.getRunEnvs().getRequestStartTime());
             userMapper.updateByPrimaryKey(user);
+
             return new SdLoginOut(BizUtil.getRunEnvs().getRequestStartTime(), requestIp);
         }
     }

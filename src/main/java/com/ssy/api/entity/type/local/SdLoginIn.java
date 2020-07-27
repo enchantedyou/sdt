@@ -9,6 +9,7 @@ public class SdLoginIn {
 
     private String userAcct;
     private String userPwd;
+    private String datasourceId;
 
     public String getUserAcct() {
         return userAcct;
@@ -26,11 +27,20 @@ public class SdLoginIn {
         this.userPwd = userPwd;
     }
 
+    public String getDatasourceId() {
+        return datasourceId;
+    }
+
+    public void setDatasourceId(String datasourceId) {
+        this.datasourceId = datasourceId;
+    }
+
     @Override
     public String toString() {
         return "SdLoginIn{" +
                 "userAcct='" + userAcct + '\'' +
                 ", userPwd='" + userPwd + '\'' +
+                ", datasourceId='" + datasourceId + '\'' +
                 '}';
     }
 }

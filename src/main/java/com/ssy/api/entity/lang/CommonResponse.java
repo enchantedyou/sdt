@@ -9,6 +9,17 @@ public class CommonResponse {
 
     private String trxnSeq;
     private String responseTime;
+    private int currentPage;
+    private int pageSize;
+    private int totalCount;
+
+    public CommonResponse(String trxnSeq, String responseTime, int currentPage, int pageSize, int totalCount) {
+        this.trxnSeq = trxnSeq;
+        this.responseTime = responseTime;
+        this.currentPage = currentPage;
+        this.pageSize = pageSize;
+        this.totalCount = totalCount;
+    }
 
     public CommonResponse(String trxnSeq, String responseTime) {
         this.trxnSeq = trxnSeq;
@@ -29,5 +40,29 @@ public class CommonResponse {
 
     public void setResponseTime(String responseTime) {
         this.responseTime = responseTime;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
     }
 }

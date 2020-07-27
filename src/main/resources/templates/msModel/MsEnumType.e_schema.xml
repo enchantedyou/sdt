@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="MsEnumType" package="cn.sunline.clwj.msap.sys.type" longname="enum-type(Msap)" classgen="normal" xsi:noNamespaceSchemaLocation="ltts-model.xsd">
+    <restrictionType id="E_YESORNO" longname="yes or no" base="MsType.U_BYTE1" desc="是否">
+        <enumeration id="YES" value="Y" longname="YES" desc="是"/>
+        <enumeration id="NO" value="N" longname="NO" desc="否"/>
+    </restrictionType>
+    <restrictionType id="E_TRUEORFALSE" longname="true or false" base="MsType.U_BYTE5" desc="真假">
+        <enumeration id="TRUE" value="true" longname="ture" desc="真"/>
+        <enumeration id="FALSE" value="false" longname="false" desc="假"/>
+    </restrictionType>
+    <restrictionType id="E_INITIATORSEQMODE" longname="initiator sequence supply mode" base="MsType.U_BYTE1" desc="调用流水提供方式">
+        <enumeration id="INTERFACE" value="A" longname="interface" desc="接口上送"/>
+        <enumeration id="AUTO" value="B" longname="auto generate" desc="自动生成"/>
+    </restrictionType>
+    <restrictionType id="E_DATAOPERATE" longname="data operate type" base="MsType.U_BYTE1" desc="数据操作类型">
+        <enumeration id="ADD" value="A" longname="add" desc="新增"/>
+        <enumeration id="MODIFY" value="M" longname="modify" desc="修改"/>
+        <enumeration id="DELETE" value="D" longname="delete" desc="删除"/>
+    </restrictionType>
+    <restrictionType id="E_CASHTRXN" longname="cash or transfer" base="MsType.U_BYTE1" desc="现转标志">
+        <enumeration id="CASH" value="C" longname="cash" desc="现金"/>
+        <enumeration id="TRXN" value="T" longname="transfer" desc="转账"/>
+        <enumeration id="OTHER" value="O" longname="other" desc="其他"/>
+    </restrictionType>
+    <restrictionType id="E_REDBLUEWORDIND" longname="red blue accounting icon" base="MsType.U_BYTE1" desc="红蓝字记账标志">
+        <enumeration id="RED" value="1" longname="red word" desc="红字"/>
+        <enumeration id="BLUE" value="2" longname="blue word" desc="蓝字"/>
+    </restrictionType>
+    <restrictionType id="E_TABLETYPE" longname="database table type" base="MsType.U_BYTE1" desc="数据库表类型">
+        <enumeration id="PARAMETER" value="P" longname="parameter table" desc="参数表"/>
+        <enumeration id="BUSINESS" value="B" longname="business table" desc="业务表"/>
+    </restrictionType>
+    <restrictionType id="E_TRXNTYPE" longname="transaction type" base="MsType.U_BYTE1" desc="交易类型">
+        <enumeration id="QUERY" value="Q" longname="query" desc="查询交易"/>
+        <enumeration id="FINANCIAL" value="F" longname="financial" desc="金融交易"/>
+        <enumeration id="MAINTAIN" value="M" longname="normal maintain" desc="正常维护交易"/>
+        <enumeration id="PARAMETER" value="P" longname="parm maintain" desc="参数维护交易"/>
+        <enumeration id="CHECK" value="C" longname="check" desc="账务类交易的尝试性执行，保证交易的成功率"/>
+        <enumeration id="TEST" value="T" longname="test" desc="用于测试的交易"/>
+    </restrictionType>
+    <restrictionType id="E_DEBITCREDIT" longname="debit credit" base="MsType.U_BYTE1" desc="借记贷记">
+        <enumeration id="DEBIT" value="D" longname="debit" desc="借"/>
+        <enumeration id="CREDIT" value="C" longname="credit" desc="贷"/>
+    </restrictionType>
+    <restrictionType id="E_SEQBUILDCLASS" longname="sequence build ind" base="MsType.U_BYTE1" desc="流水号组建类别">
+        <enumeration id="RECOGNITION" value="A" longname="identification section" desc="标识"/>
+        <enumeration id="SEQUENCE" value="B" longname="serial number" desc="顺序号"/>
+        <enumeration id="CHECKBIT" value="C" longname="check bit" desc="校验位"/>
+        <enumeration id="CONSTANTS" value="S" longname="constants" desc="常量"/>
+    </restrictionType>
+    <restrictionType id="E_CYCLETYPE" longname="cycle type" base="MsType.U_BYTE1" desc="周期单位">
+        <enumeration id="DAY" value="D" longname="day" desc="日"/>
+        <enumeration id="WEEK" value="W" longname="week" desc="周"/>
+        <enumeration id="MONTH" value="M" longname="month" desc="月"/>
+        <enumeration id="QUARTER" value="Q" longname="quarter" desc="季"/>
+        <enumeration id="HALF_YEAR" value="H" longname="half year" desc="半年"/>
+        <enumeration id="YEAR" value="Y" longname="year" desc="年"/>
+    </restrictionType>
+    <restrictionType id="E_PADDINGMODE" longname="padding method" base="MsType.U_BYTE1" desc="流水补齐方式">
+        <enumeration id="LEFT" value="L" longname="left padding" desc="左补齐"/>
+        <enumeration id="RIGHT" value="R" longname="right padding" desc="右补齐"/>
+    </restrictionType>
+    <restrictionType id="E_REVERSALTYPE" longname="reversal type" base="MsType.U_BYTE1" desc="冲正冲账分类">
+        <enumeration id="BUSINESS" value="B" longname="business" desc="业务冲账"/>
+        <enumeration id="TECHNOLOGY" value="T" longname="technology" desc="技术冲正"/>
+    </restrictionType>
+    <restrictionType id="E_PARTMODE" longname="partition mode" base="MsType.U_BYTE1" desc="分区模式">
+        <enumeration id="MONTH" value="M" longname="with month" desc="按月"/>
+        <enumeration id="DAY" value="D" longname="with day" desc="按天"/>
+    </restrictionType>
+    <restrictionType id="E_DBTYPE" longname="database type" base="MsType.U_BYTE10" desc="数据库类型">
+        <enumeration id="MYSQL" value="MYSQL" longname="MYSQL" desc="MySQL"/>
+        <enumeration id="ORACLE" value="ORACLE" longname="ORACLE" desc="Oracle"/>
+        <enumeration id="DB2" value="DB2" longname="DB2" desc="DB2"/>
+    </restrictionType>
+    <restrictionType id="E_OPERATOR" longname="data matching operator" base="MsType.U_BYTE4" desc="数据操作符">
+        <enumeration id="EQUAL" value="EQ" longname="equal" desc="等于"/>
+        <enumeration id="NO_EQUAL" value="NE" longname="not equal" desc="不等"/>
+        <enumeration id="IN" value="IN" longname="in" desc="包含"/>
+        <enumeration id="NO_IN" value="NI" longname="not in" desc="不包含"/>
+        <enumeration id="GREATER_THAN" value="GT" longname="greater then" desc="大于"/>
+        <enumeration id="LESS_THAN" value="LT" longname="less then" desc="小于"/>
+        <enumeration id="GREATER_THAN_OR_EQUAL" value="GTEQ" longname="greater than or equal to" desc="大于等于"/>
+        <enumeration id="LESS_THAN_OR_EQUAL" value="LTEQ" longname="less than or equal to" desc="小于等于"/>
+        <enumeration id="REQULAR_EXPRESSION" value="EXP" longname="regular expression" desc="正则表达式"/>
+        <enumeration id="CONTAIN" value="CO" longname="contain"/>
+        <enumeration id="NOT_CONTAIN" value="NCO" longname="not contain"/>
+    </restrictionType>
+    <restrictionType id="E_TRXNSTATUS" longname="transaction status" base="MsType.U_BYTE1" desc="交易状态">
+        <enumeration id="NORMAL" value="N" longname="normal" desc="正常"/>
+        <enumeration id="REVERSED" value="R" longname="reversed" desc="被冲正"/>
+    </restrictionType>
+    <restrictionType id="E_DISTRIBUTESTATUS" longname="distributed status" base="MsType.U_BYTE1" desc="分布式事务状态">
+        <enumeration id="PROCESSING" value="P" longname="processing" desc="处理中"/>
+        <enumeration id="SUCCESS" value="S" longname="success" desc="成功"/>
+        <enumeration id="FAILED" value="F" longname="failed" desc="失败"/>
+    </restrictionType>
+    <restrictionType id="E_EVENTLEVEL" longname="event level" base="MsType.U_BYTE1" desc="事件级别">
+        <enumeration id="LOCAL" value="A" longname="local"/>
+        <enumeration id="INQUIRE" value="B" longname="inquire"/>
+        <enumeration id="NORMAL" value="C" longname="normal"/>
+        <enumeration id="CREDIT" value="D" longname="credit"/>
+    </restrictionType>
+    <restrictionType id="E_REVERSAL_RESULT" longname="reversal result" base="string" maxLength="1" desc="冲账返回码">
+        <enumeration id="SUCCEED" value="10" longname="succeed"/>
+        <enumeration id="REVERSED" value="21" longname="original transaction reversed"/>
+        <enumeration id="NOTEXIST" value="22" longname="original transaction not exists"/>
+        <enumeration id="EXCEPTION" value="23" longname="business abnomaly"/>
+    </restrictionType>
+    <restrictionType id="E_EODTYPE" longname="EOD type" base="MsType.U_BYTE1" desc="批量流程分类">
+        <enumeration id="EOD" value="1" longname="eod"/>
+        <enumeration id="SWD" value="2" longname="swd"/>
+        <enumeration id="BOD" value="3" longname="bod"/>
+    </restrictionType>
+    <restrictionType id="E_EODFLOWSTATUS" longname="EOD flow stauts" base="MsType.U_BYTE1" desc="批量流程状态">
+        <enumeration id="WAIT_START" value="A" longname="wait start"/>
+        <enumeration id="FINISH" value="Z" longname="finish"/>
+    </restrictionType>
+    <restrictionType id="E_DBTRXNSPREADTYPE" longname="db transaction spread type" base="MsType.U_BYTE40" desc="事务传播类型">
+        <enumeration id="NOTSUPPORTED" value="NotSupported" longname="not supported"/>
+        <enumeration id="SUPPORTS" value="Supports" longname="supports"/>
+        <enumeration id="REQUIRED" value="Required" longname="required"/>
+        <enumeration id="REQUIRESNEW" value="RequiresNew" longname="independent"/>
+        <enumeration id="MANDATORY" value="Mandatory" longname="mandatory"/>
+        <enumeration id="NEVER" value="Never" longname="never"/>
+        <enumeration id="NESTED" value="Nested" longname="nested"/>
+    </restrictionType>
+    <restrictionType id="E_REDUPLICATIVE" longname="reduplication status" base="MsType.U_BYTE1" desc="防重状态">
+        <enumeration id="PROCESSING" value="P" longname="processing" desc="处理中"/>
+        <enumeration id="NOTRXN" value="N" longname="no-transaction" desc="冲账时原交易不存在"/>
+        <enumeration id="SUCCESS" value="S" longname="success" desc="交易成功"/>
+        <enumeration id="FAILED" value="F" longname="failed" desc="交易失败"/>
+    </restrictionType>
+    <restrictionType id="E_RVFXST" longname="reversal fix status" base="MsType.U_BYTE1" desc="冲补账标志">
+        <enumeration id="NONE" value="0" longname="无关"/>
+        <enumeration id="REVERSED" value="1" longname="被冲正"/>
+        <enumeration id="FIX" value="2" longname="补账"/>
+        <enumeration id="REVERSED_PART" value="3" longname="部分被冲正"/>
+    </restrictionType>
+    <restrictionType id="E_TXNSTS" longname="分布式交易状态" base="MsType.U_BYTE1">
+        <enumeration id="SUCCESS" value="S" longname="成功"/>
+        <enumeration id="FAILED" value="F" longname="交易失败"/>
+        <enumeration id="STRIKED" value="K" longname="已冲账"/>
+        <enumeration id="PROCESSING" value="P" longname="处理中"/>
+        <enumeration id="STRIKING" value="R" longname="冲正中"/>
+        <enumeration id="UNKNOW" value="U" longname="失败且冲正未成功"/>
+        <enumeration id="UNSTRIK" value="N" longname="成功且冲正未完整"/>
+        <enumeration id="F_SUCCESS" value="A" longname="一次提交成功"/>
+        <enumeration id="F_PART_FAILED" value="B" longname="一次提交被部分冲正"/>
+        <enumeration id="S_SUCCESS" value="C" longname="二次提交成功"/>
+        <enumeration id="S_FAILED" value="D" longname="二次提交失败"/>
+        <subenums>
+            <subenum id="ACCOUT" enums="SUCCESS,UNSTRIK" longname="可冲账"/>
+            <subenum id="POSITIVE" enums="UNKNOW,PROCESSING" longname="可冲正"/>
+        </subenums>
+    </restrictionType>
+    <restrictionType id="E_ROUTETYPE" longname="路由关键字类型" base="MsType.U_BYTE1">
+        <enumeration id="DcnNo" value="D" longname="DcnNo"/>
+        <enumeration id="Ecifid" value="E" longname="客户ID"/>
+        <enumeration id="AccountNo" value="A" longname="账号"/>
+        <enumeration id="CardNo" value="C" longname="卡号"/>
+        <enumeration id="QQ" value="Q" longname="QQ号"/>
+        <enumeration id="Wechat" value="W" longname="微信号"/>
+        <enumeration id="Local" value="L" longname="本地调用"/>
+        <enumeration id="Public" value="P" longname="无(ADM DCN)"/>
+        <enumeration id="UnKonwn" value="X" longname="未知需指定"/>
+    </restrictionType>
+    <restrictionType id="E_EVNTST" longname="事件状态" base="MsType.U_BYTE1">
+        <enumeration id="SUCCESS" value="S" longname="成功"/>
+        <enumeration id="STRIKED" value="R" longname="已冲正"/>
+        <enumeration id="NEED2C" value="C" longname="需二次提交"/>
+        <description><![CDATA[表示冲正事件的状态]]></description>
+    </restrictionType>
+    <restrictionType id="E_DYEDCT" longname="EOD ctrl proint" base="MsType.U_BYTE2" desc="日终控制点">
+        <enumeration id="SWITCH_DATE" value="00" longname="switch date"/>
+        <enumeration id="INTEREST_BEGIN" value="10" longname="interest begin"/>
+        <enumeration id="INTEREST_END" value="21" longname="interest end"/>
+        <enumeration id="CORE_EOD_END" value="50" longname="core EOD end"/>
+        <enumeration id="GL_VERIFY" value="60" longname="gl verify ok"/>
+        <enumeration id="GL_EOD_BEGIN" value="70" longname="gl EOD begin"/>
+        <enumeration id="GL_EOD_END" value="80" longname="gl EOD end"/>
+    </restrictionType>
+    <restrictionType id="E_BCSTEP" longname="日终批量步骤标志" base="MsType.U_BYTE8">
+        <enumeration id="FQDZ" value="FQDZ" longname="发起对账"/>
+        <enumeration id="JSDZ" value="JSDZ" longname="接收对账"/>
+        <enumeration id="ZXDZ" value="JSDZ" longname="执行对账"/>
+        <enumeration id="ZXRZ" value="ZXRZ" longname="执行日终"/>
+        <enumeration id="ZXCG" value="ZXCG" longname="日终成功"/>
+    </restrictionType>
+    <restrictionType id="E_DOTYPE" longname="表分区操作类型" base="MsType.U_BYTE10">
+        <enumeration id="CREATE" value="C" longname="创建分区"/>
+        <enumeration id="TOHIS" value="T" longname="转存历史表"/>
+        <enumeration id="DROP" value="D" longname="删除分区"/>
+    </restrictionType>
+    <restrictionType id="E_INTERCEPTTYPE" longname="拦截类型" base="MsType.U_BYTE1">
+        <enumeration id="SMS" value="1" longname="短信类"/>
+        <enumeration id="NOTICE" value="2" longname="通知类"/>
+    </restrictionType>
+    <restrictionType id="E_CHANGETYPE" longname="change type" base="MsType.U_BYTE1">
+        <enumeration id="INSERT" value="0" longname="INSERT"/>
+        <enumeration id="UPDATE" value="1" longname="UPDATE"/>
+        <enumeration id="MUPDATE" value="2" longname="MUPDATE"/>
+        <enumeration id="DELETE" value="3" longname="DELETE"/>
+        <enumeration id="MDELETE" value="4" longname="MDELETE"/>
+    </restrictionType>
+    <restrictionType id="E_REGISTERSTATUS" longname="register status" base="string">
+        <enumeration id="REGISTED" value="REGISTED" longname="register finished"/>
+        <enumeration id="UNREGIST" value="UNREGIST" longname="wait register"/>
+    </restrictionType>
+        <restrictionType id="E_ACCTYPE" longname="account type" base="string" maxLength="2">
+        <enumeration id="NONE" value="0" longname="unknown"/>
+        <enumeration id="DEPOSIT" value="1" longname="deposit"/>
+        <enumeration id="INSIDE" value="2" longname="internal"/>
+        <enumeration id="BUSICODE" value="3" longname="business code"/>
+        <enumeration id="LOAN" value="4" longname="loan"/>
+        <enumeration id="SUSPENSE" value="5" longname="suspense"/>
+        <enumeration id="NOSTRO" value="6" longname="nostro"/>
+        <enumeration id="CASH" value="7" longname="cash"/>
+        <enumeration id="CARD" value="8" longname="card"/>
+    </restrictionType>
+</schema>

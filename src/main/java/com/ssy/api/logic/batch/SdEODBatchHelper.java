@@ -275,7 +275,7 @@ public class SdEODBatchHelper {
         //数据源编号检查
         BizUtil.fieldNotNull(batchFlow.getDatasourceId(), SdtDict.A.datasource_id.getId(), SdtDict.A.datasource_id.getLongName());
         //数据源切换并检查输入域
-        DBContextHolder.switchToDataSource(batchFlow.getDatasourceId());
+        DBContextHolder.switchToDataSourceForce(batchFlow.getDatasourceId());
         checkBeforeCallBatch(callBatchIn);
 
         if(CommUtil.equals(batchStep.getFlowStepId(), SdtConst.DAY_SWITCH_FLOW_ID)){
@@ -461,7 +461,7 @@ public class SdEODBatchHelper {
 
             batchExecution.setBusiOrgId(contextConfig.getBusiOrgId());
             //切换数据源查询当前日期
-            DBContextHolder.switchToDataSource(batchFlow.getDatasourceId());
+            DBContextHolder.switchToDataSourceForce(batchFlow.getDatasourceId());
             batchExecution.setDayendManageDate(appDateService.queryCurrentDate());
             batchExecution.setTranState(E_BATCHEXESTATUS.onprocess.getValue());
             batchExecution.setTranGroupId(batchStep.getFlowStepGroup());

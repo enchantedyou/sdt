@@ -1,6 +1,8 @@
 package com.ssy.api.utils.system;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_DATECYCLE;
 import com.ssy.api.entity.enums.E_STRGENTYPE;
@@ -343,5 +345,46 @@ public class BizUtil {
      */
     public static RunEnvs getRunEnvs(){
         return (RunEnvs) SpringContextUtil.getRequest().getSession().getAttribute(SdtConst.RUN_ENVS);
+    }
+
+    /**
+     * @Description 分页
+     * @Author sunshaoyu
+     * @Date 2020/7/17-12:17
+     * @param currentPage
+     * @param pageSize
+     * @param list
+     * @return com.github.pagehelper.PageInfo<T>
+     */
+    public static <T> PageInfo<T> listToPage(int currentPage, int pageSize, List<T> list){
+        RunEnvs runEnvs = getRunEnvs();
+        currentPage = currentPage > 0 ? currentPage : runEnvs.getCurrentPage();
+        pageSize = pageSize > 0 ? pageSize : runEnvs.getPageSize();
+        int totalCount = list.size();
+
+        //计算下标
+        int startIndex = (currentPage - 1) * pageSize;
+        int endIndex = CommUtil.getSmaller(startIndex + pageSize, totalCount);
+
+        //开始分页
+        Page<T> page = new Page<>(currentPage, pageSize);
+        page.setTotal(totalCount);
+        page.addAll(list.subList(startIndex, endIndex));
+
+        if(CommUtil.isNotNull(runEnvs)){
+            runEnvs.setTotalCount(totalCount);
+        }
+        return new PageInfo<>(page);
+    }
+
+    /**
+     * @Description 分页
+     * @Author sunshaoyu
+     * @Date 2020/7/17-12:29
+     * @param list
+     * @return com.github.pagehelper.PageInfo<T>
+     */
+    public static <T> PageInfo<T> listToPage(List<T> list){
+        return listToPage(0, 0, list);
     }
 }

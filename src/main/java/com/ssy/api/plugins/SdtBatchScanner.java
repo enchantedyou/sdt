@@ -2,6 +2,7 @@ package com.ssy.api.plugins;
 
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.exception.SdtException;
+import com.ssy.api.utils.system.CommUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +39,7 @@ public class SdtBatchScanner {
      * @Date 2020/7/4-22:19
      * @return java.util.concurrent.ExecutorService
      */
-    private static ExecutorService getInstance(){
+    protected static ExecutorService getInstance(){
         if(null == batchTaskScanner){
             synchronized (ExecutorService.class){
                 if(null == batchTaskScanner){
@@ -68,7 +69,6 @@ public class SdtBatchScanner {
      */
     public static boolean checkCurrentCallResult(){
         try {
-            getInstance().awaitTermination(0, TimeUnit.MILLISECONDS);
             for(Future<Boolean> future : batchFutureList){
                 if(!future.get()){
                     return false;
@@ -76,7 +76,19 @@ public class SdtBatchScanner {
             }
         }catch (Exception e){
             throw new SdtException(e.getCause());
+        }finally {
+            batchFutureList.clear();
         }
         return true;
+    }
+
+    /**
+     * @Description 是否存在正在执行的批量任务
+     * @Author sunshaoyu
+     * @Date 2020/7/15-14:43
+     * @return boolean
+     */
+    public static boolean isExistBatchTask(){
+        return CommUtil.isNotNull(batchFutureList);
     }
 }

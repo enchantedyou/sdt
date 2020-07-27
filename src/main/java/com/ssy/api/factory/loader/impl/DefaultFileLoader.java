@@ -4,7 +4,6 @@ import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.FileLoader;
-import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,6 +34,8 @@ public class DefaultFileLoader implements FileLoader {
        try{
            File file = new File(path);
            loadFile(map, file, isLimitJavaReources, suffix);
+           //加载微服务模型
+           loadMsModel(map);
        }catch(Exception e){
            throw new SdtException("An unexpected exception occurred while loading the file", e);
        }
@@ -60,10 +62,6 @@ public class DefaultFileLoader implements FileLoader {
             //排除非java资源目录
             if(isLimitJavaReources && !file.getPath().contains(SdtConst.JAVA_RESOURCES_PATH)){
                 return;
-            }else if(BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, fileName) && !sdtContextConfig.getMsModelFirst()){
-                //当前是微服务模型但是非微服务模型优先,不加载
-                log.info("The current file is [{}] but the microservice model priority indicator is [{}], so it is not loaded", fileName, sdtContextConfig.getMsModelFirst());
-                return;
             }
 
             if(CommUtil.isNotNull(suffix)){
@@ -81,6 +79,18 @@ public class DefaultFileLoader implements FileLoader {
         }
     }
 
+    /**
+     * @Description 加载微服务模型
+     * @Author sunshaoyu
+     * @Date 2020/7/17-10:14
+     * @param map
+     */
+    private void loadMsModel(Map<String, File> map){
+        File[] files = new File(DefaultFileLoader.class.getResource("/templates/msModel").getPath()).listFiles();
+        for(File f : files){
+            map.put(f.getName(), f);
+        }
+    }
 
     public String loadContentToString(File file, String charset) throws IOException {
         FileInputStream inputStream = null;
@@ -97,5 +107,24 @@ public class DefaultFileLoader implements FileLoader {
             }
         }
         return null;
+    }
+
+    @Override
+    public void saveFile(byte[] buffer, String filePath) throws IOException {
+        FileOutputStream outputStream = null;
+        try{
+            File file = new File(filePath);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            outputStream = new FileOutputStream(file);
+            outputStream.write(buffer);
+            log.info("Output file: {}", filePath);
+        }finally {
+            if(outputStream != null){
+                outputStream.flush();
+                outputStream.close();
+            }
+        }
     }
 }

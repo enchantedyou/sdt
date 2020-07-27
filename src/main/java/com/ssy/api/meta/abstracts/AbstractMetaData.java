@@ -36,6 +36,10 @@ public abstract class AbstractMetaData implements Serializable {
         this.longName = longName;
     }
 
+    public AbstractMetaData() {
+
+    }
+
     public String getLocation() {
         return location;
     }

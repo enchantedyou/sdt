@@ -4,14 +4,15 @@ import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.table.local.SdpDictPriorty;
 import com.ssy.api.exception.ApPubErr;
+import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.ComplexTypeLoader;
 import com.ssy.api.factory.odb.OdbFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.ComplexType;
 import com.ssy.api.servicetype.ModulePriortyService;
-import com.ssy.api.utils.system.BizUtil;
-import com.ssy.api.utils.system.CommUtil;
+import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.parse.XmlUtil;
+import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
                         //当前复合类型是否为字典模型
                         boolean isDict = Boolean.parseBoolean(e.attributeValue("dict"));
                         //获取该复合类型节点下的所有子元素
-                        Map<String, com.ssy.api.meta.defaults.Element> currentElementMap = getComplexTypeElementMap(priority, e, location, beforeElementMap, isDict);
+                        Map<String, com.ssy.api.meta.defaults.Element> currentElementMap = getComplexTypeElementMap(map, priority, e, location, beforeElementMap, isDict);
 
                         beforeElementMap.putAll(currentElementMap);
                         complexTypeMap.put(complexTypeNodeId, new ComplexType(
@@ -69,7 +70,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
                     }
                     map.put(location, complexTypeMap);
                 } catch (Exception e) {
-                    ApPubErr.E0007(e);
+                    throw new SdtException("Failed to load metadata model", e);
                 } finally {
                     beforeElementMap.clear();
                 }
@@ -89,7 +90,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
      * @param isDict    是否为字典类型的复合类型
      * @return java.util.Map<java.lang.String,com.ssy.api.meta.defaults.Element>
      */
-    private Map<String, com.ssy.api.meta.defaults.Element> getComplexTypeElementMap(Map<String, SdpDictPriorty> priority, Element complexTypeNode, String location, Map<String, com.ssy.api.meta.defaults.Element> beforeElementMap, boolean isDict){
+    private Map<String, com.ssy.api.meta.defaults.Element> getComplexTypeElementMap(Map<String, Map<String, ComplexType>> cpxMap, Map<String, SdpDictPriorty> priority, Element complexTypeNode, String location, Map<String, com.ssy.api.meta.defaults.Element> beforeElementMap, boolean isDict){
         Map<String, com.ssy.api.meta.defaults.Element> map = new ConcurrentHashMap<>();
         List<Element> elementList = XmlUtil.searchTargetAllXmlElement(complexTypeNode, SdtConst.ELEMENT_NODE_NAME);
         String complexTypeNodeId = complexTypeNode.attributeValue("id");
@@ -101,7 +102,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
             //字典模型时,需自动生成ref
             String ref = isDict ? (new StringBuffer().append(location).append(".").append(complexTypeNodeId).append(".").append(elementId).toString()) : e.attributeValue("ref");
             com.ssy.api.meta.defaults.Element currentElement = new com.ssy.api.meta.defaults.Element(
-                    location, elementId, e.attributeValue("longname"), getElementRestrictionType(e.attributeValue("type")), e.attributeValue("desc"), ref
+                    location, elementId, e.attributeValue("longname"), getElementRestrictionType(cpxMap, e.attributeValue("type")), e.attributeValue("desc"), ref
             );
 
             if(isDict){
@@ -123,14 +124,25 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
      * @param type
      * @return com.ssy.api.meta.abstracts.AbstractRestrictionType
      */
-    private AbstractRestrictionType getElementRestrictionType(String type){
+    private AbstractRestrictionType getElementRestrictionType(Map<String, Map<String, ComplexType>> cpxMap, String type){
         if(CommUtil.isNull(type) || !type.contains(".") || type.split("\\.").length < 2){
             return null;
         }else{
             String[] arr = type.split("\\.");
             //搜索限制类型
-            return OdbFactory.searchRestrictionType(arr[0], arr[1]);
+            AbstractRestrictionType restrictionType = OdbFactory.searchRestrictionType(arr[0], arr[1]);
+            //未搜索到限制类型,则可能是复合类型
+
+            if(CommUtil.isNull(restrictionType)){
+                Map<String, ComplexType> map = cpxMap.get(arr[0]);
+                if(CommUtil.isNotNull(map)){
+                    return map.get(arr[1]);
+                }
+            }else{
+                return restrictionType;
+            }
         }
+        return null;
     }
 
     /**
@@ -144,7 +156,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
     private com.ssy.api.meta.defaults.Element checkDictPriorty(Map<String, SdpDictPriorty> priority, com.ssy.api.meta.defaults.Element before, com.ssy.api.meta.defaults.Element now){
         //之前的数据为空或[当前或之前是微服务模型但不是微服务模型优先],直接添加
         if(CommUtil.isNull(before)
-                || ((BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, now.getLocation()) || BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, before.getLocation()))
+                || ((SdtBusiUtil.isMsModel(now.getLocation()) || SdtBusiUtil.isMsModel(before.getLocation()))
                 && !sdtContextConfig.getMsModelFirst())){
             return now;
         }else{

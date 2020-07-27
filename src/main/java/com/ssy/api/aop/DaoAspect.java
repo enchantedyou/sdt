@@ -1,11 +1,14 @@
 package com.ssy.api.aop;
 
+import com.github.pagehelper.PageHelper;
 import com.ssy.api.entity.annotation.EnableNotNull;
+import com.ssy.api.entity.annotation.SelectPageWithCount;
 import com.ssy.api.entity.annotation.TableType;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
+import com.ssy.api.entity.enums.E_DATASOURCETYPE;
 import com.ssy.api.entity.enums.E_ODBOPERATE;
-import com.ssy.api.entity.table.local.SdbUser;
+import com.ssy.api.entity.session.UserInfo;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.plugins.DBContextHolder;
@@ -27,7 +30,6 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Description Data Access Object层的切面
@@ -39,10 +41,22 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 public class DaoAspect {
 
-    private final ReentrantLock lock = new ReentrantLock(true);
-
     @Autowired
     private SystemParamService systemParamService;
+
+    /**
+     * @Description 查询前增强处理(开启分页)
+     * @Author sunshaoyu
+     * @Date 2020/7/17-13:04
+     * @param point
+     */
+    @Before(value="execution(* com.ssy.api.dao.mapper.*.*.select*(..))")
+    public void selectWithPageAdvice(JoinPoint point){
+        if(MethodSignature.class.cast(point.getSignature()).getMethod().isAnnotationPresent(SelectPageWithCount.class)){
+            //分页处理
+            PageHelper.startPage(BizUtil.getRunEnvs().getCurrentPage(), BizUtil.getRunEnvs().getPageSize());
+        }
+    }
 
     /**
      * @Description 切入insert方法,在插表前初始化公共字段
@@ -83,22 +97,22 @@ public class DaoAspect {
      * @param point
      */
     @Around(value="execution(* com.ssy.api.dao.mapper.local.*.*(..)))")
-    public Object localDaoAdvice(ProceedingJoinPoint point) throws Throwable {
-        try{
-            lock.lock();
-            String beforeDataSource = DBContextHolder.getDynamicDataSource();
-            DBContextHolder.clearCurrentDataSource();
+    public Object localDaoAdvTice(ProceedingJoinPoint point) throws Throwable {
+        DBContextHolder.determineCurrentDataSourceType(E_DATASOURCETYPE.LOCAL);
+        return point.proceed(point.getArgs());
+    }
 
-            Object[] args = point.getArgs();
-            Object ret = point.proceed(args);
-
-            if(CommUtil.isNotNull(beforeDataSource)){
-                DBContextHolder.switchToDataSource(beforeDataSource);
-            }
-            return ret;
-        }finally {
-            lock.unlock();
-        }
+    /**
+     * @Description 增强远程dao方法,在执行dao之前切换到用户当前的动态数据源,执行完成后恢复
+     * @Author sunshaoyu
+     * @Date 2020/7/15-14:23
+     * @param point
+     * @return java.lang.Object
+     */
+    @Around(value="execution(* com.ssy.api.dao.mapper.ap.*.*(..))) && execution(* com.ssy.api.dao.mapper.edsp.*.*(..))) && execution(* com.ssy.api.dao.mapper.msap.*.*(..)))")
+    public Object remoteDaoAdvice(ProceedingJoinPoint point) throws Throwable {
+        DBContextHolder.determineCurrentDataSourceType(E_DATASOURCETYPE.REMOTE);
+        return point.proceed(point.getArgs());
     }
 
     /**
@@ -136,8 +150,8 @@ public class DaoAspect {
      */
     private void refreshTableCommField(Object obj, Class<?> clazz, E_ODBOPERATE operateType) {
         Field[] fields = clazz.getDeclaredFields();
-        Object user = SpringContextUtil.getAttributeFromSession(SdtConst.CURRENT_USER);
-        String currentUser = CommUtil.isNull(user) ? systemParamService.getValue(SdtConst.DEFAULT_TELLER) : SdbUser.class.cast(user).getUserAcct();
+        UserInfo userInfo = SpringContextUtil.getSessionAttribute(SdtConst.USER_INFO, UserInfo.class);
+        String currentUser = CommUtil.isNull(userInfo) ? systemParamService.getValue(SdtConst.DEFAULT_TELLER) : userInfo.getUserAcct();
 
         try{
             for(Field field : fields){
@@ -172,7 +186,6 @@ public class DaoAspect {
                 }
             }
         }catch (Exception e){
-            BizUtil.logError(e);
             throw new SdtException(e);
         }
     }

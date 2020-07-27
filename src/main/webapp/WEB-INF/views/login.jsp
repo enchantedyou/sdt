@@ -1,7 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    request.setAttribute("basePath",request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/");
-%>
 <html>
 <head>
     <meta charset="utf-8">
@@ -18,15 +15,15 @@
         <h2>开发助手平台</h2>
         <form class="layui-form" id="login-form">
             <div class="layui-form-item">
-                <input type="username" name="userAcct" placeholder="账号" required lay-verify="required" class="layui-input">
+                <input type="text" name="userAcct" placeholder="账号" lay-verify="required" class="layui-input">
                 <i class="layui-icon input-icon">&#xe66f;</i>
             </div>
             <div class="layui-form-item">
-                <input type="password" name="userPwd" placeholder="密码" required lay-verify="required" class="layui-input" id="user-pwd">
+                <input type="password" name="userPwd" placeholder="密码" lay-verify="required" class="layui-input" id="user-pwd">
                 <i class="layui-icon input-icon">&#xe673;</i>
             </div>
             <div class="layui-form-item">
-                <select name="datasourceId" lay-verify="required" id="datasourceIdSelect"></select>
+                <select name="datasourceId" lay-verify="required" id="dataSourceSelect"></select>
             </div>
             <div class="layui-form-item">
                 <button type="button" style="width: 100%" class="layui-btn" lay-submit lay-filter="login" id="login-btn">登录</button>

@@ -30,6 +30,10 @@ public class SdtDict {
         datasource_id("datasourceId", "datasource identity", "数据源编号", 50, 0),
         user_acct("userAcct", "user account", "用户账号", 50, 0),
         user_pwd("userPwd", "user password", "用户密码", 50, 0),
+        key("key", "key", "关键字", 100, 0),
+        pte_module("pteModule", "PTE module", "PTE模板", 100, 0),
+        flowtran_id("flowtranId", "flowtran id", "交易流程编号", 6, 0),
+        list_name("listName", "list name", "列表名称", 50, 0),
         ;
 
         private String id;

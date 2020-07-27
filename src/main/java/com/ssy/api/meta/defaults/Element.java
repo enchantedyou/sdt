@@ -89,13 +89,56 @@ public class Element extends AbstractMetaData implements Serializable {
         return this.longName;
     }
 
+    public void setType(AbstractRestrictionType type) {
+        this.type = type;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public void setRef(String ref) {
+        this.ref = ref;
+    }
+
+    public void setRequired(boolean required) {
+        isRequired = required;
+    }
+
+    public void setMulti(boolean multi) {
+        isMulti = multi;
+    }
+
+    public void setRange(boolean range) {
+        isRange = range;
+    }
+
+    public void setArray(boolean array) {
+        isArray = array;
+    }
+
+    public void setFinal(boolean aFinal) {
+        isFinal = aFinal;
+    }
+
+    public void setOverride(boolean override) {
+        isOverride = override;
+    }
+
+    public void setAllowSubType(boolean allowSubType) {
+        isAllowSubType = allowSubType;
+    }
+
     @Override
     public String toString() {
         return "Element{" +
-                "desc='" + desc + '\'' +
+                "id='" + id +
+                ", type='" + type + '\'' +
+                ", desc='" + desc + '\'' +
                 ", ref='" + ref + '\'' +
-                ", isRequired=" + isRequired +
+                ", longName='" + longName + '\'' +
                 ", isMulti=" + isMulti +
+                ", isRequired=" + isRequired +
                 ", isRange=" + isRange +
                 ", isArray=" + isArray +
                 ", isFinal=" + isFinal +
@@ -103,9 +146,6 @@ public class Element extends AbstractMetaData implements Serializable {
                 ", isAllowSubType=" + isAllowSubType +
                 ", location='" + location + '\'' +
                 ", suffix=" + Arrays.toString(suffix) +
-                ", id='" + id + '\'' +
-                ", longName='" + longName + '\'' +
-                ", type=" + type + '\'' +
                 '}';
     }
 }

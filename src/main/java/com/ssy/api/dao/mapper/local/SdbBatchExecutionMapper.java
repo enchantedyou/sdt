@@ -1,8 +1,14 @@
 package com.ssy.api.dao.mapper.local;
 
+import com.ssy.api.entity.annotation.EnableNotNull;
+import com.ssy.api.entity.annotation.SelectPageWithCount;
+import com.ssy.api.entity.annotation.TableType;
 import com.ssy.api.entity.table.local.SdbBatchExecution;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
+@TableType(name = "sdb_batch_execution", desc = "batch execution book")
 public interface SdbBatchExecutionMapper {
     int deleteByPrimaryKey(@Param("busiOrgId") String busiOrgId, @Param("tranFlowId") String tranFlowId, @Param("batchRunNo") String batchRunNo);
 
@@ -15,4 +21,8 @@ public interface SdbBatchExecutionMapper {
     int updateByPrimaryKeySelective(SdbBatchExecution record);
 
     int updateByPrimaryKey(SdbBatchExecution record);
+
+    /** 倒序查询批量执行登记簿列表 **/
+    @SelectPageWithCount
+    List<SdbBatchExecution> selectAll_odb1();
 }

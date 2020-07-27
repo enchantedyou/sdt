@@ -1,6 +1,7 @@
 package com.ssy.api.meta.defaults;
 
-import com.ssy.api.meta.abstracts.AbstractMetaData;
+import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -12,16 +13,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author sunshaoyu
  * @Date 2020年05月27日-14:54
  */
-public class ComplexType extends AbstractMetaData implements Serializable {
+public class ComplexType extends AbstractRestrictionType implements Serializable {
 
-    private final static String[] defaultSuffix = new String[]{".c_schema.xml", ".d_schema.xml"};
     private boolean isDict;
     private boolean isAbstract = false;
     private boolean isIntroduct = false;
     private Map<String, Element> elementMap = new ConcurrentHashMap<>();
 
     public ComplexType(String location, String id, String longName, boolean isDict, Map<String, Element> elementMap) {
-        super(location, id, longName, defaultSuffix);
+        super(elementMap, location, id, longName, SdtConst.DICT_SUFFIX, SdtConst.COMPLEX_SUFFIX);
         this.isDict = isDict;
         this.elementMap = elementMap;
     }

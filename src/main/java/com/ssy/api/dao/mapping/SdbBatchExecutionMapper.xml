@@ -177,4 +177,10 @@
       and tran_flow_id = #{tranFlowId,jdbcType=VARCHAR}
       and batch_run_no = #{batchRunNo,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAll_odb1" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sdb_batch_execution order by dayend_manage_date desc
+  </select>
 </mapper>

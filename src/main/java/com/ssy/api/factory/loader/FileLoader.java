@@ -31,4 +31,13 @@ public interface FileLoader {
      * @return java.lang.String
      */
     public String loadContentToString(File file, String charset) throws IOException;
+
+    /**
+     * @Description 文件保存
+     * @Author sunshaoyu
+     * @Date 2020/7/24-10:04
+     * @param buffer    要保存的流
+     * @param filePath  文件存储路径
+     */
+    public void saveFile(byte[] buffer , String filePath) throws IOException;
 }

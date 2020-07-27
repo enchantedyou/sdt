@@ -14,5 +14,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface TrxnEvent {
 
-    public String value();
+    /**
+     * @Description 为空时不登记请求响应报文表,只按统一的格式返回
+     * @Author sunshaoyu
+     * @Date 2020/7/15-11:39
+     */
+    public String value() default "";
 }

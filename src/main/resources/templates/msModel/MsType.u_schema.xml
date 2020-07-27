@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="MsType" package="cn.sunline.clwj.msap.sys.type" longname="Msap Data Type" classgen="normal" xsi:noNamespaceSchemaLocation="ltts-model.xsd">
+    <restrictionType id="U_ORGID" longname="organization id" base="string" maxLength="10" desc="法人ID"/>
+    <restrictionType id="U_USERID" longname="use id" base="string" maxLength="32" desc="柜员ID"/>
+    <restrictionType id="U_BRANCHID" longname="branch id" base="string" maxLength="10" desc="机构ID"/>
+    <restrictionType id="U_DATE" longname="date" base="string" pattern="yyyyMMdd" maxLength="8" minLength="8" desc="日期（8位）"/>
+    <restrictionType id="U_TIME" longname="time" base="string" pattern="HH:mm:ss SSS" maxLength="12" minLength="12" desc="时间" isUnsigned="false"/>
+    <restrictionType id="U_DATETIME" longname="datetime" base="string" pattern="yyyyMMdd HH:mm:ss SSS" maxLength="23" desc="日期时间"/>
+    <restrictionType id="U_LONG" longname="long type" base="long" maxLength="19" desc="整形"/>
+    <restrictionType id="U_TABLENAME" longname="table name" base="string" maxLength="25" desc="数据表名"/>
+    <restrictionType id="U_FIELDNAME" longname="field name" base="string" maxLength="30" desc="数据字段名"/>
+    <restrictionType id="U_MODULE" longname="module" base="string" maxLength="20" desc="模块"/>
+    <restrictionType id="U_CHANNEL" longname="channel id" base="string" maxLength="10" desc="渠道ID"/>
+    <restrictionType id="U_SYSTEM" longname="system id" base="string" maxLength="10" desc="系统ID"/>
+    <restrictionType id="U_ADDRESS" longname="address" base="encString" maxLength="500" desc="地址"/>
+    <restrictionType id="U_SHORTDESC" longname="description(short)" base="string" maxLength="100" desc="短描述"/>
+    <restrictionType id="U_MIDDESC" longname="description(middle)" base="string" maxLength="200" desc="中描述"/>
+    <restrictionType id="U_LONGDESC" longname="description(long)" base="string" maxLength="1000" desc="长描述"/>
+    <restrictionType id="U_PRODUCTCODE" longname="product id" base="string" maxLength="25" desc="产品代码"/>
+    <restrictionType id="U_BYTE1" longname="string(1byte)" base="string" maxLength="1"/>
+    <restrictionType id="U_BYTE2" longname="string(2byte)" base="string" maxLength="2"/>
+    <restrictionType id="U_BYTE3" longname="string(3byte)" base="string" maxLength="3"/>
+    <restrictionType id="U_BYTE4" longname="string(4byte)" base="string" maxLength="4"/>
+    <restrictionType id="U_BYTE5" longname="string(5byte)" base="string" maxLength="5"/>
+    <restrictionType id="U_BYTE8" longname="string(8byte)" base="string" maxLength="8"/>
+    <restrictionType id="U_BYTE10" longname="string(10byte)" base="string" maxLength="10"/>
+    <restrictionType id="U_BYTE12" longname="string(12byte)" base="string" maxLength="12"/>
+    <restrictionType id="U_BYTE16" longname="string(16byte)" base="string" maxLength="16"/>
+    <restrictionType id="U_BYTE20" longname="string(20byte)" base="string" maxLength="20"/>
+    <restrictionType id="U_BYTE30" longname="string(30byte)" base="string" maxLength="30"/>
+    <restrictionType id="U_BYTE32" longname="string(32byte)" base="string" maxLength="32"/>
+    <restrictionType id="U_BYTE40" longname="string(40byte)" base="string" maxLength="40"/>
+    <restrictionType id="U_BYTE50" longname="string(50byte)" base="string" maxLength="50"/>
+    <restrictionType id="U_BYTE60" longname="string(60byte)" base="string" maxLength="60"/>
+    <restrictionType id="U_BYTE64" longname="string(64byte)" base="string" maxLength="64"/>
+    <restrictionType id="U_BYTE100" longname="string(100byte)" base="string" maxLength="100"/>
+    <restrictionType id="U_BYTE200" longname="string(200byte)" base="string" maxLength="200"/>
+    <restrictionType id="U_BYTE512" longname="string(512byte)" base="string" maxLength="512"/>
+    <restrictionType id="U_BYTE256" longname="string(256)" base="string" maxLength="256"/>
+    <restrictionType id="U_BYTE400" longname="string(400byte)" base="string" maxLength="400"/>
+    <restrictionType id="U_BYTE1000" longname="string(2000byte)" base="string" maxLength="1000"/>
+    <restrictionType id="U_BYTE2000" longname="string(2000byte)" base="string" maxLength="2000"/>
+    <restrictionType id="U_BYTE4000" longname="string(4000byte)" base="string" maxLength="4000"/>
+    <restrictionType id="U_TEXT" longname="clob" base="clob" desc="大文本"/>
+    <restrictionType id="U_CLOBDS" longname="CLOB" base="clob" desc="clob"/>
+    <restrictionType id="U_DCNNO" longname="DCN NO" base="string" maxLength="8" desc="DCN编号"/>
+    <restrictionType id="U_TRXNCODE" longname="trxn code" base="string" maxLength="30" desc="交易码"/>
+    <restrictionType id="U_CURRENCY" longname="ccy code" base="string" maxLength="3" desc="货币代码"/>
+    <restrictionType id="U_COUNTRY" longname="country code" base="string" maxLength="3" desc="国别代码"/>
+    <restrictionType id="U_SEQNO" longname="sequence no" base="string" maxLength="32" desc="流水号"/>
+    <restrictionType id="U_MONEY" longname="amount" base="decimal" maxLength="21" fractionDigits="2" desc="金额类型"/>
+    <restrictionType id="U_RATECODE" longname="interest_code" base="string" maxLength="12" desc="利率代码"/>
+    <restrictionType id="U_INTERESTRATE" longname="interest rate" base="decimal" maxLength="11" fractionDigits="6" desc="利率"/>
+    <restrictionType id="U_EXCHANGERATE" longname="exchange rate" base="decimal" maxLength="21" fractionDigits="7" desc="汇率"/>
+    <restrictionType id="U_PERCENT" longname="percent(3 decimal)" base="decimal" maxLength="6" fractionDigits="3" desc="百分比"/>
+    <restrictionType id="U_TAXRATE" longname="tax rate" base="decimal" maxLength="21" fractionDigits="6" desc="税率"/>
+    <restrictionType id="U_TAXRATECODE" longname="tax code" base="string" maxLength="10" desc="税率代码"/>
+    <restrictionType id="U_ACCTNO" longname="account no" base="string" maxLength="35" desc="账号/电子账号"/>
+    <restrictionType id="U_SUBACCTSEQ" longname="sub account sequence" base="string" maxLength="10" desc="子账户序号"/>
+    <restrictionType id="U_ACCTTYPE" longname="account type" base="string" maxLength="10" desc="账户类型"/>
+    <restrictionType id="U_ACCTNAME" longname="account name" base="string" maxLength="100" desc="账户名称"/>
+    <restrictionType id="U_CUSTNAME" longname="customer name" base="string" maxLength="50" desc="客户名称"/>
+    <restrictionType id="U_CUSTNO" longname="customer no" base="string" maxLength="20" desc="客户号"/>
+    <restrictionType id="U_LOANNO" longname="loan no" base="string" maxLength="35" desc="借据号"/>
+    <restrictionType id="U_CONTRACTNO" longname="loan contract no" base="string" maxLength="50" desc="合同号"/>
+    <restrictionType id="U_VOUCHERNO" longname="voucher no" base="string" maxLength="20" desc="凭证号码"/>
+    <restrictionType id="U_VOCHTYPE" longname="voucher type" base="string" maxLength="10" desc="凭证类型"/>
+    <restrictionType id="U_IDTYPE" longname="doc type" base="string" maxLength="5" desc="证件类型"/>
+    <restrictionType id="U_IDNO" longname="doc no" base="string" maxLength="32" desc="证件号码"/>
+    <restrictionType id="U_LIMITNO" longname="limit no" base="string" maxLength="20" desc="限额编号"/>
+    <restrictionType id="U_LIMITCODE" longname="limit code" base="string" maxLength="32" desc="额度编号"/>
+    <restrictionType id="U_POSTCODE" longname="postcode" base="string" maxLength="10" desc="邮编"/>
+    <restrictionType id="U_SMSNO" longname="SMS template no" base="string" maxLength="16" desc="短信模版号"/>
+    <restrictionType id="U_RULEID" longname="rule id" base="string" maxLength="32" desc="规则ID"/>
+    <restrictionType id="U_CYCLE" longname="cycle(term frequency)" base="string" maxLength="8" desc="周期"/>
+    <restrictionType id="U_PHONENO" longname="phone no" base="string" maxLength="32" desc="电话号码（含移动）"/>
+    <restrictionType id="U_EMAIL" longname="email" base="string" maxLength="80" desc="e-mail地址"/>
+    <restrictionType id="U_ROLEID" longname="role id" base="string" maxLength="10" desc="角色ID"/>
+    <restrictionType id="U_MENUID" longname="menu id" base="string" maxLength="10" desc="菜单ID"/>
+    <restrictionType id="U_IPADDRESS" longname="IP address" base="string" maxLength="32" desc="IP地址"/>
+    <restrictionType id="U_FROZEID" longname="froze no" base="string" maxLength="24" desc="冻结编号"/>
+    <restrictionType id="U_FROZEKIND" longname="froze kind code" base="string" maxLength="8" desc="冻结分类码"/>
+    <restrictionType id="U_EVENT" longname="event id" base="string" maxLength="32" desc="事件ID"/>
+    <restrictionType id="U_FEECODE" longname="fee code" base="string" maxLength="20" desc="费用代码"/>
+    <restrictionType id="U_ATTRVALUE" longname="attribute value" base="string" maxLength="64" desc="属性值"/>
+    <restrictionType id="U_REGISTERTYPE" longname="register type" base="string" maxLength="2"/>
+    <restrictionType id="U_REGISTERNO" longname="register number" base="string" maxLength="40"/>
+    <restrictionType id="U_SHARDINGID" longname="sharding id" base="string" maxLength="3"/>
+    <restrictionType id="U_ERRORCODE" longname="error code" base="string" maxLength="20"/>
+</schema>

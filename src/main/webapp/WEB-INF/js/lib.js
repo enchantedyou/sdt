@@ -6088,17 +6088,40 @@ function c(g){
 	return h;
 }
 
-layui.use(['form','element','jquery','layer'], function(){
-	  var form = layui.form;
-	  var element = layui.element;
-	  var layer = layui.layer;
-	  var $ = layui.jquery;
-	  
+layui.use(['form','element','jquery','layer','table','laypage','code','util'], function(){
+	  var form = layui.form,
+		  element = layui.element,
+		  layer = layui.layer
+		  $ = layui.jquery,
+		  table = layui.table,
+		  laycode = layui.code(),
+		  util = layui.util,
+		  laypage = layui.laypage;
+
+	  //固定块
+	  util.fixbar({  //返回顶部
+		  top: true,
+		  bgcolor: '#393D49!important;display:block;',
+		  click: function(type){
+			if(type === 'top'){
+				$('.layui-body').animate({
+					scrollTop: 0
+				}, 200);
+			}
+		}
+	  });
+
 	  //请求上下文
 	  var requestContext = {
-		  doRequest:function(url, params, btnId, callback){
-			  let btn = $("#" + btnId);
-			  btn.attr("disabled", "disabled");
+		  doRequest:function(url, params, btnId, popUpWhenSuccess, successCallback){
+			  let btn;
+			  if(!requestContext.isNull(btnId)){
+			  	btn = requestContext.nvl($("#" + btnId), $("." + btnId));
+				  if(!requestContext.isNull(btn)){
+					  btn.attr("disabled", "disabled");
+				  }
+			  }
+
 			  layer.load(2);
 			  let enc = c(JSON.stringify(params));
 
@@ -6123,26 +6146,21 @@ layui.use(['form','element','jquery','layer'], function(){
 				  if(typeof response == "string"){
 					  response = JSON.parse(response);
 				  }
-				  btn.removeAttr("disabled");
+				  if(!requestContext.isNull(btn)){
+					  btn.removeAttr("disabled");
+				  }
 				  layer.closeAll();
 
 				  if(successInd){
 					  if(response.sys.status == "S"){
-						  requestContext.showMessage("处理成功");
-						  if(typeof callback == "function"){
-							  callback(response);
-						  }
+					  	if(popUpWhenSuccess){
+							requestContext.showMessage("处理成功");
+						}
+					    if(typeof successCallback == "function"){
+							successCallback(response.output);
+					    }
 					  }else{
-						  layer.open({
-							  title: "提示",
-							  content: response.sys.erortx,
-							  resize: false,
-							  end: function(){
-								  if(response.sys.erorcd == "1001"){
-								  	window.location.href = $(".basePath").val();
-								  }
-							  }
-						  });
+						  requestContext.showError(response);
 					  }
 				  }else{
 					  requestContext.showError("连接服务器失败");
@@ -6156,27 +6174,346 @@ layui.use(['form','element','jquery','layer'], function(){
 				  time: 1500
 			  });
 		  },
-		  showError: function (message) {
+		  showError: function (response) {
 			  layer.open({
 				  title: "提示",
-				  content: message,
-				  resize: false
+				  content: requestContext.isJSON(response) ? response.sys.erortx : response,
+				  resize: false,
+				  end: function(){
+					  if(requestContext.isJSON(response) && response.sys.erorcd == "1001"){
+						  window.location.href = $(".basePath").val();
+					  }
+				  }
 			  });
+		  },
+		  trim: function trim(str){
+			  if(!str || str == "" || typeof(str) == "undefined"){
+				  return "";
+			  }else{
+				  return str.toString().replace(/(^\s*)|(\s*$)/g, "");
+			  }
+		  },
+		  isNull: function isNull(obj){
+			  if(!obj || requestContext.trim(obj) == "" || typeof(obj) == "undefined")
+				  return true;
+			  return false;
+		  },
+		  nvl: function(obj, defaultValue){
+		  	return requestContext.isNull(obj) ? defaultValue : obj;
+		  },
+		  trim: function(str){
+			  if(!str || str == "" || typeof(str) == "undefined"){
+				  return "";
+			  }else{
+				  return str.toString().replace(/(^\s*)|(\s*$)/g, "");
+			  }
+		  },
+		  isJSON: function(data){
+			  try {
+				  let obj = JSON.parse(JSON.stringify(data));
+				  if(typeof obj == 'object' && obj){
+					  return true;
+				  }else{
+					  return false;
+				  }
+			  } catch(e) {
+				  return false;
+			  }
+		  },
+		  doConfirm: function(callback){
+			  layer.confirm('是否继续', {
+				  btn: ['确定','取消']
+			  }, function(){
+				  callback();
+			  });
+		  },
+		  menuClickCallback: function(response){
+			  if(requestContext.isJSON(response) && response.sys.erorcd == "1001"){
+				  window.location.href = $(".basePath").val();
+			  }else{
+				  $(".layui-btn-primary").click();
+			  }
+		  },
+		  buildJsonParam: function(array){
+			  let param = "{";
+			  if(Array.isArray(array)){
+				  for(let i = 0;i < array.length;i++){
+					  let dom = $("[name="+array[i]+"]");
+					  let type = dom.attr("type");
+					  let value = null;
+
+					  if(dom.is("input")){
+						  if(type == "text" || type == "password" || type == "hidden"){
+							  value = dom.val();
+						  }else if(type == "radio"){
+							  value = $(":radio[name="+array[i]+"]:checked").val();
+						  }
+					  } else if(dom.is("select")){
+						  value = dom.val();
+					  }
+					  param += "\""+array[i]+"\":\""+requestContext.trim(value)+"\",";
+				  }
+			  }else{
+				  return null;
+			  }
+			  if(param.lastIndexOf(",") != -1){
+				  param = param.substring(0,param.lastIndexOf(","));
+			  }
+			  param += "}";
+			  return JSON.parse(param);
+		  },
+		  formRender: function(jsonData) {
+			  if (jsonData != null) {
+				  for (let item in jsonData) {
+					  let inputDom = $("input[name='" + item + "']");
+					  let selectDom = $("select[name='" + item + "']");
+					  let value = jsonData[item];
+					  if (inputDom != null) {
+						  //渲染输入框
+						  let inputDomType = inputDom.attr("type");
+						  if (inputDom.is("input")) {
+							  if (inputDomType == "text" || inputDomType == "password" || inputDomType == "hidden") {
+								  inputDom.val(value);
+							  } else if (inputDomType == "radio") {
+								  $("input[name='" + item + "'][value='" + value + "']").prop("checked", true);
+								  //layui重新渲染表格的单选框
+								  form.render("radio");
+							  }
+						  }
+					  }
+					  if (selectDom != null) {
+						  //渲染选择器
+						  if (selectDom.is("select")) {
+							  selectDom.find("option[value='" + value + "']").attr("selected", true);
+							  //layui重新渲染表格的选择器
+							  form.render("select");
+						  }
+					  }
+				  }
+			  }
+		  },
+		  searchTableRender: function(param, requestUrl, elem, cols, callback){
+			  let enc = c(JSON.stringify(param));
+			  table.render({
+				  elem: elem,
+				  url: requestUrl,
+				  page: true,
+				  limits: [10, 15, 20],
+				  limit: 10,
+				  cols: cols,
+				  request: {
+					  pageName: "currentPage",
+					  limitName: "pageSize"
+				  },
+				  response: {
+					  statusCode: "0000"
+				  },
+				  parseData: function(res){
+					  return {
+						  "code": res.sys.erorcd,
+						  "msg": res.sys.erortx,
+						  "count": res.commRes.totalCount,
+						  "data": res.output.list
+					  };
+				  },
+				  done: function(res, curr, count){
+					  if(res.code == "1001"){
+						  layer.open({
+							  title: "提示",
+							  content: res.msg,
+							  resize: false,
+							  end: function(){
+								  window.location.href = $(".basePath").val();
+							  }
+						  });
+					  }else{
+					  	  //渲染表格后回调
+						  callback(res.data);
+					  }
+				  },
+				  contentType: "application/json",
+				  method: "post",
+				  where: {
+					  "params": enc[0],
+					  "encKey": enc[1]
+				  }
+			  });
+		  },
+		  initRemoteSelect: function(domId, jsonData, labelField, valueField){
+		  	let html;
+		  	for(let i = 0;i < jsonData.length;i++){
+		  		let single = jsonData[i];
+		  		let label, value;
+		  		for(let key in single){
+		  			if(key == labelField){
+		  				label = single[key];
+					}
+		  			if(key == valueField){
+		  				value = single[key];
+					}
+				}
+
+		  		if(!requestContext.isNull(label) && !requestContext.isNull(value)){
+					html += '<option value="'+value+'">'+value+'-'+label+'</option>';
+				}else{
+					html += '<option value="'+single+'">'+single+'</option>';
+				}
+		  	}
+		  	if(!requestContext.isNull(html)){
+				$("#" + domId).html('<option value="">请选择</option>' + html);
+				form.render("select");
+			}
 		  }
 	  };
 
-	  //用户登录
-	  form.on('submit(login)',function(data){
-		  requestContext.doRequest("local/login", data.field, "login-btn", function(response){
-
+	  //初始化数据源
+	  $(document).ready(function(){
+		  requestContext.doRequest("select/dataSource", {}, "login-btn", false, function(response){
+		  		requestContext.initRemoteSelect("dataSourceSelect", response, "datasourceDesc", "datasourceId")
 		  });
 	  });
 
+	  //用户登录
+	  form.on('submit(login)',function(data){
+		  requestContext.doRequest("local/login", data.field, "login-btn", true, function(response){
+			  window.location.href = $(".basePath").val() + "index";
+		  });
+	  });
+
+	  //字典搜索
+	  form.on('submit(dictSearch)',function(data){
+	  	requestContext.searchTableRender(data.field, "/local/searchDictList", "#bodyTable", [[
+			{title:'#', type: 'numbers'},
+			{field:'id', title:'ID'},
+			{field:'ref', title:'引用'},
+			{field:'type', title:'类型', templet: function (res) {
+					let value = "";
+					res = res.type;
+					let enumList = res.split(";");
+
+					for(let i = 0;i < enumList.length;i++){
+						if(!requestContext.isNull(enumList[i])){
+							if(i == 0){
+								value += "<li style='font-weight: bolder;'>" + enumList[i] + "</li>";
+							}else{
+								value += "<li>" + enumList[i] + "</li>";
+							}
+						}
+					}
+					return value;
+				}},
+			{field:'desc', title:'中文描述'},
+			{field:'longName', title:'英文描述'}
+		]]);
+	  });
+
+	  /** 批量登记簿查询 **/
+	form.on('submit(batchSearch)',function(data){
+		requestContext.searchTableRender(data.field, "/local/queryBatchExeList", "#bodyTable", [[
+			{title:'#', type: 'numbers'},
+			{field:'tranFlowId', title:'任务流程ID'},
+			{field:'batchRunNo', title:'批量任务执行批次号'},
+			{field:'busiOrgId', title:'法人代码'},
+			{field:'dayendManageDate', title:'日终管理日期'},
+			{field:'tranState', title:'交易状态'},
+			{field:'tranGroupId', title:'当前执行序号'}
+		]]);
+	});
+
+	/** 启动批量 **/
+	form.on('submit(batchRun)',function(data){
+		requestContext.doConfirm(function () {
+			requestContext.doRequest("local/runBatch", {}, "layui-btn", true, function(response){
+				let interval = setInterval(function () {
+					$("#batch-search-btn").click();
+				}, 2000);
+			});
+		});
+	});
+
+	/** 构建PTE json **/
+	form.on('submit(PTESubmit)',function(data){
+		requestContext.doRequest("local/buildPTE", data.field, "layui-btn", true, function(response){
+			$("#showJson").html(response);
+			//构建成功后取消下载按钮的隐藏
+			$("#PTEDownload").css("display","");
+		});
+	});
+
+	/** 下载PTE JSON文件 **/
+	form.on('submit(PTEDownload)',function(data){
+		window.open($(".basePath").val() + "local/downloadPTEJson?pteModule="+data.field.pteModule+"&flowtranId="+data.field.flowtranId);
+		return false;
+	});
+
+	  /** 字典搜索菜单 **/
+	  $(document).on("click","#m1000",function(){
+		  requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			  $(".layui-body").load($(".basePath").val()+"menu1000",null, requestContext.menuClickCallback);
+		  });
+	  });
+
+	  /** PTE代码生成 **/
+	$(document).on("click","#m1001",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu1001",null, function () {
+				requestContext.menuClickCallback();
+				requestContext.doRequest("select/pteModule", {}, "layui-btn", false, function(response){
+					requestContext.initRemoteSelect("PTESelect", response, "", "")
+				});
+			});
+		});
+	});
+
+	/** 批量调度菜单 **/
+	$(document).on("click","#m2000",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu2000",null, function (response) {
+				requestContext.menuClickCallback(response);
+				requestContext.doRequest("local/queryBatchDate", {}, "layui-btn", false, function(response){
+					requestContext.formRender(response);
+				});
+			});
+		});
+	});
+
 	  /** 回车监听 **/
 	  $(document).on("keypress","#user-pwd",function(e){
-		  console.log(e.keyCode);
 		  if(e.keyCode == 13){
 			  $("#login-btn").click();
 		  }
+	  });
+
+	  /** a标签点击事件监听 **/
+	  /*$(document).on("click","a",function(){
+	  	let id = $(this).attr("id");
+	  	if(id == "m1001"){
+			$("ul.layui-fixbar").css("display","block");
+		}else{
+			$("ul.layui-fixbar").css("display","none");
+		}
+	  });*/
+
+	  /** 禁止回车 **/
+	  $(document).on("keypress",".layui-input",function(e){
+		  if(e.keyCode == 13){
+			  return false;
+		  }
+	  });
+
+	  /** 监听PTE模板下拉和交易流程输入框,在值发生改变时隐藏下载按钮 **/
+	  form.on("select(PTESelect)", function (data) {
+		  $("#PTEDownload").css("display", "none");
+		  if(data.value == "v_search_btn_datagrid" || data.value == "v_form_editableDataGrid_btn"){
+			  $("#listNameDiv").css("display", "block");
+			  requestContext.doRequest("/select/listName", requestContext.buildJsonParam(["pteModule","flowtranId"]), "layui-btn", false, function(response){
+				  requestContext.initRemoteSelect("listName", response , "longName", "id");
+			  })
+		  }else{
+		  	$("#listNameDiv").css("display", "none");
+		  }
+	  });
+	  $(document).on('change','#flowtranId',function() {
+		$("#PTEDownload").css("display", "none");
 	  });
 });

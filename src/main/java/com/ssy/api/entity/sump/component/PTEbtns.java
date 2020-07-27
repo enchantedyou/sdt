@@ -1,6 +1,7 @@
 package com.ssy.api.entity.sump.component;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.ssy.api.entity.enums.E_BTNTYPE;
 import com.ssy.api.entity.lang.Params;
 import com.ssy.api.entity.sump.form.PTEdoRequest;
 import com.ssy.api.entity.sump.form.PTEtoRequest;
@@ -12,7 +13,7 @@ import com.ssy.api.entity.sump.form.PTEtoRequest;
  */
 public class PTEbtns {
     @JSONField(ordinal = 0)
-    private String type;
+    private E_BTNTYPE type;
     @JSONField(ordinal = 5)
     private String label;
 
@@ -26,11 +27,11 @@ public class PTEbtns {
     @JSONField(ordinal = 25)
     private PTEdoRequest doRequest;
 
-    public String getType() {
+    public E_BTNTYPE getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(E_BTNTYPE type) {
         this.type = type;
     }
 

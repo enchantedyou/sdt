@@ -1,0 +1,71 @@
+var canvas = document.createElement('canvas');
+var height = canvas.height = window.innerHeight;
+var width = canvas.width = window.innerWidth;
+var ctx = canvas.getContext('2d');
+document.body.appendChild(canvas);
+
+function random(min,max)
+{
+    return Math.random()*(max-min+1)+min;
+}
+
+function range_map(value,in_min, in_max, out_min, out_max) {
+    return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+var word_arr = [];
+var txt_min_size = 10;
+var txt_max_size = 25;
+var keypress = false;
+var acclerate = 2;
+var errorText=$("#errorInfo").val();
+
+for (var i = 0; i < 20; i++) {
+    word_arr.push({
+        x : random(0,width),
+        y : random(0,height),
+        text : errorText,
+        size : random(txt_min_size,txt_max_size)
+    });
+}
+
+function render()
+{
+    ctx.fillStyle = "rgba(0,0,0,1)";
+    ctx.fillRect(0,0,width,height);
+
+    ctx.fillStyle = "#48BAFF";
+    for (var i = 0; i < word_arr.length; i++) {
+        ctx.font = word_arr[i].size+"px sans-serif";
+        var w = ctx.measureText(word_arr[i].text);
+        ctx.fillText(word_arr[i].text,word_arr[i].x,word_arr[i].y);
+
+        if(keypress)
+        {
+            word_arr[i].x += range_map(word_arr[i].size,txt_min_size,txt_max_size,0.5,2) * acclerate;
+        }
+        else {
+            word_arr[i].x += range_map(word_arr[i].size,txt_min_size,txt_max_size,0.5,1);
+        }
+
+        if(word_arr[i].x >= width)
+        {
+            word_arr[i].x = -w.width*2;
+            word_arr[i].y = random(0, height);
+            word_arr[i].size =  Math.floor(random(txt_min_size,txt_max_size));
+
+        }
+    }
+
+    ctx.fill();
+    requestAnimationFrame(render);
+}
+
+render();
+
+window.addEventListener('keydown',function(){
+    keypress = true;
+},true);
+window.addEventListener('keyup',function(){
+    keypress = false;
+},true);

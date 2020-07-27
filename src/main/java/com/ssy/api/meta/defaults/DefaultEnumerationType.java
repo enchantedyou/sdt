@@ -1,5 +1,6 @@
 package com.ssy.api.meta.defaults;
 
+import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.meta.abstracts.AbstractMetaData;
 
 import java.io.Serializable;
@@ -12,11 +13,10 @@ import java.util.Arrays;
  */
 public class DefaultEnumerationType extends AbstractMetaData implements Serializable {
 
-    private final static String defaultSuffix = ".e_schema.xml";
     private String value;
 
     public DefaultEnumerationType(String location, String id, String longName, String value) {
-        super(location, id, longName, defaultSuffix);
+        super(location, id, longName, SdtConst.ENUM_SUFFIX);
         this.value = value;
     }
 
@@ -26,6 +26,10 @@ public class DefaultEnumerationType extends AbstractMetaData implements Serializ
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getEnumSelect(){
+        return String.format("%s-%s", getValue(), getLongName());
     }
 
     @Override

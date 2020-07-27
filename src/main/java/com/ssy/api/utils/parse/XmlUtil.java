@@ -19,6 +19,7 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -155,49 +156,6 @@ public class XmlUtil {
      */
     public static Element searchXmlElement(Element element,String elementName){
         return searchXmlElement(element, elementName, null, null);
-    }
-
-    /**
-     * @Description 递归搜索xml元素节点,返回满足条件的节点的子节点列表
-     * @Author sunshaoyu
-     * @Date 2020/6/11-15:58
-     * @param element
-     * @param elementName
-     * @param attrName
-     * @param attrValue
-     * @return java.util.List<org.dom4j.Element>
-     */
-    public static List<Element> searchXmlElementList(Element element,String elementName,String attrName,String attrValue){
-        if(CommUtil.isNull(elementName) || CommUtil.isNull(element)){
-            throw new IllegalArgumentException("Element entity or element name cannot be null or empty");
-        }else if((CommUtil.isNull(attrName) || CommUtil.isNull(attrValue)) && elementName.equals(element.getName())){
-            return element.elements();
-        }else if(elementName.equals(element.getName()) && attrValue.equals(element.attributeValue(attrName))){
-            return element.elements();
-        }else{
-            List<Element> elementList = element.elements();
-            if(CommUtil.isNotNull(elementList)){
-                for(Element subElement : elementList){
-                    List<Element> resultElementList = searchXmlElementList(subElement, elementName,attrName,attrValue);
-                    if(CommUtil.isNotNull(resultElementList)){
-                        return resultElementList;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @Description 递归搜索xml元素节点,返回满足条件的节点的子节点列表
-     * @Author sunshaoyu
-     * @Date 2020/6/11-15:58
-     * @param element
-     * @param elementName
-     * @return java.util.List<org.dom4j.Element>
-     */
-    public static List<Element> searchXmlElementList(Element element,String elementName){
-        return searchXmlElementList(element, elementName, null, null);
     }
 
     /**

@@ -15,6 +15,8 @@ public class ErrCodeDef {
     public static final String REPEATE_REQUEST = "1006";
     /** 非法的请求 **/
     public static final String INVALID_REQUEST = "1007";
+    /** 请求被禁止 **/
+    public static final String FORBIDDEN_REQUEST = "1008";
     /** 数字或金额不合法 **/
     public static final String INVALID_NUMBER = "1010";
     /** 数据未改变，不能维护 **/
@@ -25,6 +27,8 @@ public class ErrCodeDef {
     public static final String NOTHINGNESS_ACCT = "2001";
     /** 密码错误 **/
     public static final String WRONG_PASSWD = "2004";
+    /** 文件不存在 **/
+    public static final String FILE_NOT_EXIST = "3001";
     /** 主键或唯一索引冲突 **/
     public static final String DB_PK_CONFLICT = "8001";
     /** 数据无对应记录 **/
@@ -51,4 +55,6 @@ public class ErrCodeDef {
     public static final String BATCH_TASK_ERROR = "9030";
     /** 未知错误 **/
     public static final String UNKNOWN_ERROR = "9999";
+    /** 系统抛出的已知错误 **/
+    public static final String SYSTEM_ERROR = "SYS001";
 }

@@ -55,7 +55,8 @@ public class SpringContextUtil implements ApplicationContextAware {
      * @return javax.servlet.http.HttpServletRequest
      */
     public static HttpServletRequest getRequest(){
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        ServletRequestAttributes servletRequestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        return CommUtil.isNull(servletRequestAttributes) ? null : servletRequestAttributes.getRequest();
     }
 
     /**
@@ -65,7 +66,27 @@ public class SpringContextUtil implements ApplicationContextAware {
      * @param key
      * @return java.lang.Object
      */
-    public static Object getAttributeFromSession(String key){
-        return getRequest().getSession().getAttribute(key);
+    public static Object getSessionAttribute(String key){
+        HttpServletRequest request = getRequest();
+        if(CommUtil.isNotNull(request)){
+            return request.getSession().getAttribute(key);
+        }
+        return null;
+    }
+
+    /**
+     * @Description 从session中获取属性
+     * @Author sunshaoyu
+     * @Date 2020/7/15-13:13
+     * @param key
+     * @param clazz
+     * @return T
+     */
+    public static <T> T getSessionAttribute(String key, Class<T> clazz){
+        HttpServletRequest request = getRequest();
+        if(CommUtil.isNotNull(request)){
+            return (T) request.getSession().getAttribute(key);
+        }
+        return null;
     }
 }

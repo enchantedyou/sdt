@@ -1,8 +1,10 @@
 package com.ssy.api.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageInfo;
 import com.ssy.api.dao.mapper.local.SdsPacketMapper;
 import com.ssy.api.entity.annotation.TrxnEvent;
+import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.lang.ResponseData;
 import com.ssy.api.entity.table.local.SdsPacket;
 import com.ssy.api.utils.http.HttpServletUtil;
@@ -21,10 +23,14 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.StopWatch;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
@@ -35,15 +41,34 @@ import java.lang.reflect.Method;
 @RestControllerAdvice
 @Aspect
 @Slf4j
-public class ControllerAdvice implements ResponseBodyAdvice<Object> {
+public class ControllerAspect implements ResponseBodyAdvice<Object> {
 
     /** 当前请求的交易事件 **/
     private static final ThreadLocal<String> trxnEventLocal = new ThreadLocal<>();
-    /** 当前请求出现的异常 **/
-    private static final ThreadLocal<Throwable> throwableLocal = new ThreadLocal<>();
 
     @Autowired
     private SdsPacketMapper packetMapper;
+
+    /**
+     * @Description 全局异常处理
+     * @Author sunshaoyu
+     * @Date 2020/7/15-11:24
+     * @param throwable
+     * @return com.ssy.api.entity.lang.ResponseData
+     */
+    @ExceptionHandler
+    public ResponseData exceptionHandler(Throwable throwable, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BizUtil.logError(throwable);
+        ResponseData responseData = new ResponseData(throwable);
+        registerResponsePacket(responseData, request, throwable);
+
+        if(CommUtil.equals(request.getMethod(), SdtConst.GET_REQUEST)){
+            //转发到错误页面
+            request.setAttribute(SdtConst.RESPONSE_DATA, responseData);
+            request.getRequestDispatcher("/exception").forward(request, response);
+        }
+        return responseData;
+    }
 
     /**
      * @Description 控制层日志环绕增强
@@ -74,15 +99,12 @@ public class ControllerAdvice implements ResponseBodyAdvice<Object> {
 
             stopWatch.start();
             responseData = point.proceed(args);
-        }catch (Throwable e){
-            BizUtil.logError(e);
-            throwableLocal.set(e);
         }finally {
             stopWatch.stop();
             if(CommUtil.isNull(responseData)){
                 log.info("调用{}结束,耗时:{}ms", String.format("%s.%s",method.getDeclaringClass().getName(), method.getName()), stopWatch.getTotalTimeMillis());
             }else{
-                log.info("调用{}结束,返回结果:[{}],耗时:{}ms", String.format("%s.%s",method.getDeclaringClass().getName(), method.getName()), String.valueOf(responseData), stopWatch.getTotalTimeMillis());
+                log.info("调用{}结束,耗时:{}ms,返回结果:[{}]", String.format("%s.%s",method.getDeclaringClass().getName(), method.getName()), stopWatch.getTotalTimeMillis(), String.valueOf(responseData));
             }
         }
         return responseData;
@@ -121,16 +143,15 @@ public class ControllerAdvice implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         ResponseData responseData = null;
         if(CommUtil.isNull(o)){
-            responseData = CommUtil.isNull(throwableLocal.get()) ? new ResponseData() : new ResponseData(throwableLocal.get());
+            responseData = new ResponseData();
         }else{
+            if(o instanceof PageInfo){
+                //赋值总数量
+                BizUtil.getRunEnvs().setTotalCount((int) PageInfo.class.cast(o).getTotal());
+            }
             responseData = new ResponseData(o);
         }
-
-        if(CommUtil.isNull(throwableLocal.get())){
-            registerResponsePacket(responseData, SpringContextUtil.getRequest());
-        }else{
-            registerResponsePacket(responseData, SpringContextUtil.getRequest(), throwableLocal.get());
-        }
+        registerResponsePacket(responseData, SpringContextUtil.getRequest());
         return responseData;
     }
 
@@ -143,6 +164,11 @@ public class ControllerAdvice implements ResponseBodyAdvice<Object> {
      * @param e
      */
     private void registerResponsePacket(ResponseData responseData, HttpServletRequest request, Throwable e){
+        //交易事件为空则不登记
+        if(CommUtil.isNull(trxnEventLocal.get())){
+            return;
+        }
+
         SdsPacket packet = new SdsPacket();
         packet.setTrxnSeq(BizUtil.getRunEnvs().getTrxnSeq());
         packet.setTrxnDate(BizUtil.getCurSysDate());
@@ -154,6 +180,7 @@ public class ControllerAdvice implements ResponseBodyAdvice<Object> {
         packet.setEndTime(responseData.getCommRes().getResponseTime());
         packet.setUsedTime(BizUtil.calTimeConsume(packet.getBeginTime(), packet.getEndTime()));
         packet.setHostIp(HttpServletUtil.getRemoteHostAddr(request));
+        packet.setErrorText(responseData.getSys().getErortx());
 
         if(CommUtil.isNotNull(e)){
             Throwable cause = getRootCause(e);
@@ -162,7 +189,6 @@ public class ControllerAdvice implements ResponseBodyAdvice<Object> {
             for(StackTraceElement traceElement : cause.getStackTrace()){
                 buffer.append(String.format("%s.%s(%s:%d)", traceElement.getClassName(), traceElement.getMethodName(), traceElement.getFileName(), traceElement.getLineNumber())).append("\r\n");
             }
-            packet.setErrorText(e.getMessage());
             packet.setErrorStack(buffer.toString());
         }
         packetMapper.insert(packet);

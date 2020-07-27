@@ -20,6 +20,8 @@ public class PTEtabs {
 
     @JSONField(ordinal = 10)
     private E_POSITION submitBtnPlace;
+    @JSONField(ordinal = 11)
+    private List<PTEbtns> btns;
     @JSONField(ordinal = 15)
     private PTEdoRequest doRequest;
 
@@ -95,5 +97,13 @@ public class PTEtabs {
 
     public void setStyleClass(String styleClass) {
         this.styleClass = styleClass;
+    }
+
+    public List<PTEbtns> getBtns() {
+        return btns;
+    }
+
+    public void setBtns(List<PTEbtns> btns) {
+        this.btns = btns;
     }
 }

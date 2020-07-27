@@ -12,11 +12,11 @@ import com.ssy.api.entity.sump.grid.PTEdatagrid;
 public class PTElayout {
     @JSONField(ordinal = 0)
     private PTEform form;
+    @JSONField(ordinal = 1)
+    private PTEtoolbar toolbar;
     @JSONField(ordinal = 5)
     private PTEdatagrid datagrid;
 
-    @JSONField(ordinal = 10)
-    private PTEtoolbar toolbar;
     @JSONField(ordinal = 15)
     private PTEtabs tabs;
     @JSONField(ordinal = 20)

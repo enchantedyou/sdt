@@ -1,10 +1,16 @@
 package com.ssy.api.utils.business;
 
+import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
+import java.io.File;
 import java.math.BigDecimal;
 
 /**
@@ -112,5 +118,48 @@ public class SdtBusiUtil {
      */
     public static String parseStrArrayToSingle(String... strArray){
         return parseStrArrayToSingle(null, strArray);
+    }
+
+    /**
+     * @Description 判断是否为微服务模型
+     * @Author sunshaoyu
+     * @Date 2020/7/17-10:00
+     * @param s
+     * @return boolean
+     */
+    public static boolean isMsModel(String s){
+        return BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, s);
+    }
+
+    /**
+     * @Description 获取小数点左边的内容
+     * @Author sunshaoyu
+     * @Date 2020/7/23-10:02
+     * @param s
+     * @return java.lang.String
+     */
+    public static String getDotLeft(String s){
+        String[] component = s.split("\\.");
+        if(CommUtil.isNotNull(component) && component.length > 1){
+            return component[0];
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * @Description 获取小数点右边的内容
+     * @Author sunshaoyu
+     * @Date 2020/7/23-10:02
+     * @param s
+     * @return java.lang.String
+     */
+    public static String getDotRight(String s){
+        String[] component = s.split("\\.");
+        if(CommUtil.isNotNull(component) && component.length > 1){
+            return component[1];
+        }else{
+            return null;
+        }
     }
 }

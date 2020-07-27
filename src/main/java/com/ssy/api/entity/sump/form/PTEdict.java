@@ -12,8 +12,6 @@ import java.util.List;
 public class PTEdict {
     @JSONField(ordinal = 0)
     private String dictType;
-    @JSONField(ordinal = 5)
-    private String format;
 
     @JSONField(ordinal = 10)
     private List<String> dictKey;
@@ -24,6 +22,8 @@ public class PTEdict {
     private String valueField;
     @JSONField(ordinal = 25)
     private PTEdoRequest doRequest;
+    @JSONField(ordinal = 30)
+    private String format;
 
     public String getDictType() {
         return dictType;

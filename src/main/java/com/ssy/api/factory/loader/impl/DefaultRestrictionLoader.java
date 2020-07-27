@@ -11,6 +11,7 @@ import com.ssy.api.meta.defaults.DefaultBaseType;
 import com.ssy.api.meta.defaults.DefaultEnumType;
 import com.ssy.api.meta.defaults.DefaultEnumerationType;
 import com.ssy.api.servicetype.ModulePriortyService;
+import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import com.ssy.api.utils.parse.XmlUtil;
@@ -108,9 +109,9 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
      * @return com.ssy.api.meta.abstracts.AbstractRestrictionType
      */
     private AbstractRestrictionType checkEnumPriorty(Map<String, SdpEnumPriorty> priority, AbstractRestrictionType before, AbstractRestrictionType now){
-        //之前的数据为空或[当前或之前是微服务模型但不是微服务模型优先],直接添加
+        //之前的数据为空或[当前或之前是微服务模型,但不是微服务模型优先],直接添加
         if(CommUtil.isNull(before)
-                || ((BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, now.getLocation())|| BizUtil.isRegexMatches(SdtConst.MS_MODEL_REG, before.getLocation()))
+                || ((SdtBusiUtil.isMsModel(now.getLocation()) || SdtBusiUtil.isMsModel(before.getLocation()))
                 && !sdtContextConfig.getMsModelFirst())){
             return now;
         }else{

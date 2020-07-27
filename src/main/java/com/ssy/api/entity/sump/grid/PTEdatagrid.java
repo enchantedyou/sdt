@@ -14,6 +14,8 @@ public class PTEdatagrid {
 
     @JSONField(ordinal = 0)
     private Boolean isInitSearch;
+    @JSONField(ordinal = 1)
+    private String name;
     @JSONField(ordinal = 5)
     private String scope;
 
@@ -104,5 +106,13 @@ public class PTEdatagrid {
 
     public void setShowAndHideColumns(Boolean showAndHideColumns) {
         this.showAndHideColumns = showAndHideColumns;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

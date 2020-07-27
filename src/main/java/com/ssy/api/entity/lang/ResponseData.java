@@ -25,9 +25,11 @@ public class ResponseData implements Serializable {
      * @Date 2020/7/13-14:06
      */
     public ResponseData(Object output) {
+        RunEnvs runEvns = BizUtil.getRunEnvs();
         this.output = CommUtil.nvl(output, new Object());
-        this.sys = new SystemResponse(null, ErrCodeDef.SUCCESS, E_STATUS.S);
-        this.commRes = new CommonResponse(BizUtil.getRunEnvs().getTrxnSeq(), BizUtil.getCurSysTime());
+        this.sys = new SystemResponse("处理成功", ErrCodeDef.SUCCESS, E_STATUS.S);
+        this.commRes = new CommonResponse(BizUtil.getRunEnvs().getTrxnSeq(), BizUtil.getCurSysTime(),
+                runEvns.getCurrentPage(), runEvns.getPageSize(), runEvns.getTotalCount());
     }
 
     /**
@@ -37,7 +39,7 @@ public class ResponseData implements Serializable {
      */
     public ResponseData() {
         this.output = new Object();
-        this.sys = new SystemResponse(null, ErrCodeDef.SUCCESS, E_STATUS.S);
+        this.sys = new SystemResponse("处理成功", ErrCodeDef.SUCCESS, E_STATUS.S);
         this.commRes = new CommonResponse(BizUtil.getRunEnvs().getTrxnSeq(), BizUtil.getCurSysTime());
     }
 
@@ -47,12 +49,14 @@ public class ResponseData implements Serializable {
      * @Date 2020/7/13-14:10
      */
     public ResponseData(Throwable e) {
+        RunEnvs runEvns = BizUtil.getRunEnvs();
         if(e instanceof SdtException){
             this.sys = new SystemResponse(((SdtException) e).getErrorMsg(), ((SdtException) e).getErrorCode(), E_STATUS.F);
         }else{
             this.sys = new SystemResponse(e.getMessage(), ErrCodeDef.UNKNOWN_ERROR, E_STATUS.F);
         }
-        this.commRes = new CommonResponse(BizUtil.getRunEnvs().getTrxnSeq(), BizUtil.getCurSysTime());
+        this.commRes = new CommonResponse(BizUtil.getRunEnvs().getTrxnSeq(), BizUtil.getCurSysTime(),
+                runEvns.getCurrentPage(), runEvns.getPageSize(), runEvns.getTotalCount());
         this.output = new Object();
     }
 

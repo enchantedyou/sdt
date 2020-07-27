@@ -15,23 +15,23 @@ public class SdtException extends RuntimeException {
 
     public SdtException(Throwable cause) {
         super(cause);
-        this.errorMsg = ((SdtException) cause).getErrorMsg();
-
         if(cause instanceof SdtException){
             this.errorCode = ((SdtException) cause).getErrorCode();
+            this.errorMsg = ((SdtException) cause).getErrorMsg();
         }else{
             this.errorCode = ErrCodeDef.UNKNOWN_ERROR;
+            this.errorMsg = cause.getMessage();
         }
     }
 
     public SdtException(String message, Throwable cause) {
         super(message, cause);
-        this.errorMsg = ((SdtException) cause).getErrorMsg();
-        if
-        (cause instanceof SdtException){
+        if(cause instanceof SdtException){
+            this.errorMsg = ((SdtException) cause).getErrorMsg();
             this.errorCode = ((SdtException) cause).getErrorCode();
         }else{
-            this.errorCode = ErrCodeDef.UNKNOWN_ERROR;
+            this.errorCode = ErrCodeDef.SYSTEM_ERROR;
+            this.errorMsg = cause.getMessage();
         }
     }
 
@@ -45,6 +45,12 @@ public class SdtException extends RuntimeException {
         super("[" + CommUtil.nvl(errorCode, ErrCodeDef.UNKNOWN_ERROR) + "]" + errorMsg, e);
         this.errorMsg = errorMsg;
         this.errorCode = errorCode;
+    }
+
+    public SdtException(String errorMsg) {
+        super("[" + ErrCodeDef.SYSTEM_ERROR + "]" + errorMsg);
+        this.errorMsg = errorMsg;
+        this.errorCode = ErrCodeDef.SYSTEM_ERROR;
     }
 
     public SdtException() {

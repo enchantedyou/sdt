@@ -112,6 +112,16 @@ public class OdbFactory {
     }
 
     /**
+     * @Description 获取字典的map
+     * @Author sunshaoyu
+     * @Date 2020/7/16-13:42
+     * @return java.util.Map<java.lang.String,com.ssy.api.meta.defaults.Element>
+     */
+    public static Map<String, Element> getDictMap(){
+        return MetaDataFactory.loadDictMap();
+    }
+
+    /**
      * @Description 搜索表模型
      * @Author sunshaoyu
      * @Date 2020/6/14-14:17
@@ -151,5 +161,14 @@ public class OdbFactory {
      */
     public static Map<Object, Object> refreshDynamicDataSource(){
         return MetaDataFactory.refreshDynamicDataSource();
+    }
+
+    /**
+     * @Description 刷新元数据
+     * @Author sunshaoyu
+     * @Date 2020/7/23-13:17
+     */
+    public static void refreshMetaData(){
+        MetaDataFactory.loadMetaDataInitially();
     }
 }

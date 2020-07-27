@@ -21,6 +21,9 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -48,11 +51,23 @@ public class SdtArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         try{
             HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+
             /** 获取入参和加密秘钥 **/
             String params = request.getParameter(SdtConst.PARAMS);
             String encKey = request.getParameter(SdtConst.ENCKEY);
             String randKey = systemParamService.getValue(SdtConst.AES_RAND_KEY);
             String aesKey = systemParamService.getValue(SdtConst.AES_ENC_KEY);
+
+            if(CommUtil.isNull(params) || CommUtil.isNull(encKey)){
+                JSONObject requestBody = getRequestOfJsonType(request);
+                params = requestBody.getString(SdtConst.PARAMS);
+                encKey = requestBody.getString(SdtConst.ENCKEY);
+
+                //设置分页信息
+                BizUtil.getRunEnvs().setCurrentPage(requestBody.getIntValue(SdtConst.CURRENT_PAGE));
+                BizUtil.getRunEnvs().setPageSize(requestBody.getIntValue(SdtConst.PAGE_SIZE));
+                log.info("Get request parameters from input stream:{}", requestBody.toJSONString());
+            }
 
             /** 参数解密 **/
             String randStr = AesEnDecrypt.aesDecrypt(encKey.substring(SdtConst.ENCKEY_RAND_LENTH), randKey);
@@ -257,5 +272,22 @@ public class SdtArgumentResolver implements HandlerMethodArgumentResolver {
             }
         }
         return null;
+    }
+
+    /**
+     * @Description 获取json类型的请求参数
+     * @Author sunshaoyu
+     * @Date 2020/7/16-16:48
+     * @param request
+     * @return com.alibaba.fastjson.JSONObject
+     */
+    private JSONObject getRequestOfJsonType(HttpServletRequest request) throws IOException {
+        BufferedReader streamReader = new BufferedReader(new InputStreamReader(request.getInputStream(), SdtConst.DEFAULT_ENCODING));
+        StringBuilder builder = new StringBuilder();
+        String inputStr = null;
+        while ((inputStr = streamReader.readLine()) != null){
+            builder.append(inputStr);
+        }
+        return JSON.parseObject(builder.toString());
     }
 }

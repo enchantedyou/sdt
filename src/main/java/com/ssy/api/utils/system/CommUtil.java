@@ -1,10 +1,11 @@
 package com.ssy.api.utils.system;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.Feature;
 import com.ssy.api.entity.enums.E_STRGENTYPE;
 import com.ssy.api.exception.SdtException;
 import org.springframework.beans.BeanUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -29,13 +30,9 @@ public class CommUtil {
         } else if (obj instanceof String) {
             return ((String) obj).length() == 0 || ((String) obj).equals("null");
         } else if (obj instanceof Map) {
-            obj = Map.class.cast(obj);
-            Map<?, ?> tmpObj = (Map<?, ?>) obj;
-            return tmpObj.isEmpty();
+            return Map.class.cast(obj).isEmpty();
         } else if (obj instanceof Collection<?>) {
-            obj = Collection.class.cast(obj);
-            Collection<?> tmpObj = (Collection<?>) obj;
-            return tmpObj.isEmpty();
+            return Collection.class.cast(obj).isEmpty();
         } else if (obj.getClass().isArray()) {
             return Array.getLength(obj) == 0;
         }
@@ -305,6 +302,23 @@ public class CommUtil {
         }catch (Exception e){
             BizUtil.logError(e);
             throw new SdtException(e);
+        }
+    }
+
+    /**
+     * @Description JSON美化
+     * @Author sunshaoyu
+     * @Date 2020/7/23-13:31
+     * @param jsonString
+     * @return java.lang.String
+     */
+    public static String fastjsonBeauty(String jsonString) {
+        if(JSON.isValidArray(jsonString)){
+            com.alibaba.fastjson.JSONArray fastjsonArray = com.alibaba.fastjson.JSONArray.parseArray(jsonString);
+            return JSON.toJSONString(fastjsonArray, true);
+        }else{
+            com.alibaba.fastjson.JSONObject fastjsonObj = com.alibaba.fastjson.JSONObject.parseObject(jsonString, Feature.OrderedField);
+            return JSON.toJSONString(fastjsonObj, true);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ssy.api.entity.lang;
 
+import com.ssy.api.entity.constant.ErrCodeDef;
 import com.ssy.api.entity.enums.E_STATUS;
 import com.ssy.api.utils.system.CommUtil;
 
@@ -16,7 +17,9 @@ public class SystemResponse {
 
     public SystemResponse(String erortx, String erorcd, E_STATUS status) {
         if(CommUtil.isNotNull(erortx)){
-            this.erortx = String.format("[%s]%s", erorcd, erortx);
+            this.erortx = CommUtil.equals(erorcd, ErrCodeDef.SUCCESS) ? erortx : String.format("[%s]%s", erorcd, erortx);
+        }else{
+            this.erortx = "系统错误";
         }
         this.erorcd = erorcd;
         this.status = status;
