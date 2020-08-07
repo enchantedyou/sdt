@@ -10,10 +10,12 @@ import com.ssy.api.meta.flowtran.Flowtran;
 import com.ssy.api.meta.flowtran.IntfAssemble;
 import com.ssy.api.meta.flowtran.IntfFields;
 import com.ssy.api.meta.flowtran.IntfService;
-import com.ssy.api.utils.parse.XmlUtil;
+import com.ssy.api.utils.parse.XmlParser;
 import com.ssy.api.utils.system.CommUtil;
+import com.ssy.api.utils.system.RedisHelper;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.List;
  * @Author sunshaoyu
  * @Date 2020年07月22日-17:09
  */
+@Component
 public class SdFlowtranParser {
 
     /**
@@ -35,13 +38,18 @@ public class SdFlowtranParser {
      */
     public static Flowtran load(String flowTranId){
         try {
+            //优先从redis缓存中获取
+            if(RedisHelper.hasKey(flowTranId)){
+                return (Flowtran) RedisHelper.getValue(flowTranId);
+            }
+
             String fileName = flowTranId + SdtConst.FLOWTRAN_SUFFIX;
             File flowtranFile = OdbFactory.searchFile(fileName);
             if(CommUtil.isNull(flowtranFile)){
                 throw SdtServError.E0014(flowTranId);
             }
 
-            Element rootNode = XmlUtil.getXmlRootElement(flowtranFile);
+            Element rootNode = XmlParser.getXmlRootElement(flowtranFile);
             Flowtran flowtran = new Flowtran(fileName, flowTranId, rootNode.attributeValue("longname"));
 
             //解析基础属性
@@ -57,6 +65,8 @@ public class SdFlowtranParser {
 
             //解析服务
             parseService(flowtran, rootNode);
+            //存入redis缓存
+            RedisHelper.addandSetValue(flowTranId, flowtran, SdtConst.REDIS_FLOWTRAN_TIMEOUT);
             return flowtran;
         } catch (DocumentException e) {
             throw new SdtException("Failed to parse flowtran " + flowTranId, e);
@@ -129,7 +139,7 @@ public class SdFlowtranParser {
      * @param rootNode
      */
     private static void parseService(Flowtran flowtran, Element rootNode){
-        List<Element> serviceNodeList = XmlUtil.searchTargetAllXmlElement(rootNode, "service");
+        List<Element> serviceNodeList = XmlParser.searchTargetAllXmlElement(rootNode, "service");
         List<IntfService> serviceList = new ArrayList<>();
         for(Element e : serviceNodeList){
             IntfService service = new IntfService(flowtran.getLocation(), e.attributeValue("id"), e.attributeValue("longname"));

@@ -29,7 +29,9 @@ public class SdpDatasource {
 
     private Integer dataVersion;
 
-    public SdpDatasource(String datasourceId, String datasourceType, String tlsqlInd, String platformTablePrefix, String datasourceDesc, String datasourceDriver, String datasourceUrl, String datasourceUser, String datasourcePwd, String dataCreateUser, String dataCreateTime, String dataUpdateUser, String dataUpdateTime, Integer dataVersion) {
+    private Boolean isEnabled;
+
+    public SdpDatasource(String datasourceId, String datasourceType, String tlsqlInd, String platformTablePrefix, String datasourceDesc, String datasourceDriver, String datasourceUrl, String datasourceUser, String datasourcePwd, String dataCreateUser, String dataCreateTime, String dataUpdateUser, String dataUpdateTime, Integer dataVersion, Boolean isEnabled) {
         this.datasourceId = datasourceId;
         this.datasourceType = datasourceType;
         this.tlsqlInd = tlsqlInd;
@@ -44,6 +46,7 @@ public class SdpDatasource {
         this.dataUpdateUser = dataUpdateUser;
         this.dataUpdateTime = dataUpdateTime;
         this.dataVersion = dataVersion;
+        this.isEnabled = isEnabled;
     }
 
     public SdpDatasource() {
@@ -162,6 +165,14 @@ public class SdpDatasource {
         this.dataVersion = dataVersion;
     }
 
+    public Boolean getIsEnabled() {
+        return isEnabled;
+    }
+
+    public void setIsEnabled(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -182,6 +193,7 @@ public class SdpDatasource {
         sb.append(", dataUpdateUser=").append(dataUpdateUser);
         sb.append(", dataUpdateTime=").append(dataUpdateTime);
         sb.append(", dataVersion=").append(dataVersion);
+        sb.append(", isEnabled=").append(isEnabled);
         sb.append("]");
         return sb.toString();
     }

@@ -13,7 +13,7 @@ public class RunEnvs {
 
     private int currentPage;
     private int pageSize;
-    private int totalCount;
+    private long totalCount;
 
     public RunEnvs(String trxnSeq, String requestStartTime, int currentPage, int pageSize) {
         this.trxnSeq = trxnSeq;
@@ -67,11 +67,11 @@ public class RunEnvs {
         this.pageSize = pageSize;
     }
 
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
 }

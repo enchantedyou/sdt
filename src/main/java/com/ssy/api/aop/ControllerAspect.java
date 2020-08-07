@@ -71,7 +71,7 @@ public class ControllerAspect implements ResponseBodyAdvice<Object> {
     }
 
     /**
-     * @Description 控制层日志环绕增强
+     * @Description 日志环绕增强
      * @Author sunshaoyu
      * @Date 2020/7/14-16:36
      * @param point
@@ -147,7 +147,7 @@ public class ControllerAspect implements ResponseBodyAdvice<Object> {
         }else{
             if(o instanceof PageInfo){
                 //赋值总数量
-                BizUtil.getRunEnvs().setTotalCount((int) PageInfo.class.cast(o).getTotal());
+                BizUtil.getRunEnvs().setTotalCount(PageInfo.class.cast(o).getTotal());
             }
             responseData = new ResponseData(o);
         }

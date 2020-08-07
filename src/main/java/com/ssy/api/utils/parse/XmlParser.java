@@ -24,11 +24,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @Description xml工具类
+ * @Description xml解析器
  * @Author sunshaoyu
  * @Date 2020年06月11日-13:23
  */
-public class XmlUtil {
+public class XmlParser {
 
     /**
      * @Description 从文件中获取xml文件的document

@@ -6,10 +6,12 @@ import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.enums.E_PTEMODULE;
 import com.ssy.api.entity.type.local.Empty;
 import com.ssy.api.entity.type.local.SdBuildPTE;
+import com.ssy.api.logic.higention.SdNexus;
 import com.ssy.api.logic.local.SdFlowtranParser;
 import com.ssy.api.meta.flowtran.Flowtran;
 import com.ssy.api.meta.flowtran.IntfFields;
 import com.ssy.api.servicetype.DataSourceService;
+import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.system.BizUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ public class RemoteSelectController {
 
     @Autowired
     private DataSourceService dataSourceService;
+    @Autowired
+    private ModuleMapService moduleMapService;
 
     /**
      * @Description 数据源下拉列表
@@ -77,5 +81,44 @@ public class RemoteSelectController {
         nameList.addAll(flowtran.getInput().getFieldsList());
         nameList.addAll(flowtran.getOutput().getFieldsList());
         return nameList;
+    }
+
+    /**
+     * @Description 合并业务模块下拉列表
+     * @Author sunshaoyu
+     * @Date 2020/7/31-13:21
+     * @param empty
+     * @return java.lang.Object
+     */
+    @TrxnEvent
+    @PostMapping("/mergeModule")
+    public Object queryMergeModuleList(@EncryptedArgument Empty empty){
+        return moduleMapService.queryMergeModuleList();
+    }
+
+    /**
+     * @Description 所有模块下拉列表
+     * @Author sunshaoyu
+     * @Date 2020/8/5-14:49
+     * @param empty
+     * @return java.lang.Object
+     */
+    @TrxnEvent
+    @PostMapping("/module")
+    public Object queryModuleList(@EncryptedArgument Empty empty){
+        return moduleMapService.queryAllModuleList();
+    }
+
+    /**
+     * @Description nexus仓库类型下拉列表
+     * @Author sunshaoyu
+     * @Date 2020/8/5-14:50
+     * @param empty
+     * @return java.lang.Object
+     */
+    @TrxnEvent
+    @PostMapping("/rpoType")
+    public Object queryRepositoryTypes(@EncryptedArgument Empty empty){
+        return SdNexus.getRepositoryTypes();
     }
 }

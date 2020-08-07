@@ -2,12 +2,14 @@ package com.ssy.api.meta.flowtran;
 
 import com.ssy.api.meta.abstracts.AbstractMetaData;
 
+import java.io.Serializable;
+
 /**
  * @Description 接口服务
  * @Author sunshaoyu
  * @Date 2020年07月22日-17:42
  */
-public class IntfService extends AbstractMetaData {
+public class IntfService extends AbstractMetaData implements Serializable {
 
     private boolean mappingToProperty;
     private String serviceName;

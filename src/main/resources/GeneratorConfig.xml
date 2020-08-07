@@ -21,7 +21,7 @@
             <property name="constructorBased" value="true"/>
         </javaModelGenerator>
         <!--生成映射文件存放位置-->
-        <sqlMapGenerator targetPackage="com.ssy.api.dao.mapping.local"
+        <sqlMapGenerator targetPackage="com.ssy.api.dao.mapping"
                          targetProject="C:\Users\DELL\Desktop\ln\mapper">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -32,6 +32,6 @@
         </javaClientGenerator>
         
         <!-- 表与实体间的映射 -->
-        <table tableName="sdp_batch_date" domainObjectName="SdpBatchDate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" delimitAllColumns=""/>
+        <table tableName="sdp_datasource" domainObjectName="SdpDatasource" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" delimitAllColumns=""/>
     </context>
 </generatorConfiguration>

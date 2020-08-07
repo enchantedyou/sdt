@@ -45,6 +45,18 @@ public class SdtContextConfig {
 
     /** 批量任务轮询线程池大小 **/
     @NotNull @Range(min = 1, max = 200) private int batchPollThreadPoolSize;
+    /** gitlab session,用于操作git,获取合并文件 **/
+    @NotBlank private String gitlabSession;
+
+    /** 公共脚本主目录 **/
+    private String commonSqlMainDir;
+    /** 业务模块脚本主目录 **/
+    private String moduleSqlMainDir;
+
+    /** 稽核工具脚本目录 **/
+    private String sqlToolsDir;
+    /** 默认的sump数据源,用于生产接口文档 **/
+    @NotBlank private String sumpDataSource;
 
     public String getWorkSpacePath() {
         return workSpacePath;
@@ -132,5 +144,45 @@ public class SdtContextConfig {
 
     public void setBatchPollThreadPoolSize(int batchPollThreadPoolSize) {
         this.batchPollThreadPoolSize = batchPollThreadPoolSize;
+    }
+
+    public String getGitlabSession() {
+        return gitlabSession;
+    }
+
+    public void setGitlabSession(String gitlabSession) {
+        this.gitlabSession = gitlabSession;
+    }
+
+    public String getCommonSqlMainDir() {
+        return commonSqlMainDir;
+    }
+
+    public void setCommonSqlMainDir(String commonSqlMainDir) {
+        this.commonSqlMainDir = commonSqlMainDir;
+    }
+
+    public String getModuleSqlMainDir() {
+        return moduleSqlMainDir;
+    }
+
+    public void setModuleSqlMainDir(String moduleSqlMainDir) {
+        this.moduleSqlMainDir = moduleSqlMainDir;
+    }
+
+    public String getSqlToolsDir() {
+        return sqlToolsDir;
+    }
+
+    public void setSqlToolsDir(String sqlToolsDir) {
+        this.sqlToolsDir = sqlToolsDir;
+    }
+
+    public String getSumpDataSource() {
+        return sumpDataSource;
+    }
+
+    public void setSumpDataSource(String sumpDataSource) {
+        this.sumpDataSource = sumpDataSource;
     }
 }

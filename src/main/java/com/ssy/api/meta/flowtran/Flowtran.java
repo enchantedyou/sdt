@@ -4,6 +4,7 @@ import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_TRANKIND;
 import com.ssy.api.meta.abstracts.AbstractMetaData;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @Author sunshaoyu
  * @Date 2020年07月22日-17:15
  */
-public class Flowtran extends AbstractMetaData {
+public class Flowtran extends AbstractMetaData implements Serializable {
 
     private E_TRANKIND kind;
     private String tranPackage;

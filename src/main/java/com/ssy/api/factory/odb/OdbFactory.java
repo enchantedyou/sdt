@@ -5,6 +5,7 @@ import com.ssy.api.meta.defaults.ComplexType;
 import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.defaults.TableType;
 import com.ssy.api.utils.system.CommUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
  * @Author sunshaoyu
  * @Date 2020年06月12日-15:03
  */
+@Slf4j
 public class OdbFactory {
 
     /**

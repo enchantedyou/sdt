@@ -34,6 +34,13 @@ public class SdtDict {
         pte_module("pteModule", "PTE module", "PTE模板", 100, 0),
         flowtran_id("flowtranId", "flowtran id", "交易流程编号", 6, 0),
         list_name("listName", "list name", "列表名称", 50, 0),
+        merge_url("mergeUrl", "merge url", "合并链接", 250, 0),
+        module_id("moduleId", "module identity", "模块编号", 2, 0),
+        inner_service_code("innerServiceCode", "inner service code", "内部服务码", 6, 0),
+        service_code("serviceCode", "service code", "服务码", 6, 0),
+        jira_id("jiraId", "jira identity", "JIRA编号", 15, 0),
+        repository_type("repositoryType", "repository type", "仓库类型", 20, 0),
+        data_operate_type("dataOperateType", "data operate type", "数据源操作类型", 1, 0),
         ;
 
         private String id;

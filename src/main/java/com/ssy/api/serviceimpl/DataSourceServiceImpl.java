@@ -1,6 +1,7 @@
 package com.ssy.api.serviceimpl;
 
 import com.ssy.api.entity.table.local.SdpDatasource;
+import com.ssy.api.entity.type.local.SdDatasourceEdit;
 import com.ssy.api.logic.local.SdDynamicDs;
 import com.ssy.api.servicetype.DataSourceService;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,10 @@ public class DataSourceServiceImpl implements DataSourceService {
     @Override
     public List<SdpDatasource> queryDataSourceList() {
         return SdDynamicDs.queryDataSourceList();
+    }
+
+    @Override
+    public void editDataSource(SdDatasourceEdit datasourceEdit) {
+        SdDynamicDs.editDataSource(datasourceEdit);
     }
 }

@@ -62,9 +62,8 @@ public class HttpServletUtil {
         BufferedInputStream bufferedInputStream = null;
         try{
             if(CommUtil.isNotNull(file) && file.exists()){
-                //设置请求头
-                response.setContentType("application/force-download");
-                response.setHeader("Content-Disposition", "attachment;fileName=" + file.getName());
+                //设置响应头
+                downloadHeaderSet(file.getName(), response);
                 byte[] buffer = new byte[(int) file.length()];
 
                 //创建输入流并读取文件
@@ -81,5 +80,18 @@ public class HttpServletUtil {
                 bufferedInputStream.close();
             }
         }
+    }
+
+    /**
+     * @Description 文件下载响应头设置
+     * @Author sunshaoyu
+     * @Date 2020/8/6-16:32
+     * @param fileName
+     * @param response
+     */
+    public static void downloadHeaderSet(String fileName, HttpServletResponse response) {
+        //设置请求头
+        response.setContentType("application/force-download");
+        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
     }
 }

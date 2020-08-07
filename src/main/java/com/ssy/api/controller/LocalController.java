@@ -8,14 +8,19 @@ import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.lang.ResponseData;
 import com.ssy.api.entity.table.local.SdbBatchExecution;
 import com.ssy.api.entity.table.local.SdpBatchDate;
+import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.entity.type.local.*;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.factory.loader.FileLoader;
+import com.ssy.api.logic.higention.SdGitlabReader;
+import com.ssy.api.logic.higention.SdNexus;
 import com.ssy.api.logic.local.SdPTEJsonParser;
 import com.ssy.api.servicetype.BatchService;
+import com.ssy.api.servicetype.DataSourceService;
 import com.ssy.api.servicetype.MetaService;
 import com.ssy.api.servicetype.UserService;
 import com.ssy.api.utils.http.HttpServletUtil;
+import com.ssy.api.utils.parse.ExcelParser;
 import com.ssy.api.utils.system.BizUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +48,12 @@ public class LocalController {
     @Autowired
     private MetaService metaService;
     @Autowired
+    private DataSourceService dataSourceService;
+
+    @Autowired
     private BatchService batchService;
+    @Autowired
+    private SdGitlabReader gitlabReader;
     @Autowired
     private FileLoader fileLoader;
 
@@ -158,5 +168,71 @@ public class LocalController {
             throw SdtServError.E0015(buildPTE.getFlowtranId(), buildPTE.getPteModule());
         }
         HttpServletUtil.fileDownload(downloadFile, response);
+    }
+
+    /**
+     * @Description 从gitlab读取合并文件差异
+     * @Author sunshaoyu
+     * @Date 2020/7/31-14:20
+     * @param moduleId
+     * @param jiraId
+     * @return java.lang.String
+     */
+    @TrxnEvent("read gitlab merge diffs")
+    @PostMapping("/mergeDiffs")
+    public String readMergeDiffs(@EncryptedArgument String moduleId, @EncryptedArgument String jiraId) {
+        return gitlabReader.getMergeDiffs(moduleId, jiraId);
+    }
+
+    /**
+     * @Description 从nexus读取各模块服务总线层的最新版本
+     * @Author sunshaoyu
+     * @Date 2020/8/5-14:52
+     * @param repositoryType
+     * @return java.lang.String
+     */
+    @TrxnEvent("read nexus lastest iobus version")
+    @PostMapping("/iobusVer")
+    public String readIobusVer(@EncryptedArgument String repositoryType) {
+        return SdNexus.getLastestIobusVersion(repositoryType);
+    }
+
+    /**
+     * @Description 接口文档生成并下载
+     * @Author sunshaoyu
+     * @Date 2020/8/6-16:36
+     * @param flowtranId
+     * @param response
+     */
+    @RequestMapping("/downloadIntf")
+    public void downloadInterfaceDoc(String flowtranId, HttpServletResponse response) throws IOException {
+        BizUtil.fieldNotNull(flowtranId, SdtDict.A.flowtran_id.getId(), SdtDict.A.flowtran_id.getLongName());
+        HttpServletUtil.downloadHeaderSet(flowtranId + SdtConst.INTF_EXCEL_SUFFIX, response);
+        ExcelParser.genInterfaceDoc(flowtranId, response.getOutputStream());
+    }
+
+    /**
+     * @Description 数据源列表查询
+     * @Author sunshaoyu
+     * @Date 2020/8/6-16:59
+     * @param empty
+     * @return java.util.List<com.ssy.api.entity.table.local.SdpDatasource>
+     */
+    @TrxnEvent("query data source list")
+    @PostMapping("/dataSourceList")
+    public PageInfo<SdpDatasource> queryDataSourceList(@EncryptedArgument Empty empty) {
+        return new PageInfo<>(dataSourceService.queryDataSourceList());
+    }
+
+    /**
+     * @Description 数据源维护
+     * @Author sunshaoyu
+     * @Date 2020/8/7-14:14
+     * @param datasourceEdit
+     */
+    @TrxnEvent("edit data source")
+    @PostMapping("/editDataSource")
+    public void editDataSource(@EncryptedArgument SdDatasourceEdit datasourceEdit){
+        dataSourceService.editDataSource(datasourceEdit);
     }
 }

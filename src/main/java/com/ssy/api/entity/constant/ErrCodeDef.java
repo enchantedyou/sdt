@@ -57,4 +57,6 @@ public class ErrCodeDef {
     public static final String UNKNOWN_ERROR = "9999";
     /** 系统抛出的已知错误 **/
     public static final String SYSTEM_ERROR = "SYS001";
+    /** SQL运行时异常 **/
+    public static final String SQL_ERROR = "SQL001";
 }

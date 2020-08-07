@@ -14,8 +14,7 @@ public class SdtConst {
     /** 通配符 **/
     public static final String WILDCARD = "*";
     /** java资源文件目录 **/
-    public static final String JAVA_RESOURCES_PATH =
-            new StringBuffer("src").append(File.separator).append("main").append(File.separator).append("resources").toString();
+    public static final String JAVA_RESOURCES_PATH = new StringBuffer("src").append(File.separator).append("main").toString();
     /** session中的运行时环境变量名 **/
     public static final String RUN_ENVS = "runEnvs";
     /** 交易流水的长度 **/
@@ -36,6 +35,8 @@ public class SdtConst {
     public static final String PAGE_SIZE = "pageSize";
     /** 响应数据 **/
     public static final String RESPONSE_DATA = "responseData";
+    /** 列表分隔符 **/
+    public static final String LIST_SPLIT_TOKEN = ";";
 
     /** 加密秘钥入参名 **/
     public static final String ENCKEY = "encKey";
@@ -63,7 +64,8 @@ public class SdtConst {
     public static final String INTF_EXCEL_SUFFIX = ".xlsx";
     public static final String FLOWTRAN_SUFFIX = ".flowtrans.xml";
     public static final String SERVICETYPE_SUFFIX = ".serviceType.xml";
-    public static final String[] PROJECT_FILE_SUFFIX = {".xml"};
+    public static final String JAVA_SUFFIX = ".java";
+    public static final String[] PROJECT_FILE_SUFFIX = {"xml", "java"};
 
     /** 动态数据源 **/
     public static final String MASTER_DATASOURCE = "masterDS";
@@ -97,4 +99,8 @@ public class SdtConst {
     /** 正则表达式 **/
     public static final String MS_MODEL_REG = "^Ms.*?";
     public static final String CURRENCY_REG = "^[0-9]+([.][0-9]{1,2})?$";
+
+    /** redis缓存相关 **/
+    public static final long REDIS_FLOWTRAN_TIMEOUT = 60 * 60 * 2;//2小时
+    public static final long REDIS_GITDIFFS_TIMEOUT = 60 * 60 * 24 * 15;//15天
 }

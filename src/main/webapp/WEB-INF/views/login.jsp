@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="../layui/css/layui.css"/>
     <link rel="stylesheet" href="../css/login.css">
     <script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="../layui/layui.all.js"></script>
-    <script type="text/javascript" src="../js/lib.js"></script>
 </head>
 <body id="login">
     <div class="login">
@@ -31,5 +29,8 @@
         </form>
     </div>
     <input type="hidden" class="basePath" value="${basePath }">
+    <script type="text/javascript" src="../layui/layui.all.js"></script>
+    <script type="text/javascript" src="../js/clipboard.min.js"></script>
+    <script type="text/javascript" src="../js/lib.js"></script>
 </body>
 </html>

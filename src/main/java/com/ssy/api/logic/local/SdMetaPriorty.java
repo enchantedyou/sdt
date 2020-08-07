@@ -129,7 +129,7 @@ public class SdMetaPriorty {
     public static void addDictPriorty(SdpDictPriorty sdpDictPriorty) {
         SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType(), true);
         if(CommUtil.isNotNull(oldData)){
-            ApPubErr.E0006(SdtTable.A.sdp_dict_priority.getLongName(), SdtBusiUtil.parseStrArrayToSingle(sdpDictPriorty.getDictType()));
+            throw ApPubErr.E0006(SdtTable.A.sdp_dict_priority.getLongName(), SdtBusiUtil.parseStrArrayToSingle(sdpDictPriorty.getDictType()));
         }
         sdpDictPriortyMapper.insert(sdpDictPriorty);
     }

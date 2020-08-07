@@ -6298,6 +6298,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 				  elem: elem,
 				  url: requestUrl,
 				  page: true,
+				  toolbar: "#gridAdd",
 				  limits: [10, 15, 20],
 				  limit: 10,
 				  cols: cols,
@@ -6328,7 +6329,9 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 						  });
 					  }else{
 					  	  //渲染表格后回调
-						  callback(res.data);
+						  if(typeof callback == "function"){
+							  callback(res.data);
+						  }
 					  }
 				  },
 				  contentType: "application/json",
@@ -6420,6 +6423,20 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		]]);
 	});
 
+	/** 数据源列表查询 **/
+	form.on('submit(dataSourceSubmit)',function(data){
+		requestContext.searchTableRender(data.field, "/local/dataSourceList", "#bodyTable", [[
+			{title:'#', type: 'numbers'},
+			{field:'datasourceId', title:'数据源ID'},
+			{field:'datasourceDesc', title:'数据源描述'},
+			{field:'datasourceDriver', title:'驱动'},
+			{field:'datasourceUrl', title:'链接'},
+			{field:'datasourceUser', title:'用户'},
+			{field:'datasourcePwd', title:'密码'},
+			{fixed: 'right', title:'操作', toolbar: '#gridOperate', width: 120}
+		]]);
+	});
+
 	/** 启动批量 **/
 	form.on('submit(batchRun)',function(data){
 		requestContext.doConfirm(function () {
@@ -6440,9 +6457,29 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** 获取请求合并文件 **/
+	form.on('submit(diffSubmit)',function(data){
+		requestContext.doRequest("local/mergeDiffs", data.field, "layui-btn", true, function(response){
+			$("#showDiffs").html(response);
+		});
+	});
+
+	/** 读取服务总线层最新版本 **/
+	form.on('submit(iobusVerSubmit)',function(data){
+		requestContext.doRequest("local/iobusVer", data.field, "layui-btn", true, function(response){
+			$("#showIobusVer").html(response);
+		});
+	});
+
 	/** 下载PTE JSON文件 **/
 	form.on('submit(PTEDownload)',function(data){
 		window.open($(".basePath").val() + "local/downloadPTEJson?pteModule="+data.field.pteModule+"&flowtranId="+data.field.flowtranId);
+		return false;
+	});
+
+	/** 接口文档下载 **/
+	form.on('submit(intfDownload)',function(data){
+		window.open($(".basePath").val() + "local/downloadIntf?flowtranId="+data.field.flowtranId);
 		return false;
 	});
 
@@ -6465,6 +6502,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** 接口文档生成 **/
+	$(document).on("click","#m1002",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu1002",null, requestContext.menuClickCallback);
+		});
+	});
+
 	/** 批量调度菜单 **/
 	$(document).on("click","#m2000",function(){
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
@@ -6477,22 +6521,55 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** 数据源列表查询 **/
+	$(document).on("click","#m2001",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu2001",null, requestContext.menuClickCallback);
+		});
+	});
+
+	/** 合并请求差异菜单 **/
+	$(document).on("click","#m3000",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu3000",null, function (response) {
+				requestContext.menuClickCallback(response);
+				requestContext.doRequest("select/mergeModule", {}, "layui-btn", false, function(response){
+					requestContext.initRemoteSelect("moduleSelect", response, "moduleDesc", "moduleId")
+				});
+			});
+			let codeClipboard = new Clipboard("#copy-diffs-btn");
+			codeClipboard.on('success', function(e) {
+				if(!requestContext.isNull(e.text)){
+					requestContext.showMessage("已复制到剪贴板");
+				}
+				e.clearSelection();
+			});
+
+			codeClipboard.on('error', function(e) {
+				requestContext.showMessage("复制失败");
+				e.clearSelection();
+			});
+		});
+	});
+
+	/** 服务总线层最新版本 **/
+	$(document).on("click","#m3001",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu3001",null, function () {
+				requestContext.menuClickCallback();
+				requestContext.doRequest("select/rpoType", {}, "layui-btn", false, function(response){
+					requestContext.initRemoteSelect("rpoSelect", response, "", "")
+				});
+			});
+		});
+	});
+
 	  /** 回车监听 **/
 	  $(document).on("keypress","#user-pwd",function(e){
 		  if(e.keyCode == 13){
 			  $("#login-btn").click();
 		  }
 	  });
-
-	  /** a标签点击事件监听 **/
-	  /*$(document).on("click","a",function(){
-	  	let id = $(this).attr("id");
-	  	if(id == "m1001"){
-			$("ul.layui-fixbar").css("display","block");
-		}else{
-			$("ul.layui-fixbar").css("display","none");
-		}
-	  });*/
 
 	  /** 禁止回车 **/
 	  $(document).on("keypress",".layui-input",function(e){
@@ -6508,7 +6585,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 			  $("#listNameDiv").css("display", "block");
 			  requestContext.doRequest("/select/listName", requestContext.buildJsonParam(["pteModule","flowtranId"]), "layui-btn", false, function(response){
 				  requestContext.initRemoteSelect("listName", response , "longName", "id");
-			  })
+			  });
 		  }else{
 		  	$("#listNameDiv").css("display", "none");
 		  }
@@ -6516,4 +6593,27 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 	  $(document).on('change','#flowtranId',function() {
 		$("#PTEDownload").css("display", "none");
 	  });
+
+
+	  /** 数据源编辑监听 **/
+	table.on('tool(bodyTable)', function(obj) {
+		let data = obj.data;
+		let layEvent = obj.event;
+
+		if(layEvent == 'dsDel'){
+			data.dataOperateType = "D";
+			layer.confirm('此操作将删除数据,是否继续?', function(index){
+				requestContext.doRequest("/local/editDataSource", data, "layui-btn", true, function(response){
+					obj.del();
+					layer.close(index);
+				});
+			});
+		}else if(layEvent == 'dsEdit'){
+			data.dataOperateType = "M";
+
+		}else if(layEvent == 'dsAdd'){
+			data.dataOperateType = "A";
+
+		}
+	});
 });

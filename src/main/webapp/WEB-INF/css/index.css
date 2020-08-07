@@ -1,5 +1,6 @@
 .layui-form-item{
 	position: relative;
+	float: left;
 	margin-top: 10px;
 	margin-left: 30px;
 }
@@ -29,18 +30,14 @@
 	bottom: 4px;
 }
 
-.layui-form-item{
-	float: left;
-}
-
 .layui-form-btn{
 	float: right;
 }
 
-.layui-btn{
+/*.layui-btn{
 	width: 60px;
 	height: 35px;
-}
+}*/
 
 .layui-table-cell {
 	height:auto;

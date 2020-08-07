@@ -12,9 +12,8 @@ import com.ssy.api.meta.defaults.DefaultEnumType;
 import com.ssy.api.meta.defaults.DefaultEnumerationType;
 import com.ssy.api.servicetype.ModulePriortyService;
 import com.ssy.api.utils.business.SdtBusiUtil;
-import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
-import com.ssy.api.utils.parse.XmlUtil;
+import com.ssy.api.utils.parse.XmlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +47,15 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
         for(String fileName : fileMap.keySet()){
             if(fileName.contains(SdtConst.ENUM_SUFFIX) || fileName.contains(SdtConst.REUSABLE_SUFFIX)){
                 try {
-                    Element rootNode = XmlUtil.getXmlRootElement(fileMap.get(fileName));
+                    Element rootNode = XmlParser.getXmlRootElement(fileMap.get(fileName));
                     String location = rootNode.attributeValue("id");
                     Map<String, AbstractRestrictionType> currentRestrictionTypeMap = CommUtil.nvl(map.get(location), new ConcurrentHashMap<>());
 
-                    List<Element> restrictionTypeList = XmlUtil.searchTargetAllXmlElement(rootNode, SdtConst.RESTRICTIONTYPE_NODE_NAME);
+                    List<Element> restrictionTypeList = XmlParser.searchTargetAllXmlElement(rootNode, SdtConst.RESTRICTIONTYPE_NODE_NAME);
                     for(Element e : restrictionTypeList){
                         String restrictionTypeId = e.attributeValue("id");
 
-                        List<Element> enumerationList = XmlUtil.searchTargetAllXmlElement(e, SdtConst.ENUMERATION_NODE_NAME);
+                        List<Element> enumerationList = XmlParser.searchTargetAllXmlElement(e, SdtConst.ENUMERATION_NODE_NAME);
                         AbstractRestrictionType currentRestrictionType = null;
 
                         Integer maxLength = CommUtil.isNull(e.attributeValue("maxLength")) ? SdtConst.DEFAULT_RESTRICTION_LENGTH : Integer.parseInt(e.attributeValue("maxLength"));

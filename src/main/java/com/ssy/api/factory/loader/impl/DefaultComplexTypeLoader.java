@@ -11,7 +11,7 @@ import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.ComplexType;
 import com.ssy.api.servicetype.ModulePriortyService;
 import com.ssy.api.utils.business.SdtBusiUtil;
-import com.ssy.api.utils.parse.XmlUtil;
+import com.ssy.api.utils.parse.XmlParser;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
@@ -49,9 +49,9 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
             if(fileName.contains(SdtConst.DICT_SUFFIX) || fileName.contains(SdtConst.COMPLEX_SUFFIX)){
                 try {
                     //读取复合类型文件模型
-                    Element rootNode = XmlUtil.getXmlRootElement(fileMap.get(fileName));
+                    Element rootNode = XmlParser.getXmlRootElement(fileMap.get(fileName));
                     //获取复合类型节点列表
-                    List<Element> complexTypeList = XmlUtil.searchTargetAllXmlElement(rootNode, SdtConst.COMPLEX_TYPE_NODE_NAME);
+                    List<Element> complexTypeList = XmlParser.searchTargetAllXmlElement(rootNode, SdtConst.COMPLEX_TYPE_NODE_NAME);
                     //复合类型位置
                     String location = rootNode.attributeValue("id");
 
@@ -92,7 +92,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
      */
     private Map<String, com.ssy.api.meta.defaults.Element> getComplexTypeElementMap(Map<String, Map<String, ComplexType>> cpxMap, Map<String, SdpDictPriorty> priority, Element complexTypeNode, String location, Map<String, com.ssy.api.meta.defaults.Element> beforeElementMap, boolean isDict){
         Map<String, com.ssy.api.meta.defaults.Element> map = new ConcurrentHashMap<>();
-        List<Element> elementList = XmlUtil.searchTargetAllXmlElement(complexTypeNode, SdtConst.ELEMENT_NODE_NAME);
+        List<Element> elementList = XmlParser.searchTargetAllXmlElement(complexTypeNode, SdtConst.ELEMENT_NODE_NAME);
         String complexTypeNodeId = complexTypeNode.attributeValue("id");
 
         //处理复合类型单个元素

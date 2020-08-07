@@ -99,4 +99,19 @@ public class SdtServError {
     public static SdtException E0016(String listName) {
         throw new SdtException("Cannot retrieve the field list with list name ["+listName+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
     }
+
+    /** PTE json{}对应的文件模型不存在 **/
+    public static SdtException E0017(String pteJsonName) {
+        throw new SdtException("The file model corresponding to the PTE json ["+pteJsonName+"] does not exist", ErrCodeDef.FILE_NOT_EXIST);
+    }
+
+    /** SQL运行时错误 **/
+    public static SdtException E0018(Exception e) {
+        throw new SdtException(e, ErrCodeDef.SQL_ERROR);
+    }
+
+    /** 未找到指定的节点{} **/
+    public static SdtException E0019(String node) {
+        throw new SdtException("The specified node ["+node+"] was not found", ErrCodeDef.DB_NO_RECORD);
+    }
 }

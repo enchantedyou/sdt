@@ -11,9 +11,9 @@ public class CommonResponse {
     private String responseTime;
     private int currentPage;
     private int pageSize;
-    private int totalCount;
+    private long totalCount;
 
-    public CommonResponse(String trxnSeq, String responseTime, int currentPage, int pageSize, int totalCount) {
+    public CommonResponse(String trxnSeq, String responseTime, int currentPage, int pageSize, long totalCount) {
         this.trxnSeq = trxnSeq;
         this.responseTime = responseTime;
         this.currentPage = currentPage;
@@ -58,7 +58,7 @@ public class CommonResponse {
         this.pageSize = pageSize;
     }
 
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 

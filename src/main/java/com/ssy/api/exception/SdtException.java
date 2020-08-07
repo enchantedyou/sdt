@@ -24,6 +24,17 @@ public class SdtException extends RuntimeException {
         }
     }
 
+    public SdtException(Throwable cause, String errorCode) {
+        super(cause);
+        if(cause instanceof SdtException){
+            this.errorCode = ((SdtException) cause).getErrorCode();
+            this.errorMsg = ((SdtException) cause).getErrorMsg();
+        }else{
+            this.errorCode = errorCode;
+            this.errorMsg = cause.getMessage();
+        }
+    }
+
     public SdtException(String message, Throwable cause) {
         super(message, cause);
         if(cause instanceof SdtException){

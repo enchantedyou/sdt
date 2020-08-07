@@ -15,6 +15,7 @@ public class SdtTable {
         sdp_enum_priority("SdpEnumPriority", "enum priority", "枚举优先级"),
         msp_organization("MspOrganization", "business organization indicator", "组织机构"),
         app_date("AppDate", "transaction date", "交易日期"),
+        sdp_datasource("SdpDatasource", "data source", "数据源"),
         ;
 
         private String id;

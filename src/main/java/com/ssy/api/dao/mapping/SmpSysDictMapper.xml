@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.ct.SmpSysDictMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ct.SmpSysDict">
+    <constructor>
+      <idArg column="DICT_ID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="DICT_TYPE" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="DICT_NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="PARENT_DICT_TYPE" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="PARENT_DICT_ID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="STATUS" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="SORT_NO" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="timestamp" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="DICT_TYPE_NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    DICT_ID, DICT_TYPE, DICT_NAME, PARENT_DICT_TYPE, PARENT_DICT_ID, STATUS, SORT_NO, 
+    timestamp, DICT_TYPE_NAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from smp_sys_dict
+    where DICT_ID = #{dictId,jdbcType=VARCHAR}
+      and DICT_TYPE = #{dictType,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from smp_sys_dict
+    where DICT_ID = #{dictId,jdbcType=VARCHAR}
+      and DICT_TYPE = #{dictType,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.ct.SmpSysDict">
+    insert into smp_sys_dict (DICT_ID, DICT_TYPE, DICT_NAME, 
+      PARENT_DICT_TYPE, PARENT_DICT_ID, STATUS, 
+      SORT_NO, timestamp, DICT_TYPE_NAME
+      )
+    values (#{dictId,jdbcType=VARCHAR}, #{dictType,jdbcType=VARCHAR}, #{dictName,jdbcType=VARCHAR}, 
+      #{parentDictType,jdbcType=VARCHAR}, #{parentDictId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{sortNo,jdbcType=BIGINT}, #{timestamp,jdbcType=VARCHAR}, #{dictTypeName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ct.SmpSysDict">
+    insert into smp_sys_dict
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dictId != null">
+        DICT_ID,
+      </if>
+      <if test="dictType != null">
+        DICT_TYPE,
+      </if>
+      <if test="dictName != null">
+        DICT_NAME,
+      </if>
+      <if test="parentDictType != null">
+        PARENT_DICT_TYPE,
+      </if>
+      <if test="parentDictId != null">
+        PARENT_DICT_ID,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="sortNo != null">
+        SORT_NO,
+      </if>
+      <if test="timestamp != null">
+        timestamp,
+      </if>
+      <if test="dictTypeName != null">
+        DICT_TYPE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dictId != null">
+        #{dictId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictType != null">
+        #{dictType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictName != null">
+        #{dictName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentDictType != null">
+        #{parentDictType,jdbcType=VARCHAR},
+      </if>
+      <if test="parentDictId != null">
+        #{parentDictId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        #{sortNo,jdbcType=BIGINT},
+      </if>
+      <if test="timestamp != null">
+        #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTypeName != null">
+        #{dictTypeName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ct.SmpSysDict">
+    update smp_sys_dict
+    <set>
+      <if test="dictName != null">
+        DICT_NAME = #{dictName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentDictType != null">
+        PARENT_DICT_TYPE = #{parentDictType,jdbcType=VARCHAR},
+      </if>
+      <if test="parentDictId != null">
+        PARENT_DICT_ID = #{parentDictId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null">
+        SORT_NO = #{sortNo,jdbcType=BIGINT},
+      </if>
+      <if test="timestamp != null">
+        timestamp = #{timestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTypeName != null">
+        DICT_TYPE_NAME = #{dictTypeName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DICT_ID = #{dictId,jdbcType=VARCHAR}
+      and DICT_TYPE = #{dictType,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ct.SmpSysDict">
+    update smp_sys_dict
+    set DICT_NAME = #{dictName,jdbcType=VARCHAR},
+      PARENT_DICT_TYPE = #{parentDictType,jdbcType=VARCHAR},
+      PARENT_DICT_ID = #{parentDictId,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      SORT_NO = #{sortNo,jdbcType=BIGINT},
+      timestamp = #{timestamp,jdbcType=VARCHAR},
+      DICT_TYPE_NAME = #{dictTypeName,jdbcType=VARCHAR}
+    where DICT_ID = #{dictId,jdbcType=VARCHAR}
+      and DICT_TYPE = #{dictType,jdbcType=VARCHAR}
+  </update>
+</mapper>

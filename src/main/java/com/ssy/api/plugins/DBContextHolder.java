@@ -32,8 +32,9 @@ public class DBContextHolder extends AbstractRoutingDataSource {
     public static void switchToDataSource(String dataSource) {
         if (OdbFactory.getDataSourceMap().containsKey(dataSource)) {
             if(!CommUtil.equals(dataSource, SdtConst.MASTER_DATASOURCE)){
+                dataSourceTypeLocal.set(E_DATASOURCETYPE.REMOTE);
                 dataSourceHolder.set(dataSource);
-                log.debug("The current data source is switched to [{}]", dataSource);
+                log.info("The current data source is switched to [{}]", dataSource);
             }
         } else {
             ApPubErr.E0009(dataSource);
@@ -93,5 +94,10 @@ public class DBContextHolder extends AbstractRoutingDataSource {
         }
         log.debug("Determine current data source {{}}", datasource);
         return datasource;
+    }
+
+    @Override
+    public int hashCode() {
+        return determineTargetDataSource().hashCode();
     }
 }

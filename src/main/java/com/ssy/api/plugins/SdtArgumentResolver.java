@@ -265,10 +265,11 @@ public class SdtArgumentResolver implements HandlerMethodArgumentResolver {
      * @param paramName
      * @return java.lang.Object
      */
-    private Object resolveArgumentForBase(JSONObject obj,String paramName){
+    private Object resolveArgumentForBase(JSONObject obj, String paramName){
         for(String key : obj.keySet()){
             if(CommUtil.equals(key, paramName)){
-                return obj.get(key);
+                Object value = obj.get(key);
+                return (value instanceof String && CommUtil.isNotNull(value)) ? String.valueOf(value).trim() : value;
             }
         }
         return null;

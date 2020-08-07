@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.ssy.api.entity.enums.E_STRGENTYPE;
 import com.ssy.api.exception.SdtException;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Array;
@@ -320,5 +321,16 @@ public class CommUtil {
             com.alibaba.fastjson.JSONObject fastjsonObj = com.alibaba.fastjson.JSONObject.parseObject(jsonString, Feature.OrderedField);
             return JSON.toJSONString(fastjsonObj, true);
         }
+    }
+
+    /**
+     * @Description list数据去重
+     * @Author sunshaoyu
+     * @Date 2020/8/5-13:29
+     * @param list
+     * @return java.util.List<T>
+     */
+    public static <T> List<T> uniqueList(List<T> list){
+        return new ArrayList<>(new LinkedHashSet<>(list));
     }
 }

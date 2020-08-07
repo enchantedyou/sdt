@@ -23,6 +23,7 @@ import com.ssy.api.meta.defaults.DefaultEnumerationType;
 import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.flowtran.Flowtran;
 import com.ssy.api.meta.flowtran.IntfFields;
+import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @Description PTE json   解析器
+ * @Description PTE json 解析器
  * @Author sunshaoyu
  * @Date 2020年06月22日-20:40
  */
@@ -48,6 +49,8 @@ public class SdPTEJsonParser {
 
     private static SdtContextConfig sdtContextConfig;
     private static FileLoader fileLoader;
+    private static ModuleMapService moduleMapService;
+    private static final ThreadLocal<List<String>> mandatoryLocal = new ThreadLocal<>();
 
     @Autowired
     public void setSdtContextConfig(SdtContextConfig sdtContextConfig) {
@@ -59,8 +62,15 @@ public class SdPTEJsonParser {
         SdPTEJsonParser.fileLoader = fileLoader;
     }
 
+    @Autowired
+    public void setModuleMapService(ModuleMapService moduleMapService) {
+        SdPTEJsonParser.moduleMapService = moduleMapService;
+    }
+
     /** json对象map **/
     private static final Map<String, PTEComponent> pteComponentMap = new ConcurrentHashMap<>();
+    /** json文件map **/
+    private static final Map<String, PTEComponent> pteJsonMap = new ConcurrentHashMap<>();
 
     /**
      * @Description 根据模板解析PTE json
@@ -100,13 +110,35 @@ public class SdPTEJsonParser {
     }
 
     /**
+     * @Description 获取PTEform中的所有PTEcontrol(不包含events中的)
+     * @Author sunshaoyu
+     * @Date 2020/7/28-16:55
+     * @param form
+     * @return java.util.List<java.util.Map<java.lang.String,com.ssy.api.entity.sump.form.PTEcontrol>>
+     */
+    private static List<Map<String, PTEcontrol>> getFormControls(PTEform form){
+        List<Map<String, PTEcontrol>> controlList = new ArrayList<>();
+        if(CommUtil.isNotNull(form)){
+            if(CommUtil.isNotNull(form.getControlsGroup())){
+                form.getControlsGroup().forEach(group -> {
+                    controlList.addAll(group.getControls());
+                });
+            }
+
+            if(CommUtil.isNotNull(form.getControls())){
+                controlList.addAll(form.getControls());
+            }
+        }
+        return controlList;
+    }
+
+    /**
      * @Description 搜索PTE组件
      * @Author sunshaoyu
      * @Date 2020/6/22-21:24
      * @param jsonName  json文件名
      * @return com.ssy.api.entity.sump.component.PTEComponent
      */
-    @Deprecated
     public static PTEComponent searchOne(String jsonName) throws IOException {
         checkPTEInitialize();
         return pteComponentMap.get(jsonName);
@@ -231,7 +263,7 @@ public class SdPTEJsonParser {
 
         tabs.setDoRequest(buildComponentDoRequest(buildPTE.getFlowtran()));
         tabs.setTabHeader(buildComponentTabHeaderList(buildPTE));
-        tabs.setDefaultActiveKey(tabs.getTabHeader().get(0).getId());
+        tabs.setDefaultActiveKey(CommUtil.isNull(tabs.getTabHeader()) ? "" : tabs.getTabHeader().get(0).getId());
         tabs.setPosition(E_POSITION.top);
 
         tabs.setStyleClass("card");
@@ -353,7 +385,7 @@ public class SdPTEJsonParser {
         if(pteModule == E_PTEMODULE.v_search_btn_datagrid || pteModule == E_PTEMODULE.v_inputDataForm_btn){
             control.setLabel(field.getDesc());
             control.setControl(determineControlType(field));
-            control.setRules(buildComponentRules(field, control.getControl(), true));
+            control.setRules(buildComponentRules(field, control.getControl(), CommUtil.isNotNull(mandatoryLocal.get()) && mandatoryLocal.get().contains(field.getId())));
             control.setDisabled(false);
             control.setDict(buildComponentDict(field));
 
@@ -397,6 +429,7 @@ public class SdPTEJsonParser {
         }else{
             if(required){
                 requiredRule.setMessage(String.format("请输入%s", field.getDesc()));
+                ruleList.add(requiredRule);
             }
             if(control == E_CONTROL.currency){
                 limitRule.setPattern(SdtConst.CURRENCY_REG);
@@ -407,9 +440,9 @@ public class SdPTEJsonParser {
             }
             ruleList.add(limitRule);
         }
-        ruleList.add(requiredRule);
         return ruleList;
     }
+
 
     /**
      * @Description 构建组件PTEdoRequest
@@ -422,7 +455,7 @@ public class SdPTEJsonParser {
         PTEdoRequest doRequest = new PTEdoRequest();
         doRequest.setUrl(SdtConst.DEFAULT_REQUEST_URL);
         doRequest.setMethod(E_REQUESTMETHOD.POST);
-        doRequest.setParams(new Params().add("servicecode", flowtran.getId()));
+        doRequest.setParams(new Params().add(SdtDict.A.service_code.getId(), moduleMapService.getServiceCode(flowtran.getId())));
         return doRequest;
     }
 
@@ -524,7 +557,7 @@ public class SdPTEJsonParser {
 
             dict.setLabelField("drop_list_desc");
             dict.setValueField("drop_list_value");
-            dict.setDoRequest(buildComponentDoRequest(new Params().add("servicecode", "ms1053").add("dynamic_drop_list_type","AP0011")));
+            dict.setDoRequest(buildComponentDoRequest(new Params().add(SdtDict.A.service_code.getId(), "ms1053").add("dynamic_drop_list_type","AP0011")));
             return dict;
         }
         return null;
@@ -656,13 +689,13 @@ public class SdPTEJsonParser {
     }
 
     /**
-     * @Description 根据模板构建PTE json
+     * @Description 根据模板构建PTE Component
      * @Author sunshaoyu
      * @Date 2020/7/23-16:48
      * @param buildPTE
      * @return java.lang.String
      */
-    public static String buildPTEJson(SdBuildPTE buildPTE){
+    public static PTEComponent buildPTEComponent(SdBuildPTE buildPTE){
         BizUtil.fieldNotNull(buildPTE.getFlowtranId(), SdtDict.A.flowtran_id.getId(), SdtDict.A.flowtran_id.getLongName());
         BizUtil.fieldNotNull(buildPTE.getPteModule(), SdtDict.A.pte_module.getId(), SdtDict.A.pte_module.getLongName());
 
@@ -670,6 +703,9 @@ public class SdPTEJsonParser {
         Flowtran flowtran = SdFlowtranParser.load(buildPTE.getFlowtranId());
         buildPTE.setFlowtran(flowtran);
         PTEComponent pteComponent = new PTEComponent();
+
+        //必输字段集
+        mandatoryLocal.set(SdJavaParser.searchMandatoryFields(buildPTE.getFlowtranId()));
 
         //获取字段列表
         if(buildPTE.getPteModule() == E_PTEMODULE.v_search_btn_datagrid || buildPTE.getPteModule() == E_PTEMODULE.v_form_editableDataGrid_btn){
@@ -686,8 +722,18 @@ public class SdPTEJsonParser {
         //开始构建
         pteComponent.setModule(buildPTE.getPteModule());
         pteComponent.setLayout(buildComponentLayout(buildPTE));
-        String pteJsonString = CommUtil.fastjsonBeauty(JSON.toJSONString(pteComponent));
-        return pteJsonString;
+        return pteComponent;
+    }
+
+    /**
+     * @Description 根据模板构建PTE json
+     * @Author sunshaoyu
+     * @Date 2020/7/28-17:04
+     * @param buildPTE
+     * @return java.lang.String
+     */
+    public static String buildPTEJson(SdBuildPTE buildPTE){
+        return CommUtil.fastjsonBeauty(JSON.toJSONString(buildPTEComponent(buildPTE)));
     }
 
     /**

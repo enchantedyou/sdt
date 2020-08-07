@@ -17,12 +17,13 @@
       <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="is_enabled" javaType="java.lang.Boolean" jdbcType="BIT" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
     datasource_id, datasource_type, tlsql_ind, platform_table_prefix, datasource_desc, 
     datasource_driver, datasource_url, datasource_user, datasource_pwd, data_create_user, 
-    data_create_time, data_update_user, data_update_time, data_version
+    data_create_time, data_update_user, data_update_time, data_version, is_enabled
   </sql>
   <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
     select 
@@ -41,12 +42,14 @@
       platform_table_prefix, datasource_desc, datasource_driver, 
       datasource_url, datasource_user, datasource_pwd, 
       data_create_user, data_create_time, data_update_user, 
-      data_update_time, data_version)
+      data_update_time, data_version, is_enabled
+      )
     values (#{datasourceId,jdbcType=VARCHAR}, #{datasourceType,jdbcType=VARCHAR}, #{tlsqlInd,jdbcType=VARCHAR}, 
       #{platformTablePrefix,jdbcType=VARCHAR}, #{datasourceDesc,jdbcType=VARCHAR}, #{datasourceDriver,jdbcType=VARCHAR}, 
       #{datasourceUrl,jdbcType=VARCHAR}, #{datasourceUser,jdbcType=VARCHAR}, #{datasourcePwd,jdbcType=VARCHAR}, 
       #{dataCreateUser,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, 
-      #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER})
+      #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER}, #{isEnabled,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
     insert into sdp_datasource
@@ -93,6 +96,9 @@
       <if test="dataVersion != null">
         data_version,
       </if>
+      <if test="isEnabled != null">
+        is_enabled,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="datasourceId != null">
@@ -137,6 +143,9 @@
       <if test="dataVersion != null">
         #{dataVersion,jdbcType=INTEGER},
       </if>
+      <if test="isEnabled != null">
+        #{isEnabled,jdbcType=BIT},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
@@ -178,6 +187,9 @@
       <if test="dataVersion != null">
         data_version = #{dataVersion,jdbcType=INTEGER},
       </if>
+      <if test="isEnabled != null">
+        is_enabled = #{isEnabled,jdbcType=BIT},
+      </if>
     </set>
     where datasource_id = #{datasourceId,jdbcType=VARCHAR}
       and datasource_type = #{datasourceType,jdbcType=VARCHAR}
@@ -195,14 +207,16 @@
       data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
       data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
       data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
-      data_version = #{dataVersion,jdbcType=INTEGER}
+      data_version = #{dataVersion,jdbcType=INTEGER},
+      is_enabled = #{isEnabled,jdbcType=BIT}
     where datasource_id = #{datasourceId,jdbcType=VARCHAR}
       and datasource_type = #{datasourceType,jdbcType=VARCHAR}
   </update>
 
-  <select id="selectAll_odb1" resultMap="BaseResultMap">
+  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from sdp_datasource
+    where is_enabled = true
   </select>
 </mapper>

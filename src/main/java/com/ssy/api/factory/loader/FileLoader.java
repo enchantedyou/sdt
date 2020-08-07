@@ -22,6 +22,7 @@ public interface FileLoader {
      */
     public Map<String, File> load(String path, boolean isLimitJavaReources, String... suffix);
 
+
     /**
      * @Description 加载文件内容并转化为字符串
      * @Author sunshaoyu
@@ -40,4 +41,13 @@ public interface FileLoader {
      * @param filePath  文件存储路径
      */
     public void saveFile(byte[] buffer , String filePath) throws IOException;
+
+    /**
+     * @Description 文件保存
+     * @Author sunshaoyu
+     * @Date 2020/7/30-13:36
+     * @param str   要保存的字符串
+     * @param filePath  文件存储路径
+     */
+    public void saveFile(String str , String filePath) throws IOException;
 }

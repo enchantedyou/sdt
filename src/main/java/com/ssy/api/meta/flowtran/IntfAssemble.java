@@ -2,6 +2,7 @@ package com.ssy.api.meta.flowtran;
 
 import com.ssy.api.meta.defaults.Element;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * @Author sunshaoyu
  * @Date 2020年07月22日-17:26
  */
-public class IntfAssemble {
+public class IntfAssemble implements Serializable {
 
     private boolean packMode;
     private boolean asParm;

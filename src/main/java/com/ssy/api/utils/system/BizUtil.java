@@ -387,4 +387,37 @@ public class BizUtil {
     public static <T> PageInfo<T> listToPage(List<T> list){
         return listToPage(0, 0, list);
     }
+
+    /**
+     * @Description 获取文件类型后缀(abc.serviceImpl.xml->xml)
+     * @Author sunshaoyu
+     * @Date 2020/7/29-15:37
+     * @param name
+     * @return java.lang.String
+     */
+    public static String getFileType(String name){
+        return name.substring(name.lastIndexOf(".") + 1);
+    }
+
+    /**
+     * @Description 获取文件名,不包含后缀(abc.serviceImpl.xml->abc.serviceImpl)
+     * @Author sunshaoyu
+     * @Date 2020/7/29-16:03
+     * @param name
+     * @return java.lang.String
+     */
+    public static String getFileName(String name){
+        return name.substring(0, name.lastIndexOf("."));
+    }
+
+    /**
+     * @Description 获取文件的真实名称(abc.serviceImpl.xml->abc)
+     * @Author sunshaoyu
+     * @Date 2020/8/5-13:05
+     * @param name
+     * @return java.lang.String
+     */
+    public static String getFileRealName(String name){
+        return name.substring(0, name.indexOf("."));
+    }
 }

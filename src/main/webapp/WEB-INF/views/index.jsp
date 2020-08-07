@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -40,12 +41,21 @@
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" id="m1000">[1000]字典搜索</a></dd>
                         <dd><a href="javascript:;" id="m1001">[1001]PTE代码生成</a></dd>
+                        <dd><a href="javascript:;" id="m1002">[1002]接口文档生成</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">批量中心</a>
+                    <a href="javascript:;">数据源</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" id="m2000">[2000]日终批量</a></dd>
+                        <dd><a href="javascript:;" id="m2000" style="display: none">[2000]日终批量</a></dd>
+                        <dd><a href="javascript:;" id="m2001">[2001]数据源列表查询</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">私服</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" id="m3000">[3000]合并请求差异</a></dd>
+                        <dd><a href="javascript:;" id="m3001">[3001]服务总线最新版本</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -56,6 +66,7 @@
 </div>
 <input type="hidden" class="basePath" value="${basePath }">
 <script type="text/javascript" src="../layui/layui.all.js"></script>
+<script type="text/javascript" src="../js/clipboard.min.js"></script>
 <script type="text/javascript" src="../js/lib.js"></script>
 </body>
 </html>

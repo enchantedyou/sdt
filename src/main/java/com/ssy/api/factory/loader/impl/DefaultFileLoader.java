@@ -4,6 +4,7 @@ import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.FileLoader;
+import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,11 @@ public class DefaultFileLoader implements FileLoader {
        try{
            File file = new File(path);
            loadFile(map, file, isLimitJavaReources, suffix);
+
            //加载微服务模型
-           loadMsModel(map);
+           if(isLimitJavaReources){
+               loadMsModel(map);
+           }
        }catch(Exception e){
            throw new SdtException("An unexpected exception occurred while loading the file", e);
        }
@@ -66,9 +70,8 @@ public class DefaultFileLoader implements FileLoader {
 
             if(CommUtil.isNotNull(suffix)){
                 if(fileName.contains(".")){
-                    String fileSuffix = fileName.substring(fileName.lastIndexOf("."));
                     for(String s : suffix){
-                        if(s.equals(fileSuffix)){
+                        if(s.equals(BizUtil.getFileType(fileName))){
                             map.put(fileName, file);
                         }
                     }
@@ -126,5 +129,10 @@ public class DefaultFileLoader implements FileLoader {
                 outputStream.close();
             }
         }
+    }
+
+    @Override
+    public void saveFile(String str, String filePath) throws IOException {
+        saveFile(str.getBytes(), filePath);
     }
 }

@@ -7,7 +7,7 @@ import com.ssy.api.factory.odb.OdbFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.TableType;
 import com.ssy.api.utils.system.CommUtil;
-import com.ssy.api.utils.parse.XmlUtil;
+import com.ssy.api.utils.parse.XmlParser;
 import org.dom4j.Element;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +31,9 @@ public class DefaultTableLoader implements TableTypeLoader {
         for(String fileName : fileMap.keySet()) {
             if (fileName.contains(SdtConst.TABLE_SUFFIX)) {
                 try {
-                    Element rootNode = XmlUtil.getXmlRootElement(fileMap.get(fileName));
+                    Element rootNode = XmlParser.getXmlRootElement(fileMap.get(fileName));
                     String location = rootNode.attributeValue("id");
-                    List<Element> tableList = XmlUtil.searchTargetAllXmlElement(rootNode, SdtConst.TABLE_NODE_NAME);
+                    List<Element> tableList = XmlParser.searchTargetAllXmlElement(rootNode, SdtConst.TABLE_NODE_NAME);
 
                     for(Element table : tableList){
                         String tableId = table.attributeValue("id");
@@ -59,7 +59,7 @@ public class DefaultTableLoader implements TableTypeLoader {
      * @return java.util.Map<java.lang.String,com.ssy.api.meta.defaults.Element>
      */
     private Map<String, com.ssy.api.meta.defaults.Element> getTableFiledMap(String location, Element table) {
-        List<Element> fieldList = XmlUtil.searchTargetAllXmlElement(table, SdtConst.FIELD_NODE_NAME);
+        List<Element> fieldList = XmlParser.searchTargetAllXmlElement(table, SdtConst.FIELD_NODE_NAME);
         Map<String, com.ssy.api.meta.defaults.Element> fieldMap = new HashMap<>();
         for(Element field : fieldList){
             fieldMap.put(field.attributeValue("id"), new com.ssy.api.meta.defaults.Element(
