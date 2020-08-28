@@ -12,6 +12,8 @@ import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.entity.type.local.*;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.factory.loader.FileLoader;
+import com.ssy.api.logic.builder.SdScriptBuilder;
+import com.ssy.api.logic.builder.SdTrxnBuilder;
 import com.ssy.api.logic.higention.SdGitlabReader;
 import com.ssy.api.logic.higention.SdNexus;
 import com.ssy.api.logic.local.SdPTEJsonParser;
@@ -22,6 +24,7 @@ import com.ssy.api.servicetype.UserService;
 import com.ssy.api.utils.http.HttpServletUtil;
 import com.ssy.api.utils.parse.ExcelParser;
 import com.ssy.api.utils.system.BizUtil;
+import com.ssy.api.utils.system.JDBCHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +37,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @Description
+ * @Description 本想相关服务的控制层
  * @Author sunshaoyu
  * @Date 2020年07月11日-13:57
  */
@@ -56,6 +59,8 @@ public class LocalController {
     private SdGitlabReader gitlabReader;
     @Autowired
     private FileLoader fileLoader;
+    @Autowired
+    private JDBCHelper jdbcHelper;
 
     /**
      * @param loginIn
@@ -234,5 +239,43 @@ public class LocalController {
     @PostMapping("/editDataSource")
     public void editDataSource(@EncryptedArgument SdDatasourceEdit datasourceEdit){
         dataSourceService.editDataSource(datasourceEdit);
+    }
+
+    /**
+     * @Description 构建交易模型
+     * @Author sunshaoyu
+     * @Date 2020/8/11-14:32
+     * @param metaGen
+     */
+    @TrxnEvent("build transaction model")
+    @PostMapping("/buildTrxn")
+    public void buildTrxnModel(@EncryptedArgument SdMetaGen metaGen){
+        SdTrxnBuilder.build(metaGen);
+    }
+
+    /**
+     * @Description 构建交易脚本
+     * @Author sunshaoyu
+     * @Date 2020/8/12-9:43
+     * @param flowtranId
+     * @return java.lang.String
+     */
+    @TrxnEvent("build transaction script")
+    @PostMapping("/trxnScript")
+    public String buildTrxnScript(@EncryptedArgument String flowtranId){
+        return SdScriptBuilder.buildTransaction(flowtranId);
+    }
+
+    /**
+     * @Description 数据库解锁
+     * @Author sunshaoyu
+     * @Date 2020/8/28-15:38
+     * @param datasourceId
+     * @return int
+     */
+    @TrxnEvent("database unlock")
+    @PostMapping("/dbUnlock")
+    public int dbUnlock(@EncryptedArgument String datasourceId){
+        return jdbcHelper.unlock(datasourceId);
     }
 }

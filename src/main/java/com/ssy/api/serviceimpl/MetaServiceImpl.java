@@ -30,6 +30,7 @@ public class MetaServiceImpl implements MetaService {
     @Override
     public PageInfo<SdSearchDictOut> queryDictListFuzzy(String key) {
         BizUtil.fieldNotNull(key, SdtDict.A.key.getId(), SdtDict.A.key.getLongName());
+        key = key.toLowerCase();
         Map<String, Element> dictMap = OdbFactory.getDictMap();
         List<SdSearchDictOut> dictList = new ArrayList<>();
 

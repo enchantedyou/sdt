@@ -6234,6 +6234,20 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 				  $(".layui-btn-primary").click();
 			  }
 		  },
+		  enableClipboard: function(){
+			  let codeClipboard = new Clipboard("#copy-diffs-btn");
+			  codeClipboard.on('success', function(e) {
+				  if(!requestContext.isNull(e.text)){
+					  requestContext.showMessage("已复制到剪贴板");
+				  }
+				  e.clearSelection();
+			  });
+
+			  codeClipboard.on('error', function(e) {
+				  requestContext.showMessage("复制失败");
+				  e.clearSelection();
+			  });
+		  },
 		  buildJsonParam: function(array){
 			  let param = "{";
 			  if(Array.isArray(array)){
@@ -6372,7 +6386,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 	  //初始化数据源
 	  $(document).ready(function(){
 		  requestContext.doRequest("select/dataSource", {}, "login-btn", false, function(response){
-		  		requestContext.initRemoteSelect("dataSourceSelect", response, "datasourceDesc", "datasourceId")
+		  		requestContext.initRemoteSelect("dataSourceSelect", response, "datasourceDesc", "datasourceId");
 		  });
 	  });
 
@@ -6471,6 +6485,23 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** 交易模型构建 **/
+	form.on('submit(trxnBuildSubmit)',function(data){
+		requestContext.doRequest("local/buildTrxn", data.field, "layui-btn", true);
+	});
+
+	/** 数据库解锁 **/
+	form.on('submit(dbUnlock)',function(data){
+		requestContext.doRequest("local/dbUnlock", data.field, "layui-btn", true);
+	});
+
+	/** 交易脚本构建 **/
+	form.on('submit(trxnScriptSubmit)',function(data){
+		requestContext.doRequest("local/trxnScript", data.field, "layui-btn", true, function(response){
+			$("#showTrxnScript").html(response);
+		});
+	});
+
 	/** 下载PTE JSON文件 **/
 	form.on('submit(PTEDownload)',function(data){
 		window.open($(".basePath").val() + "local/downloadPTEJson?pteModule="+data.field.pteModule+"&flowtranId="+data.field.flowtranId);
@@ -6509,6 +6540,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** 交易模型生成 **/
+	$(document).on("click","#m1003",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu1003",null, requestContext.menuClickCallback);
+		});
+	});
+
 	/** 批量调度菜单 **/
 	$(document).on("click","#m2000",function(){
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
@@ -6528,6 +6566,18 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** 数据库解锁 **/
+	$(document).on("click","#m2002",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu2002",null, function (rs) {
+				requestContext.menuClickCallback(rs);
+				requestContext.doRequest("select/dataSource", {}, "login-btn", false, function(response){
+					requestContext.initRemoteSelect("dataSourceSelect", response, "datasourceDesc", "datasourceId");
+				});
+			});
+		});
+	});
+
 	/** 合并请求差异菜单 **/
 	$(document).on("click","#m3000",function(){
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
@@ -6537,18 +6587,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 					requestContext.initRemoteSelect("moduleSelect", response, "moduleDesc", "moduleId")
 				});
 			});
-			let codeClipboard = new Clipboard("#copy-diffs-btn");
-			codeClipboard.on('success', function(e) {
-				if(!requestContext.isNull(e.text)){
-					requestContext.showMessage("已复制到剪贴板");
-				}
-				e.clearSelection();
-			});
-
-			codeClipboard.on('error', function(e) {
-				requestContext.showMessage("复制失败");
-				e.clearSelection();
-			});
+			requestContext.enableClipboard();
 		});
 	});
 
@@ -6561,6 +6600,14 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 					requestContext.initRemoteSelect("rpoSelect", response, "", "")
 				});
 			});
+		});
+	});
+
+	/** 交易脚本生成 **/
+	$(document).on("click","#m4000",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu4000",null, requestContext.menuClickCallback);
+			requestContext.enableClipboard();
 		});
 	});
 

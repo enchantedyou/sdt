@@ -99,7 +99,11 @@ public class DaoAspect {
     @Around(value="execution(* com.ssy.api.dao.mapper.local.*.*(..)))")
     public Object localDaoAdvTice(ProceedingJoinPoint point) throws Throwable {
         DBContextHolder.determineCurrentDataSourceType(E_DATASOURCETYPE.LOCAL);
-        return point.proceed(point.getArgs());
+        Object returnVal = point.proceed(point.getArgs());
+        if(CommUtil.isNotNull(DBContextHolder.getCurrentDataSource())){
+            DBContextHolder.determineCurrentDataSourceType(E_DATASOURCETYPE.REMOTE);
+        }
+        return returnVal;
     }
 
     /**
@@ -109,11 +113,12 @@ public class DaoAspect {
      * @param point
      * @return java.lang.Object
      */
-    @Around(value="execution(* com.ssy.api.dao.mapper.ap.*.*(..))) && execution(* com.ssy.api.dao.mapper.edsp.*.*(..))) && execution(* com.ssy.api.dao.mapper.msap.*.*(..)))")
+    /*@Around(value="execution(* com.ssy.api.dao.mapper.ap.*.*(..))) && execution(* com.ssy.api.dao.mapper.edsp.*.*(..)))" +
+            "&& execution(* com.ssy.api.dao.mapper.msap.*.*(..))) && execution(* com.ssy.api.dao.mapper.system.*.*(..)))")
     public Object remoteDaoAdvice(ProceedingJoinPoint point) throws Throwable {
         DBContextHolder.determineCurrentDataSourceType(E_DATASOURCETYPE.REMOTE);
         return point.proceed(point.getArgs());
-    }
+    }*/
 
     /**
      * @Description odb查询增强:查询的结果为空时抛出异常
@@ -127,14 +132,14 @@ public class DaoAspect {
             Object[] args = point.getArgs();
             Class[] argTypeArr = MethodSignature.class.cast(point.getSignature()).getParameterTypes();
             Class<?> declaringType = point.getSignature().getDeclaringType();
-            String tableDesc = declaringType.getAnnotation(TableType.class).desc();
             Method targetMethod = declaringType.getMethod(point.getSignature().getName(), argTypeArr);
+            int len = args.length;
 
-            if(CommUtil.isNotNull(args) && args[args.length - 1] instanceof Boolean
-                    && Boolean.TRUE.equals(args[args.length - 1]) && targetMethod.isAnnotationPresent(EnableNotNull.class)){
+            if(CommUtil.isNotNull(args) && args[len - 1] instanceof Boolean
+                    && Boolean.TRUE.equals(args[len - 1]) && targetMethod.isAnnotationPresent(EnableNotNull.class)){
                 List<Object> argList = CommUtil.asList(args);
-                argList.remove(args.length - 1);
-                throw SdtServError.E0003(tableDesc, argList.toArray(new String[]{}));
+                argList.remove(len - 1);
+                throw SdtServError.E0003(declaringType.getAnnotation(TableType.class).desc(), argList.toArray(new String[]{}));
             }
         }
     }

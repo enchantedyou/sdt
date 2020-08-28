@@ -175,6 +175,10 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
             if(!beforeDictPriorty.getGroupId().contains(SdtConst.WILDCARD) && !nowDictPriorty.getGroupId().contains(SdtConst.WILDCARD) && !CommUtil.equals(beforeDictPriorty.getGroupId(), nowDictPriorty.getGroupId())) {
                 return now;
             }
+            //两者的类型不一致,不处理
+            else if(!CommUtil.equals(before.getType().getFullId(), now.getType().getFullId())){
+                return now;
+            }
             //返回优先级较高的一方
             else{
                 if(CommUtil.compare(beforeDictPriorty.getDictPriority(), nowDictPriorty.getDictPriority()) < 0){

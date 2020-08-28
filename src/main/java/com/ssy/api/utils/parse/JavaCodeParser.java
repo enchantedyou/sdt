@@ -2,10 +2,12 @@ package com.ssy.api.utils.parse;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.ssy.api.exception.SdtServError;
 import com.ssy.api.utils.system.CommUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
  * @Author sunshaoyu
  * @Date 2020年08月03日-16:41
  */
+@Slf4j
 public class JavaCodeParser {
 
     /**
@@ -23,16 +26,18 @@ public class JavaCodeParser {
      * @Date 2020/8/3-17:30
      * @param unit
      * @param methodName
+     * @param expressionNodeList
      * @return com.github.javaparser.ast.body.MethodDeclaration
      */
-    public static MethodDeclaration findMethodDeclaration(CompilationUnit unit, String methodName){
+    public static MethodDeclaration findMethodDeclaration(CompilationUnit unit, String methodName, NodeList<Expression> expressionNodeList){
         List<MethodDeclaration> methodDeclarationList = unit.findAll(MethodDeclaration.class);
         for(MethodDeclaration m : methodDeclarationList){
-            if(CommUtil.equals(m.getNameAsString(), methodName)){
+            boolean isEqualArgument = CommUtil.isNull(expressionNodeList) || expressionNodeList.size() == m.getParameters().size();
+            if(CommUtil.equals(m.getNameAsString(), methodName) && isEqualArgument){
                 return m;
             }
         }
-        throw SdtServError.E0019(methodName);
+        return null;
     }
 
     /**
@@ -41,16 +46,19 @@ public class JavaCodeParser {
      * @Date 2020/8/5-10:11
      * @param unit
      * @param methodName
+     * @param expressionNodeList
      * @return java.util.List<com.github.javaparser.ast.expr.MethodCallExpr>
      */
-    public static List<MethodCallExpr> findMethodCallExprList(CompilationUnit unit, String methodName){
-        MethodDeclaration methodDeclaration = findMethodDeclaration(unit, methodName);
+    public static List<MethodCallExpr> findMethodCallExprList(CompilationUnit unit, String methodName, NodeList<Expression> expressionNodeList){
+        MethodDeclaration methodDeclaration = findMethodDeclaration(unit, methodName, expressionNodeList);
         List<MethodCallExpr> methodCallExprList = unit.findAll(MethodCallExpr.class);
         List<MethodCallExpr> resultList = new ArrayList<>();
-        
-        for(MethodCallExpr m : methodCallExprList){
-            if(lineIn(m.getRange().get(), methodDeclaration.getRange().get())){
-                resultList.add(m);
+
+        if(CommUtil.isNotNull(methodDeclaration)){
+            for(MethodCallExpr m : methodCallExprList){
+                if(lineIn(m.getRange().get(), methodDeclaration.getRange().get())){
+                    resultList.add(m);
+                }
             }
         }
         return resultList;

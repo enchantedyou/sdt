@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.system.ProcessMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.system.DBProcess">
+    <constructor>
+      <idArg column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="host" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="db" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="command" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="state" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="info" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <select id="showProcessList" resultMap="BaseResultMap">
+    show full processlist
+  </select>
+
+  <update id="kill" parameterType="map">
+    kill ${id}
+  </update>
+</mapper>

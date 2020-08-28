@@ -13,6 +13,7 @@ import com.ssy.api.exception.SdtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StopWatch;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.ParseException;
@@ -62,13 +63,31 @@ public class BizUtil {
      * @Description 日志输出详细错误信息
      * @Author sunshaoyu
      * @Date 2020/6/11-15:48
-     * @param e
+     * @param throwable
      */
-    public static void logError(Throwable e) {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stringWriter, true);
-        e.printStackTrace(printWriter);
-        log.error(stringWriter.toString());
+    public static void logError(Throwable throwable) {
+        StringWriter stringWriter = null;
+        PrintWriter printWriter = null;
+        try {
+            stringWriter = new StringWriter();
+            printWriter = new PrintWriter(stringWriter, true);
+            throwable.printStackTrace(printWriter);
+            log.error(stringWriter.toString());
+        }finally {
+            if(CommUtil.isNotNull(printWriter)) {
+                printWriter.flush();
+                printWriter.close();
+            }
+
+            if(CommUtil.isNotNull(stringWriter)) {
+                stringWriter.flush();
+                try{
+                    stringWriter.close();
+                }catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+            }
+        }
     }
 
     /**

@@ -22,7 +22,7 @@ public class SdtConst {
     /** 当前用户的session的key **/
     public static final String USER_INFO = "userInfo";
     /** 用户登录最大有效时间 **/
-    public static final int userMaxInactiveInterval = 30 * 60;
+    public static final int userMaxInactiveInterval = 60 * 60 * 2;
     /** 项目基础路径 **/
     public static final String BASE_PATH = "basePath";
     /** POST请求方式 **/

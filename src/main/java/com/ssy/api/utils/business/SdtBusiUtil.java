@@ -1,16 +1,15 @@
 package com.ssy.api.utils.business;
 
 import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.entity.lang.Params;
 import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 /**
@@ -18,6 +17,7 @@ import java.math.BigDecimal;
  * @Author sunshaoyu
  * @Date 2020年06月12日-15:39
  */
+@Slf4j
 public class SdtBusiUtil {
 
     private static final String DEFAULT_SPLIT_TOKEN = "-";
@@ -161,5 +161,35 @@ public class SdtBusiUtil {
         }else{
             return null;
         }
+    }
+
+    /**
+     * @Description 打印对象所有get方法的值
+     * @Author sunshaoyu
+     * @Date 2020/8/12-13:55
+     * @param object
+     */
+    public static void printGetMethodResult(Object object) throws InvocationTargetException, IllegalAccessException {
+        for(Method method : object.getClass().getMethods()) {
+            if(method.getParameterCount() == 0 && method.getName().startsWith("get")){
+                log.info("result of method {{}} is {{}}", method.getName(), method.invoke(object));
+            }
+        }
+    }
+
+    /**
+     * @Description 获取核心请求的请求头
+     * @Author sunshaoyu
+     * @Date 2020/8/12-14:56
+     * @param subSystemId
+     * @param serviceCode
+     * @return com.ssy.api.entity.lang.Params
+     */
+    public static Params getIcoreHeaders(String subSystemId, String serviceCode){
+        Params headers = new Params();
+        String trxnSeq = BizUtil.buildTrxnSeq(SdtConst.TRXN_SEQ_LENGTH);
+        headers.add("dapplication", subSystemId).add("dserviceid", serviceCode).add("dgroup", "01").add("dversion", "1.0").
+                add("api_id", serviceCode).add("busiseqno", trxnSeq).add("callseqno", trxnSeq).add("Content-Type", "application/json");
+        return headers;
     }
 }

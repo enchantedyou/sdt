@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -95,11 +92,11 @@ public class DefaultFileLoader implements FileLoader {
         }
     }
 
-    public String loadContentToString(File file, String charset) throws IOException {
+    public String loadAsString(File file, String charset) throws IOException {
         FileInputStream inputStream = null;
         try{
             inputStream = new FileInputStream(file);
-            byte[] buffer = new byte[(int) file.length()];
+            byte[] buffer = new byte[inputStream.available()];
             if(inputStream.read(buffer) > 0){
                 return new String(buffer, charset);
             }
@@ -133,6 +130,20 @@ public class DefaultFileLoader implements FileLoader {
 
     @Override
     public void saveFile(String str, String filePath) throws IOException {
-        saveFile(str.getBytes(), filePath);
+        OutputStreamWriter writer = null;
+        try{
+            File file = new File(filePath);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            writer = new OutputStreamWriter(new FileOutputStream(file), SdtConst.DEFAULT_ENCODING);
+            writer.write(str);
+            log.info("Output file: {}", filePath);
+        }finally {
+            if(writer != null){
+                writer.flush();
+                writer.close();
+            }
+        }
     }
 }

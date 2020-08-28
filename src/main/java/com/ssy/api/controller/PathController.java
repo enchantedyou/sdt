@@ -78,6 +78,17 @@ public class PathController {
     }
 
     /**
+     * @Description 返回menu1003视图
+     * @Author sunshaoyu
+     * @Date 2020/8/11-14:30
+     * @return java.lang.String
+     */
+    @RequestMapping("/menu1003")
+    public String menu1003(){
+        return "component/menu1003";
+    }
+
+    /**
      * @Description 返回menu2000视图
      * @Author sunshaoyu
      * @Date 2020/7/17-15:19
@@ -100,6 +111,17 @@ public class PathController {
     }
 
     /**
+     * @Description 返回menu2002视图
+     * @Author sunshaoyu
+     * @Date 2020/8/28-15:35
+     * @return java.lang.String
+     */
+    @RequestMapping("/menu2002")
+    public String menu2002(){
+        return "component/menu2002";
+    }
+
+    /**
      * @Description 返回menu3000视图
      * @Author sunshaoyu
      * @Date 2020/7/31-14:31
@@ -119,5 +141,16 @@ public class PathController {
     @RequestMapping("/menu3001")
     public String menu3001(){
         return "component/menu3001";
+    }
+
+    /**
+     * @Description 返回menu4000视图
+     * @Author sunshaoyu
+     * @Date 2020/8/12-9:45
+     * @return java.lang.String
+     */
+    @RequestMapping("/menu4000")
+    public String menu4000(){
+        return "component/menu4000";
     }
 }

@@ -81,7 +81,7 @@ public class SdPTEJsonParser {
         //加载所有的json文件
         Map<String, File> fileMap = fileLoader.load(sdtContextConfig.getSumpResourcePath(), false, ".json");
         for(String fileName : fileMap.keySet()){
-            String jsonStr = fileLoader.loadContentToString(fileMap.get(fileName), SdtConst.DEFAULT_ENCODING);
+            String jsonStr = fileLoader.loadAsString(fileMap.get(fileName), SdtConst.DEFAULT_ENCODING);
 
             if(JSONObject.isValidObject(jsonStr)){
                 try{
@@ -426,21 +426,26 @@ public class SdPTEJsonParser {
             if(required){
                 requiredRule.setMessage(String.format("请选择%s", field.getDesc()));
             }
+            ruleList.add(requiredRule);
         }else{
             if(required){
                 requiredRule.setMessage(String.format("请输入%s", field.getDesc()));
-                ruleList.add(requiredRule);
             }
+            ruleList.add(requiredRule);
+
             if(control == E_CONTROL.currency){
                 limitRule.setPattern(SdtConst.CURRENCY_REG);
                 limitRule.setMessage("请输入正确的金额");
-            }else{
+            }else if(control != E_CONTROL.lookup){
                 limitRule.setMax(determineControlMaxLength(field));
                 limitRule.setMessage(String.format("长度不能超过%d个字符", limitRule.getMax()));
             }
-            ruleList.add(limitRule);
+
+            if(CommUtil.isNotNull(limitRule.getMessage())){
+                ruleList.add(limitRule);
+            }
         }
-        return ruleList;
+        return CommUtil.nvl(ruleList, null);
     }
 
 

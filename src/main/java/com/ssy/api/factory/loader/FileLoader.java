@@ -31,7 +31,7 @@ public interface FileLoader {
      * @param charset   字符集
      * @return java.lang.String
      */
-    public String loadContentToString(File file, String charset) throws IOException;
+    public String loadAsString(File file, String charset) throws IOException;
 
     /**
      * @Description 文件保存

@@ -1,9 +1,12 @@
 package com.ssy.api.utils.system;
 
+import com.ssy.api.dao.mapper.system.ProcessMapper;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.exception.SdtServError;
+import com.ssy.api.plugins.DBContextHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Description	JDBC工具类
@@ -28,6 +32,8 @@ public class JDBCHelper {
 
 	@Resource(name= SdtConst.DYNAMIC_DATASOURCE)
 	private DataSource dataSource;
+	@Autowired
+	private ProcessMapper processMapper;
 
 	/**
 	 * @Description	获取记录条数
@@ -136,5 +142,30 @@ public class JDBCHelper {
 		} catch (Exception e) {
 			throw SdtServError.E0018(e);
 		}
+	}
+
+	/**
+	 * @Description 数据库解锁
+	 * @Author sunshaoyu
+	 * @Date 2020/8/28-15:23
+	 * @param datasourceId
+	 * @return int
+	 */
+	public int unlock(String datasourceId) {
+		if(CommUtil.isNotNull(datasourceId)){
+			DBContextHolder.switchToDataSource(datasourceId);
+		}
+
+		AtomicInteger size = new AtomicInteger();
+		processMapper.showProcessList().forEach(dbProcess -> {
+			try{
+				processMapper.kill(dbProcess.getId());
+				log.info("Kill the process[{}] of database [{}]", dbProcess.getId(), DBContextHolder.getCurrentDataSource());
+				size.getAndIncrement();
+			}catch (Exception e){
+				log.info(e.getMessage());
+			}
+		});
+		return size.get();
 	}
 }

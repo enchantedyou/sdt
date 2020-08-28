@@ -44,8 +44,10 @@ public class SdSqlAuditExecutor {
             String[] sqlScriptPath = new String[]{contextConfig.getSqlToolsDir() + "/sql/ln/", contextConfig.getSqlToolsDir() + "/sql/cl/"};
 
             for(int i = 0;i < busiModuleSql.size();i++){
-                fileLoader.saveFile(new StringBuilder(commonSql.getFirst()).append(busiModuleSql.get(i).getFirst()).toString(), sqlScriptPath[i] + "ddl/ddl.sql");
-                fileLoader.saveFile(new StringBuilder(commonSql.getSecond()).append(busiModuleSql.get(i).getSecond()).toString(), sqlScriptPath[i] + "dml/dml.sql");
+                String ddl = new StringBuffer(commonSql.getFirst()).append(busiModuleSql.get(i).getFirst()).toString();
+                String dml = new StringBuffer(commonSql.getSecond()).append(busiModuleSql.get(i).getSecond()).toString();
+                fileLoader.saveFile(ddl, sqlScriptPath[i] + "ddl/ddl.sql");
+                fileLoader.saveFile(dml, sqlScriptPath[i] + "dml/dml.sql");
             }
         }catch(Exception e){
             throw new SdtException("Script audit failed", e);
@@ -95,13 +97,13 @@ public class SdSqlAuditExecutor {
      */
     protected String extractDdlSql(String path) throws IOException {
         StringBuilder ddlPath = new StringBuilder(path).append(File.separator).append("ddl");
-        StringBuilder builder = new StringBuilder();
+        StringBuffer buffer = new StringBuffer();
 
         Map<String, File> ddlSqlMap = fileLoader.load(ddlPath.toString(), false);
         for(String key : ddlSqlMap.keySet()){
-            builder.append(fileLoader.loadContentToString(ddlSqlMap.get(key), SdtConst.DEFAULT_ENCODING)).append("\r\n");
+            buffer.append(fileLoader.loadAsString(ddlSqlMap.get(key), SdtConst.DEFAULT_ENCODING)).append("\r\n");
         }
-        return builder.toString();
+        return buffer.toString();
     }
 
     /**

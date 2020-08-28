@@ -236,4 +236,11 @@
       and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
       and out_service_code = #{outServiceCode,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAll_odb1" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tsp_service_in
+    where protocol_id = #{protocolId,jdbcType=VARCHAR}
+  </select>
 </mapper>

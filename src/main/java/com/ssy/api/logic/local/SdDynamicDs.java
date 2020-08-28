@@ -11,6 +11,7 @@ import com.ssy.api.exception.SdtServError;
 import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * @Date 2020年06月15日-15:39
  */
 @Component
+@Slf4j
 public class SdDynamicDs {
 
     private static SdpDatasourceMapper sdpDatasourceMapper;

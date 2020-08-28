@@ -198,4 +198,21 @@ public class MetaDataFactory {
         //初始化表模型
         loadTableTypeMap();
     }
+
+    /**
+     * @Description 刷新元数据
+     * @Author sunshaoyu
+     * @Date 2020/8/24-13:53
+     */
+    protected static void refreshMetaData(){
+        StopWatch s = BizUtil.startStopWatch();
+        intfExcelFileMap.clear();
+        restrictionTypeMap.clear();
+        complexTypeMap.clear();
+        dictMap.clear();
+        tableTypeMap.clear();
+
+        loadMetaDataInitially();
+        BizUtil.stoptStopWatch(s, "Refresh the meta data");
+    }
 }

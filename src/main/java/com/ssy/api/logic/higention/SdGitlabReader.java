@@ -82,7 +82,9 @@ public class SdGitlabReader {
             throw new SdtException("Failed to parse difference file list from jira identity["+jiraId+"] and business module["+moduleId+"]", e);
         }
         String diffStr = removeRepeate(buffer.toString());
-        RedisHelper.addandSetValue(md5, diffStr, SdtConst.REDIS_GITDIFFS_TIMEOUT);
+        if(CommUtil.isNotNull(diffStr)){
+            RedisHelper.addandSetValue(md5, diffStr, SdtConst.REDIS_GITDIFFS_TIMEOUT);
+        }
         return diffStr;
     }
 

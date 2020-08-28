@@ -55,6 +55,19 @@ public class HttpUtil {
 	}
 
 	/**
+	 * @Description	post请求
+	 * @Author sunshaoyu
+	 * @Date 2020/8/12-14:51
+	 * @param url
+	 * @param hearders
+	 * @param body
+	 * @return java.lang.String
+	 */
+	public static String doPost(String url, Params hearders, String body) throws IOException {
+		return resolveResponse(doPost(url, "", hearders, null, body));
+	}
+
+	/**
 	 * @Description	get请求
 	 * @Author sunshaoyu
 	 * @Date 2020/7/29-9:53

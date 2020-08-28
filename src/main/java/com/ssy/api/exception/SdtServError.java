@@ -114,4 +114,14 @@ public class SdtServError {
     public static SdtException E0019(String node) {
         throw new SdtException("The specified node ["+node+"] was not found", ErrCodeDef.DB_NO_RECORD);
     }
+
+    /** 复合类型模型不存在 **/
+    public static SdtException E0020(String complexLocaltion) {
+        throw new SdtException("The file model corresponding to the complex type location ["+complexLocaltion+"] does not exist", ErrCodeDef.FILE_NOT_EXIST);
+    }
+
+    /** 服务类型模型不存在 **/
+    public static SdtException E0021(String serviceLocaltion) {
+        throw new SdtException("The file model corresponding to the service type location ["+serviceLocaltion+"] does not exist", ErrCodeDef.FILE_NOT_EXIST);
+    }
 }

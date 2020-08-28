@@ -2,20 +2,27 @@ package com.ssy.api.utils.system;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
+import com.ssy.api.entity.constant.ErrCodeDef;
 import com.ssy.api.entity.enums.E_STRGENTYPE;
 import com.ssy.api.exception.SdtException;
-import org.apache.poi.ss.formula.functions.T;
+import com.ssy.api.plugins.Callback;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 /**
  * @Description 公共工具类
  * @Author sunshaoyu
  * @Date 2020年06月11日-14:06
  */
+@Slf4j
 public class CommUtil {
 
     /**
@@ -29,7 +36,7 @@ public class CommUtil {
         if (null == obj){
             return true;
         } else if (obj instanceof String) {
-            return ((String) obj).length() == 0 || ((String) obj).equals("null");
+            return ((String) obj).trim().length() == 0 || obj.equals("null");
         } else if (obj instanceof Map) {
             return Map.class.cast(obj).isEmpty();
         } else if (obj instanceof Collection<?>) {
@@ -332,5 +339,92 @@ public class CommUtil {
      */
     public static <T> List<T> uniqueList(List<T> list){
         return new ArrayList<>(new LinkedHashSet<>(list));
+    }
+
+    /**
+     * @Description 并发执行
+     * @Author sunshaoyu
+     * @Date 2020/8/12-15:43
+     * @param concurrentNum
+     * @param timeoutMillis
+     * @param callback
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public static Map<String, Object> concurrentExecute(int concurrentNum, long timeoutMillis, Callback callback){
+        //返回结果列表
+        final Map<String, Object> returnObjMap = new HashMap<String, Object>();
+
+        //执行成功线程返回结果列表
+        final List<Object> successThreadReturnList = new LinkedList<Object>();
+        //执行失败线程返回结果列表
+        final List<Object> errorThreadReturnList = new LinkedList<Object>();
+
+        //定义请求线程池
+        ExecutorService threadPool = Executors.newCachedThreadPool();
+        List<FutureTask<Object>> futureTaskList = new ArrayList<FutureTask<Object>>();
+
+        log.debug("并发任务启动,并发数:{}", concurrentNum);
+        //启动线程
+        for(int i = 0;i < concurrentNum;i++){
+            FutureTask<Object> futureTask = new FutureTask<Object>(new Callable<Object>() {
+
+                @Override
+                public Object call() {
+
+                    Object returnObj = null;
+                    String curThread = Thread.currentThread().toString();
+                    log.debug("线程[" + curThread + "]开始执行");
+                    long start = System.currentTimeMillis();
+                    boolean successInd = false;
+
+                    try {
+                        returnObj = callback.run();
+                        successInd = true;
+                    }catch (Exception e) {
+                        returnObj = CommUtil.nvl(e.getCause().getMessage(), ErrCodeDef.UNKNOWN_ERROR);
+                        BizUtil.logError(e);
+                    }
+                    log.debug("线程[" + Thread.currentThread() + "]执行完成,耗时:" + (System.currentTimeMillis() - start) + "ms");
+
+                    if(successInd){
+                        successThreadReturnList.add(returnObj);
+                    }else{
+                        errorThreadReturnList.add(returnObj);
+                    }
+                    returnObjMap.put(curThread, returnObj);
+                    return returnObj;
+                }
+            });
+            futureTaskList.add(futureTask);
+            threadPool.submit(futureTask);
+        }
+
+        //等待线程执行完成或超时
+        if(awaitThreadPoolFinish(threadPool, timeoutMillis)){
+            log.info("并发任务执行完成,作业总数:" + concurrentNum + ",成功作业数:" + successThreadReturnList.size() + ",失败作业数:" + errorThreadReturnList.size());
+        }else{
+            log.error("并发任务执行超时");
+        }
+        return returnObjMap;
+    }
+
+    /**
+     * @Description 等待线程池的任务执行完成
+     * @Author sunshaoyu
+     * @Date 2020/8/12-15:34
+     * @param threadPool
+     * @param timeout
+     * @return boolean
+     */
+    public static boolean awaitThreadPoolFinish(ExecutorService threadPool, long timeout){
+        threadPool.shutdown();
+        long start = System.currentTimeMillis();
+        while(!threadPool.isTerminated()){
+            if(timeout > 0 && (System.currentTimeMillis() - start) > timeout){
+                threadPool.shutdownNow();
+                return false;
+            }
+        }
+        return true;
     }
 }
