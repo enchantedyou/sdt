@@ -42,7 +42,7 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
     @Override
     public Map<String, Map<String, AbstractRestrictionType>> load(Map<String, File> fileMap) {
         Map<String, Map<String, AbstractRestrictionType>> map = new ConcurrentHashMap<>();
-        Map<String, SdpEnumPriorty> priority = modulePriortyService.getEnumPriortyMap(sdtContextConfig.getMsModelFirst());
+        Map<String, SdpEnumPriorty> priority = modulePriortyService.getEnumPriortyMap();
 
         for(String fileName : fileMap.keySet()){
             if(fileName.contains(SdtConst.ENUM_SUFFIX) || fileName.contains(SdtConst.REUSABLE_SUFFIX)){
@@ -107,7 +107,7 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
      * @param now
      * @return com.ssy.api.meta.abstracts.AbstractRestrictionType
      */
-    private AbstractRestrictionType checkEnumPriorty(Map<String, SdpEnumPriorty> priority, AbstractRestrictionType before, AbstractRestrictionType now){
+    public AbstractRestrictionType checkEnumPriorty(Map<String, SdpEnumPriorty> priority, AbstractRestrictionType before, AbstractRestrictionType now){
         //之前的数据为空或[当前或之前是微服务模型,但不是微服务模型优先],直接添加
         if(CommUtil.isNull(before)
                 || ((SdtBusiUtil.isMsModel(now.getLocation()) || SdtBusiUtil.isMsModel(before.getLocation()))
@@ -135,6 +135,7 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
                     log.info("Restricted type [{}] has lower priority than [{}] and should be removed", now.getFullId(), before.getFullId());
                     return before;
                 }else{
+                    log.info("Restricted type [{}] has lower priority than [{}] and should be removed", before.getFullId(), now.getFullId());
                     return now;
                 }
             }

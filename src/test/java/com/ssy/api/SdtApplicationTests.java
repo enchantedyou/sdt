@@ -4,10 +4,12 @@ import com.ssy.api.dao.mapper.edsp.TspServiceInMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceOutMapper;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_PTEMODULE;
+import com.ssy.api.entity.lang.TwoTuple;
 import com.ssy.api.entity.table.local.SdpModuleMapping;
 import com.ssy.api.entity.type.local.SdBuildPTE;
 import com.ssy.api.factory.loader.FileLoader;
 import com.ssy.api.factory.odb.MetaDataFactory;
+import com.ssy.api.factory.odb.OdbFactory;
 import com.ssy.api.logic.higention.SdGitlabReader;
 import com.ssy.api.logic.local.SdJavaParser;
 import com.ssy.api.logic.local.SdPTEJsonParser;
@@ -47,14 +49,10 @@ class SdtApplicationTests extends MetaDataFactory {
 
     @Test
     void contextLoads() throws Throwable {
-        jdbcHelper.unlock("ln_dev");
+        Map<String, TwoTuple<String, String>> map = new HashMap<>();
+        map.put("limit_type", new TwoTuple<>("引用", "类型"));
+        OdbFactory.metaDataNormalization("cl",map);
     }
-
-
-
-
-
-
 
     public void dockerRest(){
         DBContextHolder.switchToDataSource("ln_dev");
@@ -79,7 +77,7 @@ class SdtApplicationTests extends MetaDataFactory {
             if(tspServiceIn.getOutServiceCode().length() > 50){
                 System.out.println(tspServiceIn.getOutServiceCode());
             }
-            tspServiceInMapper.insert(tspServiceIn);
+            //tspServiceInMapper.insert(tspServiceIn);
         });
 
         //服务接出表
@@ -103,27 +101,14 @@ class SdtApplicationTests extends MetaDataFactory {
     private String getServiceOutApp(List<SdpModuleMapping> moduleMappingList, String subSystemCode){
         for(SdpModuleMapping moduleMapping : moduleMappingList){
             if(CommUtil.equals(moduleMapping.getSubSystemCode(), subSystemCode)){
-                return moduleMapping.getModuleId().toUpperCase() + "-ONL";
+                String moduleId = moduleMapping.getModuleId();
+                if(CommUtil.equals("cf", moduleId)){
+                    moduleId = "us";
+                }
+                return moduleId.toLowerCase() + "-onl";
             }
         }
         return null;
-    }
-
-    private void concurrentRequest() throws IOException, InterruptedException {
-        int loop = 10;
-        int total = 0;
-        long start = System.currentTimeMillis();
-        long cost = 0;
-
-        for(int i = 0;i < loop;i++){
-            int concurrentNum = 50;
-            doRequest312020(concurrentNum);
-            total += concurrentNum;
-
-            cost = (System.currentTimeMillis() - start);
-            log.info("第{}轮并发结束, 已完成笔数:{}, 总耗时:{}ms", (i + 1), total, cost - 1200);
-            Thread.sleep(1200);
-        }
     }
 
     void doRequest312020(int concurrentNum) throws IOException {

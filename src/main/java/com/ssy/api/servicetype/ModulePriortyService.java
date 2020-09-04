@@ -25,7 +25,7 @@ public interface ModulePriortyService {
 
     public void addEnumPriorty(SdpEnumPriorty sdpEnumPriorty);
 
-    public Map<String, SdpDictPriorty> getDictPriortyMap(boolean supportMsInd);
+    public Map<String, SdpDictPriorty> getDictPriortyMap();
 
-    public Map<String, SdpEnumPriorty> getEnumPriortyMap(boolean supportMsInd);
+    public Map<String, SdpEnumPriorty> getEnumPriortyMap();
 }

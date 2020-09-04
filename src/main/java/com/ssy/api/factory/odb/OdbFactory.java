@@ -1,5 +1,6 @@
 package com.ssy.api.factory.odb;
 
+import com.ssy.api.entity.lang.TwoTuple;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.ComplexType;
 import com.ssy.api.meta.defaults.Element;
@@ -172,5 +173,26 @@ public class OdbFactory {
      */
     public static void refreshMetaData(){
         MetaDataFactory.loadMetaDataInitially();
+    }
+
+    /**
+     * @Description 元数据规范化处理
+     * @Author sunshaoyu
+     * @Date 2020/9/3-14:04
+     * @param module
+     */
+    public static void metaDataNormalization(String module){
+        MetaDataFactory.metaDataNormalization(module, null);
+    }
+
+    /**
+     * @Description 元数据规范化处理
+     * @Author sunshaoyu
+     * @Date 2020/9/4-13:43
+     * @param module
+     * @param customReplaceMap  自定义替换参数(字典id, <字典引用ref, 字典类型type>)
+     */
+    public static void metaDataNormalization(String module, Map<String, TwoTuple<String, String>> customReplaceMap){
+        MetaDataFactory.metaDataNormalization(module, customReplaceMap);
     }
 }

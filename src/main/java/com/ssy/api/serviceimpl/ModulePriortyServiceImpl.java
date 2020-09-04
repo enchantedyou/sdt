@@ -55,12 +55,12 @@ public class ModulePriortyServiceImpl implements ModulePriortyService {
     }
 
     @Override
-    public Map<String, SdpDictPriorty> getDictPriortyMap(boolean supportMsInd) {
-        return SdMetaPriorty.getDictPriortyMap(supportMsInd);
+    public Map<String, SdpDictPriorty> getDictPriortyMap() {
+        return SdMetaPriorty.getDictPriortyMap();
     }
 
     @Override
-    public Map<String, SdpEnumPriorty> getEnumPriortyMap(boolean supportMsInd) {
-        return SdMetaPriorty.getEnumPriortyMap(supportMsInd);
+    public Map<String, SdpEnumPriorty> getEnumPriortyMap() {
+        return SdMetaPriorty.getEnumPriortyMap();
     }
 }

@@ -2,18 +2,29 @@ package com.ssy.api.factory.odb;
 
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.entity.lang.TwoTuple;
+import com.ssy.api.entity.table.local.SdpDictPriorty;
+import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.LoaderFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.ComplexType;
 import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.defaults.TableType;
+import com.ssy.api.servicetype.ModulePriortyService;
+import com.ssy.api.utils.parse.XmlParser;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,12 +34,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2020年06月13日-15:45
  */
 @Component
+@Slf4j
 public class MetaDataFactory {
 
     //加载器工厂
     private static LoaderFactory loaderFactory;
     //上下文配置
     private static SdtContextConfig sdtContextConfig;
+    //模块优先级服务
+    private static ModulePriortyService modulePriortyService;
 
     //元数据容器
     private static Map<String, File> projectFileMap = new ConcurrentHashMap<>();
@@ -47,6 +61,11 @@ public class MetaDataFactory {
     @Autowired
     public void setSdtContextConfig(SdtContextConfig sdtContextConfig) {
         MetaDataFactory.sdtContextConfig = sdtContextConfig;
+    }
+
+    @Autowired
+    public void setModulePriortyService(ModulePriortyService modulePriortyService) {
+        MetaDataFactory.modulePriortyService = modulePriortyService;
     }
 
     /**
@@ -120,6 +139,7 @@ public class MetaDataFactory {
     protected static Map<String, Element> loadDictMap(){
         if(CommUtil.isNull(dictMap)){
             StopWatch s = BizUtil.startStopWatch();
+            Map<String, SdpDictPriorty> dictPriortyMap = modulePriortyService.getDictPriortyMap();
             Map<String, Map<String, ComplexType>> map = loadComplexTypeMap();
 
             for(String location : map.keySet()){
@@ -127,7 +147,14 @@ public class MetaDataFactory {
                 for(String key : cMap.keySet()){
                     ComplexType c = cMap.get(key);
                     if(c.isDict()){
-                        dictMap.putAll(c.getElementMap());
+                        c.getElementMap().forEach((id, now) -> {
+                            Element before = dictMap.get(id);
+                            if(null == before){
+                                dictMap.put(id, now);
+                            }else{
+                                dictMap.put(id, loaderFactory.getComplexTypeLoader().checkDictPriorty(dictPriortyMap, before, now));
+                            }
+                        });
                     }
                 }
             }
@@ -214,5 +241,128 @@ public class MetaDataFactory {
 
         loadMetaDataInitially();
         BizUtil.stoptStopWatch(s, "Refresh the meta data");
+    }
+
+    /**
+     * @Description 元数据规范化处理
+     * @Author sunshaoyu
+     * @Date 2020/9/4-13:43
+     * @param module    模块名称
+     * @param customReplaceMap  自定义替换参数(字典id, <字典引用ref, 字典类型type>)
+     */
+    protected static void metaDataNormalization(String module, Map<String, TwoTuple<String, String>> customReplaceMap){
+        Map<String, SdpDictPriorty> dictPriortyMap = modulePriortyService.getDictPriortyMap();
+        loadProjectFileMap().forEach((fileName, file) -> {
+            //非指定模块,不处理
+            if(CommUtil.isNotNull(module) && !fileName.toLowerCase().substring(0, 7).contains(module)){
+                return;
+            }
+
+            try{
+                Map<String, String> replaceMap = new HashMap<>();
+                /** 复合类型、字典 **/
+                if(fileName.contains(SdtConst.COMPLEX_SUFFIX) || fileName.contains(SdtConst.DICT_SUFFIX)){
+                    metaDataVerify(file, replaceMap, "element", dictPriortyMap, customReplaceMap);
+                }
+                /** flowtran、数据库表、报表、服务 **/
+                else if(fileName.contains(SdtConst.FLOWTRAN_SUFFIX) || fileName.contains(SdtConst.TABLE_SUFFIX)
+                        || fileName.contains(SdtConst.REPORT_SUFFIX) || fileName.contains(SdtConst.SERVICETYPE_SUFFIX)){
+                    metaDataVerify(file, replaceMap, "field", dictPriortyMap, customReplaceMap);
+                }
+                /** 命名SQL **/
+                else if(fileName.contains(SdtConst.NAMEDSQL_SUFFIX)){
+                    metaDataVerify(file, replaceMap, "parameter", dictPriortyMap, customReplaceMap);
+                }
+
+                //文件内容替换并写入
+                if(CommUtil.isNotNull(replaceMap)){
+                    replaceStrByMap(file, replaceMap);
+                }
+            }catch (Exception e){
+                throw new SdtException("Metadata normalization processing failed", e);
+            }
+        });
+    }
+
+    /**
+     * @Description 元数据规范性校验
+     * @Author sunshaoyu
+     * @Date 2020/9/3-13:58
+     * @param file
+     * @param replaceMap
+     */
+    private static void metaDataVerify(File file, Map<String, String> replaceMap, String elementName, Map<String, SdpDictPriorty> dictPriortyMap, Map<String, TwoTuple<String, String>> customReplaceMap) throws DocumentException {
+        Document document = XmlParser.getXmlDocument(file);
+        XmlParser.searchTargetAllXmlElement(document.getRootElement(), elementName).forEach(e -> {
+            String idAttrName = file.getName().contains(SdtConst.NAMEDSQL_SUFFIX) ? "property" : "id";
+            Element dict = dictMap.get(e.attributeValue(idAttrName));
+            org.dom4j.Element before = e.createCopy();
+            TwoTuple<String, String> replaceTwoTuple = null;
+            //获取自定义的替换值
+            if(CommUtil.isNotNull(customReplaceMap)){
+                replaceTwoTuple = customReplaceMap.get(e.attributeValue(idAttrName));
+            }
+
+            if(CommUtil.isNotNull(dict)){
+                SdpDictPriorty dictPriorty = dictPriortyMap.get(dict.getLocation());
+                //原字典优先级不存在,不处理
+                if(CommUtil.isNull(replaceTwoTuple) && CommUtil.isNull(dictPriorty)){
+                    return;
+                }
+                //不同组则不处理
+                String groupId = dictPriorty.getGroupId();
+                if(CommUtil.isNull(replaceTwoTuple) && !CommUtil.equals(file.getName().toLowerCase().substring(0, 2), groupId) && !CommUtil.equals(groupId, SdtConst.WILDCARD)){
+                    return;
+                }
+
+                //引用
+                Attribute refAttribute = e.attribute("ref");
+                if(CommUtil.isNotNull(refAttribute) && CommUtil.isNotNull(refAttribute.getValue())){
+                    String beforeValue = refAttribute.getValue();
+                    if(!CommUtil.equals(dict.getRef(), refAttribute.getValue()) && CommUtil.isNull(replaceTwoTuple)){
+                        refAttribute.setValue(dict.getRef());
+                    }else if(CommUtil.isNotNull(replaceTwoTuple)){
+                        refAttribute.setValue(CommUtil.nvl(replaceTwoTuple.getFirst(), refAttribute.getValue()));
+                    }
+
+                    if(!CommUtil.equals(beforeValue, refAttribute.getValue())){
+                        log.info("[{}]The reference of element [{}] is updated {}->{}", file.getName(), dict.getId(), beforeValue, refAttribute.getValue());
+                    }
+                }
+                //类型
+                Attribute typeAttribute = file.getName().contains(SdtConst.NAMEDSQL_SUFFIX) ? e.attribute("javaType") : e.attribute("type");
+                if(CommUtil.isNotNull(dict.getType()) && CommUtil.isNotNull(typeAttribute) && CommUtil.isNotNull(typeAttribute.getValue())){
+                    String beforeValue = typeAttribute.getValue();
+                    if(!CommUtil.equals(typeAttribute.getValue(), dict.getType().getFullId()) && CommUtil.isNull(replaceTwoTuple)){
+                        typeAttribute.setValue(dict.getType().getFullId());
+                    }else if(CommUtil.isNotNull(replaceTwoTuple)){
+                        typeAttribute.setValue(CommUtil.nvl(replaceTwoTuple.getSecond(), typeAttribute.getValue()));
+                    }
+
+                    if(!CommUtil.equals(beforeValue, typeAttribute.getValue())){
+                        log.info("[{}]The type of element [{}] is updated {}->{}", file.getName(), dict.getId(), beforeValue, typeAttribute.getValue());
+                    }
+                }
+
+                if(!CommUtil.equals(before.asXML(), e.asXML())){
+                    replaceMap.put(before.asXML(), e.asXML());
+                }
+            }
+        });
+    }
+
+    /**
+     * @Description 根据map替换文件内容
+     * @Author sunshaoyu
+     * @Date 2020/9/3-13:54
+     * @param file
+     * @param map
+     */
+    private static void replaceStrByMap(File file, Map<String, String> map) throws IOException {
+        String content = loaderFactory.getFileLoader().loadAsString(file, SdtConst.DEFAULT_ENCODING);
+        for(String before : map.keySet()){
+            content = content.replaceAll(before, map.get(before));
+        }
+        //loaderFactory.getFileLoader().saveFile(content, file.getPath());
     }
 }

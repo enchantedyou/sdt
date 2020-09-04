@@ -2,6 +2,7 @@ package com.ssy.api.logic.local;
 
 import com.ssy.api.dao.mapper.local.SdpDictPriortyMapper;
 import com.ssy.api.dao.mapper.local.SdpEnumPriortyMapper;
+import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.dict.SdtTable;
 import com.ssy.api.entity.table.local.SdpDictPriorty;
@@ -28,6 +29,7 @@ public class SdMetaPriorty {
 
     private static SdpDictPriortyMapper sdpDictPriortyMapper;
     private static SdpEnumPriortyMapper sdpEnumPriortyMapper;
+    private static SdtContextConfig contextConfig;
 
     @Autowired
     public void setSdpDictPriortyMapper(SdpDictPriortyMapper sdpDictPriortyMapper) {
@@ -37,6 +39,11 @@ public class SdMetaPriorty {
     @Autowired
     public void setSdpEnumPriortyMapper(SdpEnumPriortyMapper sdpEnumPriortyMapper) {
         SdMetaPriorty.sdpEnumPriortyMapper = sdpEnumPriortyMapper;
+    }
+
+    @Autowired
+    public void setContextConfig(SdtContextConfig contextConfig) {
+        SdMetaPriorty.contextConfig = contextConfig;
     }
 
     /**
@@ -152,16 +159,15 @@ public class SdMetaPriorty {
      * @Description 获取字典优先级
      * @Author sunshaoyu
      * @Date 2020/6/13-0:53
-     * @param supportMsInd
      * @return java.util.Map<java.lang.String,com.ssy.api.entity.table.local.SdpDictPriorty>(字典类型, 字典优先级实体)
      */
-    public static Map<String, SdpDictPriorty> getDictPriortyMap(boolean supportMsInd) {
+    public static Map<String, SdpDictPriorty> getDictPriortyMap() {
         Map<String, SdpDictPriorty> map = new HashMap<>();
         List<SdpDictPriorty> dictPriortyList = queryEffectDictPriortyList();
 
         if(CommUtil.isNotNull(dictPriortyList)){
             for(SdpDictPriorty s : dictPriortyList){
-                if(SdtBusiUtil.isMsModel(s.getDictType()) && !supportMsInd){
+                if(SdtBusiUtil.isMsModel(s.getDictType()) && !contextConfig.getMsModelFirst()){
                     continue;
                 }else{
                     map.put(s.getDictType(), s);
@@ -170,7 +176,7 @@ public class SdMetaPriorty {
         }
 
         //如果不支持ms优先,则移除ms的优先级
-        if(!supportMsInd){
+        if(!contextConfig.getMsModelFirst()){
             map.remove("MsDict");
         }
         return map;
@@ -180,16 +186,15 @@ public class SdMetaPriorty {
      * @Description 获取枚举优先级
      * @Author sunshaoyu
      * @Date 2020/6/13-0:32
-     * @param supportMsInd
      * @return java.util.Map<java.lang.String,com.ssy.api.entity.table.local.SdpEnumPriorty>(枚举类型, 枚举优先级实体)
      */
-    public static Map<String, SdpEnumPriorty> getEnumPriortyMap(boolean supportMsInd) {
+    public static Map<String, SdpEnumPriorty> getEnumPriortyMap() {
         Map<String, SdpEnumPriorty> map = new HashMap<>();
         List<SdpEnumPriorty> enumPriortyList = queryEffectEnumPriortyList();
 
         if(CommUtil.isNotNull(enumPriortyList)){
             for(SdpEnumPriorty s : enumPriortyList){
-                if(SdtBusiUtil.isMsModel(s.getEnumType()) && !supportMsInd){
+                if(SdtBusiUtil.isMsModel(s.getEnumType()) && !contextConfig.getMsModelFirst()){
                     continue;
                 }else{
                     map.put(s.getEnumType(), s);

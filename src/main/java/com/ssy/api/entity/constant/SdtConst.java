@@ -22,7 +22,7 @@ public class SdtConst {
     /** 当前用户的session的key **/
     public static final String USER_INFO = "userInfo";
     /** 用户登录最大有效时间 **/
-    public static final int userMaxInactiveInterval = 60 * 60 * 2;
+    public static final int userMaxInactiveInterval = 60 * 60 * 0;
     /** 项目基础路径 **/
     public static final String BASE_PATH = "basePath";
     /** POST请求方式 **/
@@ -64,6 +64,8 @@ public class SdtConst {
     public static final String INTF_EXCEL_SUFFIX = ".xlsx";
     public static final String FLOWTRAN_SUFFIX = ".flowtrans.xml";
     public static final String SERVICETYPE_SUFFIX = ".serviceType.xml";
+    public static final String REPORT_SUFFIX = ".report.xml";
+    public static final String NAMEDSQL_SUFFIX = ".nsql.xml";
     public static final String JAVA_SUFFIX = ".java";
     public static final String[] PROJECT_FILE_SUFFIX = {"xml", "java"};
 

@@ -126,11 +126,8 @@ public class SdGitlabReader {
         for(int i = 0;i < diffFiles.size();i++){
             String oldPath = diffFiles.getJSONObject(i).getString("old_path");
             String newPath = diffFiles.getJSONObject(i).getString("new_path");
-
-            if(CommUtil.equals(oldPath, newPath)){
+            if(!newPath.toLowerCase().contains("keep")){
                 buffer.append(newPath).append("\r\n");
-            }else{
-                buffer.append(oldPath).append(" → ").append(newPath).append("\r\n");
             }
         }
         return buffer.toString();

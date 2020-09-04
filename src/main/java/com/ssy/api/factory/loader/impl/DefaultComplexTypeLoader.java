@@ -41,7 +41,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
     @Override
     public Map<String, Map<String, ComplexType>> load(Map<String, File> fileMap) {
         Map<String, Map<String, ComplexType>> map = new ConcurrentHashMap<>();
-        Map<String, SdpDictPriorty> priority = modulePriortyService.getDictPriortyMap(sdtContextConfig.getMsModelFirst());
+        Map<String, SdpDictPriorty> priority = modulePriortyService.getDictPriortyMap();
         //已存在的复合类型元素集合,用于字典优先级校验
         Map<String, com.ssy.api.meta.defaults.Element> beforeElementMap = new HashMap<>();
 
@@ -60,22 +60,21 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
                         String complexTypeNodeId = e.attributeValue("id");
                         //当前复合类型是否为字典模型
                         boolean isDict = Boolean.parseBoolean(e.attributeValue("dict"));
+
                         //获取该复合类型节点下的所有子元素
                         Map<String, com.ssy.api.meta.defaults.Element> currentElementMap = getComplexTypeElementMap(map, priority, e, location, beforeElementMap, isDict);
-
-                        beforeElementMap.putAll(currentElementMap);
                         complexTypeMap.put(complexTypeNodeId, new ComplexType(
                                 location, complexTypeNodeId, e.attributeValue("longname"), isDict, currentElementMap
                         ));
                     }
                     map.put(location, complexTypeMap);
                 } catch (Exception e) {
-                    throw new SdtException("Failed to load metadata model", e);
-                } finally {
                     beforeElementMap.clear();
+                    throw new SdtException("Failed to load metadata model", e);
                 }
             }
         }
+        beforeElementMap.clear();
         return map;
     }
 
@@ -108,7 +107,9 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
             if(isDict){
                 //当前复合类型为字典,进行优先级校验
                 com.ssy.api.meta.defaults.Element beforeElement = CommUtil.nvl(beforeElementMap.get(elementId), map.get(elementId));
-                map.put(elementId, checkDictPriorty(priority, beforeElement, currentElement));
+                currentElement = checkDictPriorty(priority, beforeElement, currentElement);
+                map.put(elementId, currentElement);
+                beforeElementMap.put(elementId, currentElement);
             }else{
                 //普通复合类型元素直接添加
                 map.put(elementId, currentElement);
@@ -153,7 +154,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
      * @param now
      * @return com.ssy.api.meta.defaults.Element
      */
-    private com.ssy.api.meta.defaults.Element checkDictPriorty(Map<String, SdpDictPriorty> priority, com.ssy.api.meta.defaults.Element before, com.ssy.api.meta.defaults.Element now){
+    public com.ssy.api.meta.defaults.Element checkDictPriorty(Map<String, SdpDictPriorty> priority, com.ssy.api.meta.defaults.Element before, com.ssy.api.meta.defaults.Element now){
         //之前的数据为空或[当前或之前是微服务模型但不是微服务模型优先],直接添加
         if(CommUtil.isNull(before)
                 || ((SdtBusiUtil.isMsModel(now.getLocation()) || SdtBusiUtil.isMsModel(before.getLocation()))
@@ -176,15 +177,16 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
                 return now;
             }
             //两者的类型不一致,不处理
-            else if(!CommUtil.equals(before.getType().getFullId(), now.getType().getFullId())){
+            /*else if(!CommUtil.equals(before.getType().getFullId(), now.getType().getFullId())){
                 return now;
-            }
+            }*/
             //返回优先级较高的一方
             else{
                 if(CommUtil.compare(beforeDictPriorty.getDictPriority(), nowDictPriorty.getDictPriority()) < 0){
                     log.info("Dict type [{}] has lower priority than [{}] and should be removed", now.getRef(), before.getRef());
                     return before;
                 }else{
+                    log.info("Dict type [{}] has lower priority than [{}] and should be removed", before.getRef(), now.getRef());
                     return now;
                 }
             }
