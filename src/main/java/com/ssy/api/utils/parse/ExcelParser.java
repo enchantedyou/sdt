@@ -13,7 +13,6 @@ import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.flowtran.Flowtran;
 import com.ssy.api.meta.flowtran.IntfFields;
 import com.ssy.api.plugins.DBContextHolder;
-import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -42,16 +41,10 @@ import java.util.Map;
 @Slf4j
 public class ExcelParser {
 
-    private static ModuleMapService moduleMapService;
     private static SdtContextConfig contextConfig;
     private static SmpSysDictMapper sysDictMapper;
     private static final ThreadLocal<Integer> curRowNumberLocal = new ThreadLocal<>();
     private static final ThreadLocal<List<String>> mandatoryLocal = new ThreadLocal<>();
-
-    @Autowired
-    public void setModuleMapService(ModuleMapService moduleMapService) {
-        ExcelParser.moduleMapService = moduleMapService;
-    }
 
     @Autowired
     public void setContextConfig(SdtContextConfig contextConfig) {
@@ -81,7 +74,7 @@ public class ExcelParser {
      * @param path
      * @return org.apache.poi.ss.usermodel.Workbook
      */
-    protected static Workbook getWorkbook(String path) throws IOException {
+    public static Workbook getWorkbook(String path) throws IOException {
         String excelSuffix = BizUtil.getFileType(path);
         FileInputStream inputStream = null;
 
@@ -189,7 +182,7 @@ public class ExcelParser {
             Flowtran flowtran = SdFlowtranParser.load(flowtranId);
             Workbook workbook = getWorkbook(ExcelParser.class.getResource("/templates/excel/intf_doc_tamplate.xlsx").getPath());
             Sheet templateSheet = workbook.cloneSheet(3);
-            templateSheet.getRow(0).getCell(1).setCellValue(moduleMapService.getServiceCode(flowtranId));
+            templateSheet.getRow(0).getCell(1).setCellValue(flowtranId);
 
             //指定参数类别
             switch(flowtran.getKind()){

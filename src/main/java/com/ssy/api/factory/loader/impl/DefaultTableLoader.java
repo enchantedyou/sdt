@@ -6,8 +6,8 @@ import com.ssy.api.factory.loader.TableTypeLoader;
 import com.ssy.api.factory.odb.OdbFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.TableType;
-import com.ssy.api.utils.system.CommUtil;
 import com.ssy.api.utils.parse.XmlParser;
+import com.ssy.api.utils.system.CommUtil;
 import org.dom4j.Element;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +28,8 @@ public class DefaultTableLoader implements TableTypeLoader {
     @Override
     public Map<String, TableType> load(Map<String, File> fileMap) {
         Map<String, TableType> map = new ConcurrentHashMap<>();
-        for(String fileName : fileMap.keySet()) {
+        for(Map.Entry<String, File> fileEntry : fileMap.entrySet()) {
+            String fileName = fileEntry.getKey();
             if (fileName.contains(SdtConst.TABLE_SUFFIX)) {
                 try {
                     Element rootNode = XmlParser.getXmlRootElement(fileMap.get(fileName));

@@ -77,22 +77,17 @@ public class Md5Encrypt {
 	 * @throws NoSuchAlgorithmException 
 	 */
 	public static String md5EncodeStr(String origin) {
-		
 		if (null == origin) {
 			throw new NullPointerException();
 		}
-		
-		String resultString = new String(origin);
-		MessageDigest md = null;
+
 		try {
-			md = MessageDigest.getInstance("MD5");
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			return byteArrayToHexString(md.digest(origin.getBytes()));
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		resultString = byteArrayToHexString(md.digest(resultString.getBytes()));
-		
-		return resultString;
-
+		return null;
 	}
 	
 	
@@ -109,18 +104,21 @@ public class Md5Encrypt {
 	 * @throws NoSuchAlgorithmException 
 	 */
 	public static String md5EncodeFile(File file) throws IOException, NoSuchAlgorithmException {
-		
 		FileInputStream in = null;
-		in = new FileInputStream(file);
-		StringBuffer fileContent = new StringBuffer();
-		byte[] buffer = new byte[1024];
-		
-		while ((in.read(buffer)) != -1) {
-			fileContent.append(new String(buffer, "UTF-8"));
+		try {
+			in = new FileInputStream(file);
+			StringBuffer fileContent = new StringBuffer();
+			byte[] buffer = new byte[1024];
+
+			while ((in.read(buffer)) != -1) {
+				fileContent.append(new String(buffer, "UTF-8"));
+			}
+			return md5EncodeStr(fileContent.toString());
+		}finally {
+			if(null != in){
+				in.close();
+				in = null;
+			}
 		}
-		in.close();
-		in = null;
-		
-		return md5EncodeStr(fileContent.toString());
 	}
 }

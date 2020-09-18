@@ -5,6 +5,7 @@ import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.lang.TwoTuple;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.FileLoader;
+import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.parse.ExcelParser;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class SdSqlAuditExecutor {
     private FileLoader fileLoader;
     @Autowired
     private SdtContextConfig contextConfig;
+    private static final ThreadLocal<List<String>> tableLocal = new ThreadLocal<>();
 
     /**
      * @Description 从本地项目将全量脚本整合到稽核工具的目录中
@@ -38,6 +40,11 @@ public class SdSqlAuditExecutor {
      */
     public void auditExecutor(){
         try{
+            //读取待校验的表
+            List<String> tableList = fileLoader.loadLineAsList(new File(contextConfig.getSqlToolsDir() + "/etc/ln_table.txt"), SdtConst.DEFAULT_ENCODING);
+            tableList.addAll(fileLoader.loadLineAsList(new File(contextConfig.getSqlToolsDir() + "/etc/cl_table.txt"), SdtConst.DEFAULT_ENCODING));
+            tableLocal.set(tableList);
+
             //提取脚本
             TwoTuple<String, String> commonSql = extractCommonSql();
             List<TwoTuple<String, String>> busiModuleSql = extractBusiModuleSql();
@@ -119,7 +126,7 @@ public class SdSqlAuditExecutor {
 
         Map<String, File> dmlSqlMap = fileLoader.load(dmlPath.toString(), false);
         for(String key : dmlSqlMap.keySet()){
-            if(ExcelParser.isExcel(key)){
+            if(ExcelParser.isExcel(key) && tableLocal.get().contains(SdtBusiUtil.getDotLeft(key))){
                 builder.append(ExcelParser.extractSqlScripts(dmlSqlMap.get(key).getPath()));
             }
         }

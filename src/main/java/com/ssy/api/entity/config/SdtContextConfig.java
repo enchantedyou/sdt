@@ -21,30 +21,30 @@ public class SdtContextConfig {
     /** icore3.0及以上项目的工作空间路径 **/
     @NotBlank private String workSpacePath;
     /** 接口文档目录 **/
-    @NotBlank private String intfExcelPath;
+    private String intfExcelPath;
 
-    /** sump资源路径 **/
-    @NotNull private Boolean msModelFirst;
     /** 是否支持微服务模型优先(MsDict,MsEnumType,MsType) **/
-    @NotBlank private String sumpResourcePath;
+    @NotNull private Boolean msModelFirst;
+    /** sump资源路径 **/
+    private String sumpResourcePath;
 
     /** 默认交易日期 **/
     @NotBlank private String defaultTrxnDate;
     /** 批量任务轮询间隔(毫秒) **/
-    @NotNull @Range(min = 1000L, max = 30000L) private Long batchPollInterval;
+    private Long batchPollInterval;
 
     /** 批量任务渠道号 **/
-    @NotBlank private String batchChannelId;
+    private String batchChannelId;
     /** 日终批量任务执行域代码 **/
-    @NotBlank private String eodDomainCode;
+    private String eodDomainCode;
 
     /** 批量任务执行表无数据时的最大等待次数,等待时间(秒)=等待次数*轮询间隔 **/
-    @NotNull @Range(min = 10, max = 30) private Integer batchMaxWaitCount;
+    private Integer batchMaxWaitCount;
     /** 业务法人代码 **/
     @NotBlank private String busiOrgId;
 
     /** 批量任务轮询线程池大小 **/
-    @NotNull @Range(min = 1, max = 200) private int batchPollThreadPoolSize;
+    private int batchPollThreadPoolSize;
     /** gitlab session,用于操作git,获取合并文件 **/
     @NotBlank private String gitlabSession;
 

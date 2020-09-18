@@ -2,8 +2,10 @@ package com.ssy.api.factory.odb;
 
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.entity.enums.E_RESTRICTION;
 import com.ssy.api.entity.lang.TwoTuple;
 import com.ssy.api.entity.table.local.SdpDictPriorty;
+import com.ssy.api.entity.table.local.SdpEnumPriorty;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.LoaderFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
@@ -50,6 +52,7 @@ public class MetaDataFactory {
     private static Map<String, Map<String, AbstractRestrictionType>> restrictionTypeMap = new ConcurrentHashMap<>();
     private static Map<String, Map<String, ComplexType>> complexTypeMap = new ConcurrentHashMap<>();
     private static Map<String, Element> dictMap = new ConcurrentHashMap<>();
+    private static Map<String, AbstractRestrictionType> enumMap = new ConcurrentHashMap<>();
     private static Map<String, TableType> tableTypeMap = new ConcurrentHashMap<>();
     private static Map<Object, Object> dataSourceMap = new ConcurrentHashMap<>();
 
@@ -131,7 +134,7 @@ public class MetaDataFactory {
     }
 
     /**
-     * @Description 加载字典
+     * @Description 加载字典（取最高优先级）
      * @Author sunshaoyu
      * @Date 2020/6/13-17:50
      * @return java.util.Map<java.lang.String,com.ssy.api.meta.defaults.Element>
@@ -142,10 +145,10 @@ public class MetaDataFactory {
             Map<String, SdpDictPriorty> dictPriortyMap = modulePriortyService.getDictPriortyMap();
             Map<String, Map<String, ComplexType>> map = loadComplexTypeMap();
 
-            for(String location : map.keySet()){
-                Map<String, ComplexType> cMap = map.get(location);
-                for(String key : cMap.keySet()){
-                    ComplexType c = cMap.get(key);
+            for(Map.Entry<String, Map<String, ComplexType>> entrySet : map.entrySet()){
+                Map<String, ComplexType> cMap = entrySet.getValue();
+                for(Map.Entry<String, ComplexType> subEntrySet : cMap.entrySet()){
+                    ComplexType c = subEntrySet.getValue();
                     if(c.isDict()){
                         c.getElementMap().forEach((id, now) -> {
                             Element before = dictMap.get(id);
@@ -161,6 +164,35 @@ public class MetaDataFactory {
             BizUtil.stoptStopWatch(s, "Load dict into containers");
         }
         return dictMap;
+    }
+
+    /**
+     * @Description 加载枚举（取最高优先级）
+     * @Author sunshaoyu
+     * @Date 2020/9/7-10:06
+     * @return java.util.Map<java.lang.String,com.ssy.api.meta.abstracts.AbstractRestrictionType>
+     */
+    protected static Map<String, AbstractRestrictionType> loadEnumMap(){
+        if(CommUtil.isNull(enumMap)){
+            StopWatch s = BizUtil.startStopWatch();
+            Map<String, SdpEnumPriorty> enumPriortyMap = modulePriortyService.getEnumPriortyMap();
+            Map<String, Map<String, AbstractRestrictionType>> map = loadRestrictionTypeMap();
+
+            map.forEach((location, eMap) -> {
+                eMap.forEach((key, e) -> {
+                    if(e.getRestriction() == E_RESTRICTION.ENUMTYPE){
+                        AbstractRestrictionType before = enumMap.get(key);
+                        if(null == before){
+                            enumMap.put(key, e);
+                        }else{
+                            enumMap.put(key, loaderFactory.getRestrictionLoader().checkEnumPriorty(enumPriortyMap, before, e));
+                        }
+                    }
+                });
+            });
+            BizUtil.stoptStopWatch(s, "Load enum into containers");
+        }
+        return enumMap;
     }
 
     /**
@@ -217,11 +249,13 @@ public class MetaDataFactory {
         loadIntfWordFileMap();
         //初始化限制类型
         loadRestrictionTypeMap();
-
         //初始化复合类型
         loadComplexTypeMap();
+
         //初始化项目字典
         loadDictMap();
+        //初始化项目枚举
+        loadEnumMap();
         //初始化表模型
         loadTableTypeMap();
     }
@@ -237,6 +271,7 @@ public class MetaDataFactory {
         restrictionTypeMap.clear();
         complexTypeMap.clear();
         dictMap.clear();
+        enumMap.clear();
         tableTypeMap.clear();
 
         loadMetaDataInitially();
@@ -260,8 +295,8 @@ public class MetaDataFactory {
 
             try{
                 Map<String, String> replaceMap = new HashMap<>();
-                /** 复合类型、字典 **/
-                if(fileName.contains(SdtConst.COMPLEX_SUFFIX) || fileName.contains(SdtConst.DICT_SUFFIX)){
+                /** 复合类型 **/
+                if(fileName.contains(SdtConst.COMPLEX_SUFFIX)){
                     metaDataVerify(file, replaceMap, "element", dictPriortyMap, customReplaceMap);
                 }
                 /** flowtran、数据库表、报表、服务 **/
@@ -333,6 +368,11 @@ public class MetaDataFactory {
                 Attribute typeAttribute = file.getName().contains(SdtConst.NAMEDSQL_SUFFIX) ? e.attribute("javaType") : e.attribute("type");
                 if(CommUtil.isNotNull(dict.getType()) && CommUtil.isNotNull(typeAttribute) && CommUtil.isNotNull(typeAttribute.getValue())){
                     String beforeValue = typeAttribute.getValue();
+                    //多级引用,不处理
+                    if(beforeValue.split("\\.").length > 2){
+                        return;
+                    }
+
                     if(!CommUtil.equals(typeAttribute.getValue(), dict.getType().getFullId()) && CommUtil.isNull(replaceTwoTuple)){
                         typeAttribute.setValue(dict.getType().getFullId());
                     }else if(CommUtil.isNotNull(replaceTwoTuple)){

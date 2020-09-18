@@ -21,9 +21,9 @@ public class SdtApplicationStartupLoader extends MetaDataFactory implements Appl
     public void run(ApplicationArguments args) throws Exception {
         StopWatch s = BizUtil.startStopWatch();
         /** 初始化元数据 **/
-        loadMetaDataInitially();
+        //loadMetaDataInitially();
         /** 初始化动态数据源 **/
-        loadDynamicDataSource();
+        //loadDynamicDataSource();
         BizUtil.stoptStopWatch(s, "Load all metadata");
     }
 }

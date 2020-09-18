@@ -6,6 +6,7 @@ import com.ssy.api.entity.enums.E_TRANKIND;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.factory.odb.OdbFactory;
+import com.ssy.api.meta.defaults.ComplexType;
 import com.ssy.api.meta.flowtran.Flowtran;
 import com.ssy.api.meta.flowtran.IntfAssemble;
 import com.ssy.api.meta.flowtran.IntfFields;
@@ -83,22 +84,17 @@ public class SdFlowtranParser {
      */
     private static void parseIntf(Flowtran flowtran, E_TRANINTFTYPE interfaceType, Element intfNode){
         IntfAssemble intfAssemble = new IntfAssemble();
+        List<IntfFields> intfFieldsList = new ArrayList<>();
         intfAssemble.setAsParm(Boolean.valueOf(intfNode.attributeValue("asParm")));
         intfAssemble.setPackMode(Boolean.valueOf(intfNode.attributeValue("packMode")));
+
         //解析field
-        List<com.ssy.api.meta.defaults.Element> fieldList = parseField(intfNode);
+        List<com.ssy.api.meta.defaults.Element> fieldList = parseField(intfFieldsList, flowtran, intfNode);
 
         //解析fields
         List<Element> fieldsNodeList = intfNode.elements("fields");
-        List<IntfFields> intfFieldsList = new ArrayList<>();
         for(Element e : fieldsNodeList){
-            IntfFields intfFields = new IntfFields(flowtran.getLocation(), e.attributeValue("id"), e.attributeValue("longname"));
-            intfFields.setScope(e.attributeValue("scope"));
-            intfFields.setMulti(Boolean.valueOf(e.attributeValue("multi")));
-            intfFields.setRequired(Boolean.valueOf(e.attributeValue("required")));
-
-            intfFields.setSubFieldList(parseField(e));
-            intfFieldsList.add(intfFields);
+            parseFields(flowtran, intfFieldsList, e);
         }
         intfAssemble.setFieldList(fieldList);
         intfAssemble.setFieldsList(intfFieldsList);
@@ -116,17 +112,53 @@ public class SdFlowtranParser {
     }
 
     /**
+     * @Description 解析fields
+     * @Author sunshaoyu
+     * @Date 2020/9/10-10:20
+     * @param flowtran
+     * @param intfFieldsList
+     * @param e
+     */
+    private static void parseFields(Flowtran flowtran, List<IntfFields> intfFieldsList, Element e) {
+        IntfFields intfFields = new IntfFields(flowtran.getLocation(), e.attributeValue("id"), e.attributeValue("longname"));
+        if(CommUtil.equals(e.getName(), "field")){
+            intfFields.setScope(e.attributeValue("type"));
+            ComplexType complex = OdbFactory.searchComplexType(intfFields.getScope().split("\\.")[1]);
+            if(CommUtil.isNotNull(complex)){
+                List<com.ssy.api.meta.defaults.Element> elementList = new ArrayList<>();
+                complex.getElementMap().forEach((key, element) -> {
+                    elementList.add(element);
+                });
+                intfFields.setSubFieldList(elementList);
+            }
+        }else if(CommUtil.equals(e.getName(), "fields")){
+            intfFields.setScope(e.attributeValue("scope"));
+            intfFields.setSubFieldList(parseField(intfFieldsList, flowtran, e));
+        }
+        intfFields.setMulti(Boolean.valueOf(e.attributeValue("multi")));
+        intfFields.setRequired(Boolean.valueOf(e.attributeValue("required")));
+        intfFieldsList.add(intfFields);
+    }
+
+    /**
      * @Description 解析field
      * @Author sunshaoyu
      * @Date 2020/7/23-11:38
+     * @param intfFieldsList
+     * @param flowtran
      * @param node
      * @return java.util.List<com.ssy.api.meta.defaults.Element>
      */
-    private static List<com.ssy.api.meta.defaults.Element> parseField(Element node) {
+    private static List<com.ssy.api.meta.defaults.Element> parseField(List<IntfFields> intfFieldsList, Flowtran flowtran, Element node) {
         List<Element> fieldNodeList = node.elements("field");
         List<com.ssy.api.meta.defaults.Element> fieldList = new ArrayList<>();
         for(Element e : fieldNodeList){
-            fieldList.add(OdbFactory.searchDict(e.attributeValue("id")));
+            com.ssy.api.meta.defaults.Element dict = OdbFactory.searchDict(e.attributeValue("id"));
+            if(null == dict && CommUtil.equals("true", e.attributeValue("multi"))){
+                parseFields(flowtran, intfFieldsList, e);
+            }else{
+                fieldList.add(dict);
+            }
         }
         return fieldList;
     }

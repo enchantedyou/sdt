@@ -124,4 +124,9 @@ public class SdtServError {
     public static SdtException E0021(String serviceLocaltion) {
         throw new SdtException("The file model corresponding to the service type location ["+serviceLocaltion+"] does not exist", ErrCodeDef.FILE_NOT_EXIST);
     }
+
+    /** 源复杂类型或目标实例类型不存在 **/
+    public static SdtException E0022() {
+        throw new SdtException("The source entity type or target entity type does not exist", ErrCodeDef.FILE_NOT_EXIST);
+    }
 }

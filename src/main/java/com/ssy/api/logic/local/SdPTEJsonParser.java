@@ -192,8 +192,8 @@ public class SdPTEJsonParser {
             //计算枚举值的最大长度
             Map<String, DefaultEnumerationType> enumMap = type.getEnumerationMap();
             int max = 0;
-            for(String key : enumMap.keySet()){
-                String value = enumMap.get(key).getValue();
+            for(Map.Entry<String, DefaultEnumerationType> entry : enumMap.entrySet()){
+                String value = entry.getValue().getValue();
                 if(value.length() > max){
                     max = value.length();
                 }
@@ -217,6 +217,7 @@ public class SdPTEJsonParser {
         PTElayout layout = new PTElayout();
         /** 查询表格 | 可编辑表格 **/
         if(buildPTE.getPteModule() == E_PTEMODULE.v_search_btn_datagrid || buildPTE.getPteModule() == E_PTEMODULE.v_form_editableDataGrid_btn){
+            layout.setForm(buildComponentForm(buildPTE));
             layout.setDatagrid(buildComponentDatagrid(buildPTE));
 
             //工具栏
@@ -310,7 +311,7 @@ public class SdPTEJsonParser {
         /** 查询表格 **/
         if(pteModule == E_PTEMODULE.v_search_btn_datagrid){
             form.setFoldLineNumber(SdtConst.FOLD_LINE_NUMBER);
-            form.setInitSearch(true);
+            form.setInitSearch(false);
             form.setControls(buildComponentFormControls(buildPTE));
         }
         /** 只读表单 **/
@@ -361,6 +362,9 @@ public class SdPTEJsonParser {
         /** 只读表单 **/
         if(buildPTE.getPteModule() == E_PTEMODULE.v_realonlyForm_btn){
             fieldList = buildPTE.getFlowtran().getOutput().getFieldList();
+            if(CommUtil.isNull(fieldList)){
+                fieldList= buildPTE.getFlowtran().getOutput().getFieldsList().get(0).getSubFieldList();
+            }
         }
 
         Map<String, PTEcontrol> map = new LinkedHashMap<>();
@@ -680,7 +684,6 @@ public class SdPTEJsonParser {
         if(buildPTE.getPteModule() == E_PTEMODULE.v_search_btn_datagrid){
             pagination.setShow(true);
             datagrid.setInitSearch(false);
-            datagrid.setScope(SdtConst.DEFAULT_GRID_SCOPE);
             datagrid.setDoRequest(buildComponentDoRequest(buildPTE.getFlowtran()));
         }
         /** 可编辑表格 **/

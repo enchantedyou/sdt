@@ -2,7 +2,6 @@ package com.ssy.api.factory.loader.impl;
 
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
-import com.ssy.api.entity.enums.E_RESTRICTION;
 import com.ssy.api.entity.table.local.SdpEnumPriorty;
 import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.factory.loader.RestrictionLoader;
@@ -10,10 +9,9 @@ import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.DefaultBaseType;
 import com.ssy.api.meta.defaults.DefaultEnumType;
 import com.ssy.api.meta.defaults.DefaultEnumerationType;
-import com.ssy.api.servicetype.ModulePriortyService;
 import com.ssy.api.utils.business.SdtBusiUtil;
-import com.ssy.api.utils.system.CommUtil;
 import com.ssy.api.utils.parse.XmlParser;
+import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +31,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Slf4j
 public class DefaultRestrictionLoader implements RestrictionLoader {
-
-    @Autowired
-    private ModulePriortyService modulePriortyService;
     @Autowired
     private SdtContextConfig sdtContextConfig;
 
     @Override
     public Map<String, Map<String, AbstractRestrictionType>> load(Map<String, File> fileMap) {
         Map<String, Map<String, AbstractRestrictionType>> map = new ConcurrentHashMap<>();
-        Map<String, SdpEnumPriorty> priority = modulePriortyService.getEnumPriortyMap();
 
-        for(String fileName : fileMap.keySet()){
+        for(Map.Entry<String, File> fileEntry : fileMap.entrySet()){
+            String fileName = fileEntry.getKey();
             if(fileName.contains(SdtConst.ENUM_SUFFIX) || fileName.contains(SdtConst.REUSABLE_SUFFIX)){
                 try {
                     Element rootNode = XmlParser.getXmlRootElement(fileMap.get(fileName));
@@ -54,7 +49,6 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
                     List<Element> restrictionTypeList = XmlParser.searchTargetAllXmlElement(rootNode, SdtConst.RESTRICTIONTYPE_NODE_NAME);
                     for(Element e : restrictionTypeList){
                         String restrictionTypeId = e.attributeValue("id");
-
                         List<Element> enumerationList = XmlParser.searchTargetAllXmlElement(e, SdtConst.ENUMERATION_NODE_NAME);
                         AbstractRestrictionType currentRestrictionType = null;
 
@@ -80,15 +74,7 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
                                     location, restrictionTypeId, e.attributeValue("longname"), e.attributeValue("base"), maxLength, enumerationMap
                             );
                         }
-
-                        //枚举类型优先级检查
-                        if(currentRestrictionType.getRestriction() == E_RESTRICTION.ENUMTYPE){
-                            AbstractRestrictionType before = searchBefore(map, restrictionTypeId);
-                            AbstractRestrictionType suitableValue = checkEnumPriorty(priority, before, currentRestrictionType);
-                            currentRestrictionTypeMap.put(restrictionTypeId, suitableValue);
-                        }else{
-                            currentRestrictionTypeMap.put(restrictionTypeId, currentRestrictionType);
-                        }
+                        currentRestrictionTypeMap.put(restrictionTypeId, currentRestrictionType);
                     }
                     map.put(location, currentRestrictionTypeMap);
                 } catch (Exception e) {
@@ -150,9 +136,10 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
      * @param id
      * @return com.ssy.api.meta.abstracts.AbstractRestrictionType
      */
+    @Deprecated
     private AbstractRestrictionType searchBefore(Map<String, Map<String, AbstractRestrictionType>> map, String id){
-        for(String local : map.keySet()){
-            AbstractRestrictionType e = map.get(local).get(id);
+        for(Map.Entry<String, Map<String, AbstractRestrictionType>> entrySet : map.entrySet()){
+            AbstractRestrictionType e = entrySet.getValue().get(id);
             if(CommUtil.isNotNull(e)){
                 return e;
             }

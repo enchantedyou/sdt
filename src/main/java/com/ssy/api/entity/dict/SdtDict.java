@@ -38,12 +38,16 @@ public class SdtDict {
         merge_url("mergeUrl", "merge url", "合并链接", 250, 0),
         module_id("moduleId", "module identity", "模块编号", 2, 0),
         inner_service_code("innerServiceCode", "inner service code", "内部服务码", 6, 0),
-        service_code("serviceCode", "service code", "服务码", 6, 0),
+        service_code("servicecode", "service code", "服务码", 6, 0),
         jira_id("jiraId", "jira identity", "JIRA编号", 15, 0),
         repository_type("repositoryType", "repository type", "仓库类型", 20, 0),
         data_operate_type("dataOperateType", "data operate type", "数据源操作类型", 1, 0),
         complex_location("complexLocation", "complex location", "复合类型位置", 50, 0),
         service_location("serviceLocation", "service location", "服务类型位置", 50, 0),
+        source_entity_id("sourceEntityId", "source entity identity", "源实体类型编号", 50, 0),
+        source_var_name("sourceVarName", "source variable name", "源变量名", 30, 0),
+        target_entity_id("targetEntityId", "target entity identity", "目标实体类型编号", 50, 0),
+        target_var_name("targetVarName", "target variable name", "目标变量名", 30, 0)
         ;
 
         private String id;

@@ -9,7 +9,6 @@ import com.ssy.api.factory.loader.ComplexTypeLoader;
 import com.ssy.api.factory.odb.OdbFactory;
 import com.ssy.api.meta.abstracts.AbstractRestrictionType;
 import com.ssy.api.meta.defaults.ComplexType;
-import com.ssy.api.servicetype.ModulePriortyService;
 import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.parse.XmlParser;
 import com.ssy.api.utils.system.CommUtil;
@@ -34,18 +33,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DefaultComplexTypeLoader implements ComplexTypeLoader {
 
     @Autowired
-    private ModulePriortyService modulePriortyService;
-    @Autowired
     private SdtContextConfig sdtContextConfig;
 
     @Override
     public Map<String, Map<String, ComplexType>> load(Map<String, File> fileMap) {
         Map<String, Map<String, ComplexType>> map = new ConcurrentHashMap<>();
-        Map<String, SdpDictPriorty> priority = modulePriortyService.getDictPriortyMap();
-        //已存在的复合类型元素集合,用于字典优先级校验
-        Map<String, com.ssy.api.meta.defaults.Element> beforeElementMap = new HashMap<>();
 
-        for(String fileName : fileMap.keySet()){
+        for(Map.Entry<String, File> fileEntry : fileMap.entrySet()){
+            String fileName = fileEntry.getKey();
             if(fileName.contains(SdtConst.DICT_SUFFIX) || fileName.contains(SdtConst.COMPLEX_SUFFIX)){
                 try {
                     //读取复合类型文件模型
@@ -62,19 +57,17 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
                         boolean isDict = Boolean.parseBoolean(e.attributeValue("dict"));
 
                         //获取该复合类型节点下的所有子元素
-                        Map<String, com.ssy.api.meta.defaults.Element> currentElementMap = getComplexTypeElementMap(map, priority, e, location, beforeElementMap, isDict);
+                        Map<String, com.ssy.api.meta.defaults.Element> currentElementMap = getComplexTypeElementMap(map, e, location, isDict);
                         complexTypeMap.put(complexTypeNodeId, new ComplexType(
                                 location, complexTypeNodeId, e.attributeValue("longname"), isDict, currentElementMap
                         ));
                     }
                     map.put(location, complexTypeMap);
                 } catch (Exception e) {
-                    beforeElementMap.clear();
                     throw new SdtException("Failed to load metadata model", e);
                 }
             }
         }
-        beforeElementMap.clear();
         return map;
     }
 
@@ -85,11 +78,10 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
      * @Date 2020/6/13-15:00
      * @param complexTypeNode   复合类型节点
      * @param location  复合类型位置
-     * @param beforeElementMap    已存在的子元素集
      * @param isDict    是否为字典类型的复合类型
      * @return java.util.Map<java.lang.String,com.ssy.api.meta.defaults.Element>
      */
-    private Map<String, com.ssy.api.meta.defaults.Element> getComplexTypeElementMap(Map<String, Map<String, ComplexType>> cpxMap, Map<String, SdpDictPriorty> priority, Element complexTypeNode, String location, Map<String, com.ssy.api.meta.defaults.Element> beforeElementMap, boolean isDict){
+    private Map<String, com.ssy.api.meta.defaults.Element> getComplexTypeElementMap(Map<String, Map<String, ComplexType>> cpxMap, Element complexTypeNode, String location, boolean isDict){
         Map<String, com.ssy.api.meta.defaults.Element> map = new ConcurrentHashMap<>();
         List<Element> elementList = XmlParser.searchTargetAllXmlElement(complexTypeNode, SdtConst.ELEMENT_NODE_NAME);
         String complexTypeNodeId = complexTypeNode.attributeValue("id");
@@ -97,23 +89,13 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
         //处理复合类型单个元素
         for(Element e : elementList){
             String elementId = e.attributeValue("id");
-
             //字典模型时,需自动生成ref
             String ref = isDict ? (new StringBuffer().append(location).append(".").append(complexTypeNodeId).append(".").append(elementId).toString()) : e.attributeValue("ref");
             com.ssy.api.meta.defaults.Element currentElement = new com.ssy.api.meta.defaults.Element(
                     location, elementId, e.attributeValue("longname"), getElementRestrictionType(cpxMap, e.attributeValue("type")), e.attributeValue("desc"), ref
             );
 
-            if(isDict){
-                //当前复合类型为字典,进行优先级校验
-                com.ssy.api.meta.defaults.Element beforeElement = CommUtil.nvl(beforeElementMap.get(elementId), map.get(elementId));
-                currentElement = checkDictPriorty(priority, beforeElement, currentElement);
-                map.put(elementId, currentElement);
-                beforeElementMap.put(elementId, currentElement);
-            }else{
-                //普通复合类型元素直接添加
-                map.put(elementId, currentElement);
-            }
+            map.put(elementId, currentElement);
         }
         return map;
     }

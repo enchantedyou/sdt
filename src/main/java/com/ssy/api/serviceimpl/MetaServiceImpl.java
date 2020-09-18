@@ -34,8 +34,8 @@ public class MetaServiceImpl implements MetaService {
         Map<String, Element> dictMap = OdbFactory.getDictMap();
         List<SdSearchDictOut> dictList = new ArrayList<>();
 
-        for(String k : dictMap.keySet()){
-            Element e = dictMap.get(k);
+        for(Map.Entry<String, Element> entry : dictMap.entrySet()){
+            Element e = entry.getValue();
             if(CommUtil.isNotNull(e.getType())
                     && (e.getId().contains(key)
                     || (CommUtil.isNotNull(e.getDesc()) && e.getDesc().contains(key))
@@ -51,7 +51,7 @@ public class MetaServiceImpl implements MetaService {
                         builder.append(map.get(enumKey).getEnumSelect()).append(";");
                     }
                 }
-                dictList.add(new SdSearchDictOut(e.getId(), e.getRef(), e.getLongName(), e.getDesc(), builder.toString()));
+                dictList.add(new SdSearchDictOut(e.getId(), e.getRef(), e.getLongName(), e.getDesc(), builder.toString(), e.getType().getMaxLength()));
             }
         }
         return BizUtil.listToPage(dictList);

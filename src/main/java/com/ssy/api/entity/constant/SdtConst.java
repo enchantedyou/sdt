@@ -103,6 +103,6 @@ public class SdtConst {
     public static final String CURRENCY_REG = "^[0-9]+([.][0-9]{1,2})?$";
 
     /** redis缓存相关 **/
-    public static final long REDIS_FLOWTRAN_TIMEOUT = 60 * 60 * 2;//2小时
+    public static final long REDIS_FLOWTRAN_TIMEOUT = 60 * 10;//10分钟
     public static final long REDIS_GITDIFFS_TIMEOUT = 60 * 60 * 24 * 15;//15天
 }

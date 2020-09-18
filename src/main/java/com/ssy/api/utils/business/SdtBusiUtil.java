@@ -1,12 +1,16 @@
 package com.ssy.api.utils.business;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.lang.Params;
 import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.exception.SdtServError;
+import com.ssy.api.utils.http.HttpUtil;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -191,5 +195,27 @@ public class SdtBusiUtil {
         headers.add("dapplication", subSystemId).add("dserviceid", serviceCode).add("dgroup", "01").add("dversion", "1.0").
                 add("api_id", serviceCode).add("busiseqno", trxnSeq).add("callseqno", trxnSeq).add("Content-Type", "application/json");
         return headers;
+    }
+
+    /**
+     * @Description 谷歌翻译(中翻英)
+     * @Author sunshaoyu
+     * @Date 2020/9/17-15:28
+     * @param content
+     * @return java.lang.String
+     */
+    public static String googleTranslateZhToEn(String content) throws Exception{
+        //谷歌翻译接口
+        String host = "http://translate.google.cn/";
+        String path = "/translate_a/single";
+
+        //查询参数
+        Params querys = new Params();
+        querys.add("client", "gtx").add("sl", "zh-CN").add("tl", "en").add("dt", "t").add("q", content);
+        HttpResponse response = HttpUtil.doGet(host, path, new Params(), querys);
+
+        //解析翻译结果
+        JSONArray jsonArray = JSON.parseArray(HttpUtil.resolveResponse(response));
+        return String.valueOf(jsonArray.getJSONArray(0).getJSONArray(0).get(0));
     }
 }

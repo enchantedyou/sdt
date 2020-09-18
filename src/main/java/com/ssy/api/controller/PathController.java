@@ -89,6 +89,17 @@ public class PathController {
     }
 
     /**
+     * @Description 返回menu1004视图
+     * @Author sunshaoyu
+     * @Date 2020/9/7-11:02
+     * @return java.lang.String
+     */
+    @RequestMapping("/menu1004")
+    public String menu1004(){
+        return "component/menu1004";
+    }
+
+    /**
      * @Description 返回menu2000视图
      * @Author sunshaoyu
      * @Date 2020/7/17-15:19

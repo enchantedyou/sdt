@@ -10,15 +10,17 @@ public class SdSearchDictOut {
     private String id;
     private String ref;
     private String type;
+    private Integer length;
     private String longName;
     private String desc;
 
-    public SdSearchDictOut(String id, String ref, String longName, String desc, String type) {
+    public SdSearchDictOut(String id, String ref, String longName, String desc, String type, Integer length) {
         this.id = id;
         this.ref = ref;
         this.type = type;
         this.longName = longName;
         this.desc = desc;
+        this.length = length;
     }
 
     public String getId() {
@@ -61,12 +63,21 @@ public class SdSearchDictOut {
         this.desc = desc;
     }
 
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
+    }
+
     @Override
     public String toString() {
         return "SdSearchDictOut{" +
                 "id='" + id + '\'' +
                 ", ref='" + ref + '\'' +
                 ", type='" + type + '\'' +
+                ", length=" + length +
                 ", longName='" + longName + '\'' +
                 ", desc='" + desc + '\'' +
                 '}';

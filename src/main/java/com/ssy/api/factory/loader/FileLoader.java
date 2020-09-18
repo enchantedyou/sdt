@@ -2,6 +2,7 @@ package com.ssy.api.factory.loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,4 +51,24 @@ public interface FileLoader {
      * @param filePath  文件存储路径
      */
     public void saveFile(String str , String filePath) throws IOException;
+
+    /**
+     * @Description 逐行读取文件并转列表
+     * @Author sunshaoyu
+     * @Date 2020/9/10-14:39
+     * @param file  文件
+     * @param charset   字符集
+     * @return java.util.List<java.lang.String>
+     */
+    public List<String> loadLineAsList(File file, String charset) throws IOException;
+
+    /**
+     * @Description 合并文件
+     * @Author sunshaoyu
+     * @Date 2020/9/15-11:22
+     * @param dir   源文件目录
+     * @param target    目标文件
+     * @param charset   字符集
+     */
+    public void mergeFile(String dir, File target, String charset) throws IOException;
 }

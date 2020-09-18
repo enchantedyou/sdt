@@ -110,8 +110,10 @@ public class XmlParser {
             writer = new XMLWriter(new FileOutputStream(xmlFile), format);
             writer.write(doc);
         }finally {
-            writer.flush();
-            writer.close();
+           if(null != writer){
+               writer.flush();
+               writer.close();
+           }
         }
     }
 

@@ -43,6 +43,7 @@
                         <dd><a href="javascript:;" id="m1001">[1001]PTE代码生成</a></dd>
                         <dd><a href="javascript:;" id="m1002">[1002]接口文档生成</a></dd>
                         <dd><a href="javascript:;" id="m1003">[1003]交易模型生成</a></dd>
+                        <dd><a href="javascript:;" id="m1004">[1004]赋值语句生成</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">

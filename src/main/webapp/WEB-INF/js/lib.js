@@ -6419,6 +6419,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 					}
 					return value;
 				}},
+			{field:'length', title:'长度'},
 			{field:'desc', title:'中文描述'},
 			{field:'longName', title:'英文描述'}
 		]]);
@@ -6485,6 +6486,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** 构建字段赋值语句 **/
+	form.on('submit(buildSetFieldSubmit)',function(data){
+		requestContext.doRequest("local/buildFieldSet", data.field, "layui-btn", true, function(response){
+			$("#showSetStatement").html(response);
+		});
+	});
+
 	/** 交易模型构建 **/
 	form.on('submit(trxnBuildSubmit)',function(data){
 		requestContext.doRequest("local/buildTrxn", data.field, "layui-btn", true);
@@ -6492,7 +6500,9 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 
 	/** 数据库解锁 **/
 	form.on('submit(dbUnlock)',function(data){
-		requestContext.doRequest("local/dbUnlock", data.field, "layui-btn", true);
+		requestContext.doRequest("local/dbUnlock", data.field, "layui-btn", false, function (response) {
+			requestContext.showMessage("处理成功，关闭进程数量["+response+"]");
+		});
 	});
 
 	/** 交易脚本构建 **/
@@ -6544,6 +6554,14 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 	$(document).on("click","#m1003",function(){
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
 			$(".layui-body").load($(".basePath").val()+"menu1003",null, requestContext.menuClickCallback);
+		});
+	});
+
+	/** 字段赋值构建语句生成 **/
+	$(document).on("click","#m1004",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu1004",null, requestContext.menuClickCallback);
+			requestContext.enableClipboard();
 		});
 	});
 

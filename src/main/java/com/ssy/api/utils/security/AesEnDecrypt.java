@@ -37,8 +37,7 @@ public class AesEnDecrypt {
 	 * @throws BadPaddingException
 	 */
 	public static String aesEncrypt(String content, String key) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-		byte[] raw = key.getBytes();
-		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+		SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(), "AES");
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");// "算法/模式/补码方式"
 		IvParameterSpec iv = new IvParameterSpec("0102030405060708".getBytes());// 使用CBC模式，需要一个向量iv，可增加加密算法的强度
 

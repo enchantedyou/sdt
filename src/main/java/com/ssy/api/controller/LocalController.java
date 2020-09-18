@@ -12,6 +12,7 @@ import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.entity.type.local.*;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.factory.loader.FileLoader;
+import com.ssy.api.logic.builder.SdFieldSetBuilder;
 import com.ssy.api.logic.builder.SdScriptBuilder;
 import com.ssy.api.logic.builder.SdTrxnBuilder;
 import com.ssy.api.logic.higention.SdGitlabReader;
@@ -277,5 +278,19 @@ public class LocalController {
     @PostMapping("/dbUnlock")
     public int dbUnlock(@EncryptedArgument String datasourceId){
         return jdbcHelper.unlock(datasourceId);
+    }
+
+    /**
+     * @Description 构建字段赋值语句
+     * @Author sunshaoyu
+     * @Date 2020/9/7-10:55
+     * @param fieldSetIn
+     * @return java.lang.String
+     */
+    @TrxnEvent("build field set statement")
+    @PostMapping("/buildFieldSet")
+    public String buildFieldSetStatement(@EncryptedArgument SdFieldSetIn fieldSetIn){
+        SdFieldSetBuilder.checkMain(fieldSetIn);
+        return SdFieldSetBuilder.doMain(fieldSetIn);
     }
 }

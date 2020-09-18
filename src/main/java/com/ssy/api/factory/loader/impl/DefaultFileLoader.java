@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -107,6 +109,44 @@ public class DefaultFileLoader implements FileLoader {
             }
         }
         return null;
+    }
+
+    public List<String> loadLineAsList(File file, String charset) throws IOException {
+        InputStreamReader inputStreamReader = null;
+        BufferedReader bufferedReader = null;
+        List<String> stringList = new ArrayList<>();
+
+        try{
+            inputStreamReader = new InputStreamReader(new FileInputStream(file), charset);
+            bufferedReader = new BufferedReader(inputStreamReader);
+            String line = null;
+
+            while(CommUtil.isNotNull((line = bufferedReader.readLine()))){
+                stringList.add(line);
+            }
+        } finally {
+            //关闭流
+            if(bufferedReader != null){
+                bufferedReader.close();
+            }
+            if(inputStreamReader != null){
+                inputStreamReader.close();
+            }
+        }
+        return stringList;
+    }
+
+    @Override
+    public void mergeFile(String dir, File target, String charset) throws IOException {
+        StringBuffer buffer = new StringBuffer();
+        File[] files = new File(dir).listFiles();
+        for(File file : files){
+            String content = loadAsString(file, charset);
+            if(CommUtil.isNotNull(content)){
+                buffer.append(content).append("\n");
+            }
+        }
+        saveFile(buffer.toString(), target.getPath());
     }
 
     @Override
