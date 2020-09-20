@@ -11,16 +11,19 @@ public class SdSearchDictOut {
     private String ref;
     private String type;
     private Integer length;
+
     private String longName;
     private String desc;
+    private Integer fractionDigits;
 
-    public SdSearchDictOut(String id, String ref, String longName, String desc, String type, Integer length) {
+    public SdSearchDictOut(String id, String ref, String longName, String desc, String type, Integer length, Integer fractionDigits) {
         this.id = id;
         this.ref = ref;
         this.type = type;
         this.longName = longName;
         this.desc = desc;
         this.length = length;
+        this.fractionDigits = fractionDigits == 0 ? null : fractionDigits;
     }
 
     public String getId() {
@@ -71,6 +74,14 @@ public class SdSearchDictOut {
         this.length = length;
     }
 
+    public Integer getFractionDigits() {
+        return fractionDigits;
+    }
+
+    public void setFractionDigits(Integer fractionDigits) {
+        this.fractionDigits = fractionDigits;
+    }
+
     @Override
     public String toString() {
         return "SdSearchDictOut{" +
@@ -80,6 +91,7 @@ public class SdSearchDictOut {
                 ", length=" + length +
                 ", longName='" + longName + '\'' +
                 ", desc='" + desc + '\'' +
+                ", fractionDigits=" + fractionDigits +
                 '}';
     }
 }

@@ -363,7 +363,8 @@ public class BizUtil {
      * @return com.ssy.api.entity.lang.RunEnvs
      */
     public static RunEnvs getRunEnvs(){
-        return (RunEnvs) SpringContextUtil.getRequest().getSession().getAttribute(SdtConst.RUN_ENVS);
+        RunEnvs runEnvs = (RunEnvs) SpringContextUtil.getRequest().getSession().getAttribute(SdtConst.RUN_ENVS);
+        return CommUtil.nvl(runEnvs, new RunEnvs());
     }
 
     /**

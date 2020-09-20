@@ -51,7 +51,7 @@ public class MetaServiceImpl implements MetaService {
                         builder.append(map.get(enumKey).getEnumSelect()).append(";");
                     }
                 }
-                dictList.add(new SdSearchDictOut(e.getId(), e.getRef(), e.getLongName(), e.getDesc(), builder.toString(), e.getType().getMaxLength()));
+                dictList.add(new SdSearchDictOut(e.getId(), e.getRef(), e.getLongName(), e.getDesc(), builder.toString(), e.getType().getMaxLength(), e.getType().getFractionDigits()));
             }
         }
         return BizUtil.listToPage(dictList);

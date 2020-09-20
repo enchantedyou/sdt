@@ -7,6 +7,7 @@ import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.lang.Params;
 import com.ssy.api.exception.SdtException;
+import com.ssy.api.exception.SdtServError;
 import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.http.HttpUtil;
 import com.ssy.api.utils.security.Md5Encrypt;
@@ -39,6 +40,7 @@ public class SdGitlabReader {
     @Autowired
     private ModuleMapService moduleMapService;
     private final String GIT_BASE_PATH = "http://e-git.yfb.sunline.cn/";
+    private final int JIRA_MIN_LENGTH = 11;
 
     /**
      * @Description 带gitlab session的get请求
@@ -70,13 +72,15 @@ public class SdGitlabReader {
         }
         StringBuffer buffer = new StringBuffer();
         try{
-            if(jiraId.length() > 8){
+            if(jiraId.length() >= JIRA_MIN_LENGTH){
                 List<String> urlList = searchMergedRequest(moduleId, jiraId);
                 if(CommUtil.isNotNull(urlList)){
                     for(String url : urlList){
                         buffer.append(parseMergeFiles(url));
                     }
                 }
+            }else{
+                throw SdtServError.E0002(jiraId.length(), JIRA_MIN_LENGTH, SdtDict.A.jira_id_length.getLongName());
             }
         }catch (Exception e){
             throw new SdtException("Failed to parse difference file list from jira identity["+jiraId+"] and business module["+moduleId+"]", e);

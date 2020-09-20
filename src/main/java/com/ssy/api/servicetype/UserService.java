@@ -19,4 +19,10 @@ public interface UserService {
      */
     public SdLoginOut login(SdLoginIn loginIn);
 
+    /**
+     * @Description 注销登录
+     * @Author sunshaoyu
+     * @Date 2020/9/19-23:32
+     */
+    public void logout();
 }

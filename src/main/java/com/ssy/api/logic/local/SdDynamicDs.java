@@ -1,6 +1,7 @@
 package com.ssy.api.logic.local;
 
 import com.ssy.api.dao.mapper.local.SdpDatasourceMapper;
+import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.dict.SdtTable;
 import com.ssy.api.entity.enums.E_DATAOPERATE;
@@ -8,7 +9,9 @@ import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.entity.type.local.SdDatasourceEdit;
 import com.ssy.api.exception.ApPubErr;
 import com.ssy.api.exception.SdtServError;
+import com.ssy.api.servicetype.SystemParamService;
 import com.ssy.api.utils.business.SdtBusiUtil;
+import com.ssy.api.utils.security.AesEnDecrypt;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ import java.util.List;
 public class SdDynamicDs {
 
     private static SdpDatasourceMapper sdpDatasourceMapper;
+    private static SystemParamService systemParamService;
     private static final String DATASOURCE_TYPE = "MYSQL";
     private static final String TLSQL_IND = "N";
     private static final String PLATFORM_TABLE_PREFIX = "MS";
@@ -37,6 +41,11 @@ public class SdDynamicDs {
         SdDynamicDs.sdpDatasourceMapper = sdpDatasourceMapper;
     }
 
+    @Autowired
+    public void setSystemParamService(SystemParamService systemParamService) {
+        SdDynamicDs.systemParamService = systemParamService;
+    }
+
     /**
      * @Description 查询数据源列表
      * @Author sunshaoyu
@@ -44,7 +53,15 @@ public class SdDynamicDs {
      * @return java.util.List<com.ssy.api.entity.table.local.SdpDatasource>
      */
     public static List<SdpDatasource> queryDataSourceList() {
-        return sdpDatasourceMapper.selectAll_odb1();
+        List<SdpDatasource> datasourceList = sdpDatasourceMapper.selectAll_odb1();
+        String aesEncKey = systemParamService.getValue(SdtConst.AES_ENC_KEY);
+
+        //数据源用户名密码脱敏处理
+        datasourceList.forEach(sdpDatasource -> {
+            sdpDatasource.setDatasourceUser(AesEnDecrypt.aesEncrypt(sdpDatasource.getDatasourceUser(), aesEncKey));
+            sdpDatasource.setDatasourcePwd(AesEnDecrypt.aesEncrypt(sdpDatasource.getDatasourcePwd(), aesEncKey));
+        });
+        return datasourceList;
     }
 
     /**

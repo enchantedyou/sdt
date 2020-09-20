@@ -16,6 +16,7 @@ import com.ssy.api.logic.local.SdJavaParser;
 import com.ssy.api.logic.local.SdPTEJsonParser;
 import com.ssy.api.logic.request.SdIcoreRequest;
 import com.ssy.api.plugins.DBContextHolder;
+import com.ssy.api.servicetype.DataSourceService;
 import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.parse.ExcelParser;
 import com.ssy.api.utils.system.CommUtil;
@@ -23,6 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.util.text.BasicTextEncryptor;
+import org.jasypt.util.text.StrongTextEncryptor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +46,8 @@ class SdtApplicationTests extends MetaDataFactory {
     @Autowired
     private FileLoader fileLoader;
     @Autowired
+    private DataSourceService dataSourceService;
+    @Autowired
     private SdGitlabReader gitlab;
     @Autowired
     private TspServiceInMapper tspServiceInMapper;
@@ -54,6 +61,7 @@ class SdtApplicationTests extends MetaDataFactory {
 
     @Test
     void contextLoads() throws Throwable {
+        System.out.println("hello");
     }
 
     /**

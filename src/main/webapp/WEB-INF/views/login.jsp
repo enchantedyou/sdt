@@ -21,7 +21,7 @@
                 <i class="layui-icon input-icon">&#xe673;</i>
             </div>
             <div class="layui-form-item">
-                <select name="datasourceId" lay-verify="required" id="dataSourceSelect"></select>
+                <select name="datasourceId" id="dataSourceSelect"></select>
             </div>
             <div class="layui-form-item">
                 <button type="button" style="width: 100%" class="layui-btn" lay-submit lay-filter="login" id="login-btn">登录</button>

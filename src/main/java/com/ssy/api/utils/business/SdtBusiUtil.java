@@ -35,7 +35,7 @@ public class SdtBusiUtil {
      */
     public static void checkAmountPositive(BigDecimal amount, String fieldDesc){
         if (CommUtil.isNotNull(amount) && CommUtil.compare(amount, BigDecimal.ZERO) <= 0) {
-            SdtServError.E0001(amount.toString(), fieldDesc);
+            throw SdtServError.E0001(amount.toString(), 0, fieldDesc);
         }
     }
 
@@ -48,7 +48,7 @@ public class SdtBusiUtil {
      */
     public static void checkAmountNotNegate(BigDecimal amount, String fielddesc) {
         if (CommUtil.isNotNull(amount) && CommUtil.compare(amount, BigDecimal.ZERO) < 0) {
-            SdtServError.E0001(amount.toString(), fielddesc);
+            throw SdtServError.E0001(amount.toString(), 0, fielddesc);
         }
     }
 

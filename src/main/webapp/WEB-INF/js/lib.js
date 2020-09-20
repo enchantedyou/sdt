@@ -6392,7 +6392,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 
 	  //用户登录
 	  form.on('submit(login)',function(data){
-		  requestContext.doRequest("local/login", data.field, "login-btn", true, function(response){
+		  requestContext.doRequest("local/login", data.field, "login-btn", false, function(response){
 			  window.location.href = $(".basePath").val() + "index";
 		  });
 	  });
@@ -6420,6 +6420,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 					return value;
 				}},
 			{field:'length', title:'长度'},
+			{field:'fractionDigits', title:'小数位'},
 			{field:'desc', title:'中文描述'},
 			{field:'longName', title:'英文描述'}
 		]]);
@@ -6554,6 +6555,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 	$(document).on("click","#m1003",function(){
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
 			$(".layui-body").load($(".basePath").val()+"menu1003",null, requestContext.menuClickCallback);
+		});
+	});
+
+	/** 注销登录 **/
+	$(document).on("click","#user_login_out",function(){
+		requestContext.doRequest("local/logout", {}, "", false, function () {
+			window.location.href = $(".basePath").val();
 		});
 	});
 

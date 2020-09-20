@@ -11,14 +11,14 @@ import com.ssy.api.utils.system.CommUtil;
  */
 public class SdtServError {
 
-    /** 值必须大于0 **/
-    public static SdtException E0001(String fieldValue, String fieldDesc) {
-        throw new SdtException(fieldDesc + " ["+fieldValue+"] must be greater than 0", ErrCodeDef.INVALID_NUMBER);
+    /** 值必须大于{} **/
+    public static SdtException E0001(Object fieldValue, Object smallerValue, String fieldDesc) {
+        throw new SdtException(fieldDesc + " ["+fieldValue+"] must be greater than " + smallerValue, ErrCodeDef.INVALID_NUMBER);
     }
 
-    /** 值必须大于等于0 **/
-    public static SdtException E0002(String fieldValue, String fieldDesc) {
-        throw new SdtException(fieldDesc + " ["+fieldValue+"] must be greater than or equal to 0", ErrCodeDef.INVALID_NUMBER);
+    /** 值必须大于等于{} **/
+    public static SdtException E0002(Object fieldValue, Object smallerValue, String fieldDesc) {
+        throw new SdtException(fieldDesc + " ["+fieldValue+"] must be greater than or equal to " + smallerValue, ErrCodeDef.INVALID_NUMBER);
     }
 
     /** 查询表的记录不存在 **/

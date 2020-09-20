@@ -175,7 +175,7 @@ public class ControllerAspect implements ResponseBodyAdvice<Object> {
         packet.setTrxnDesc(trxnEventLocal.get());
         packet.setRequest(BizUtil.getRunEnvs().getRequestParams());
 
-        packet.setResponse(JSON.toJSONString(responseData.getOutput()));
+        //packet.setResponse(JSON.toJSONString(responseData.getOutput()));
         packet.setBeginTime(BizUtil.getRunEnvs().getRequestStartTime());
         packet.setEndTime(responseData.getCommRes().getResponseTime());
         packet.setUsedTime(BizUtil.calTimeConsume(packet.getBeginTime(), packet.getEndTime()));

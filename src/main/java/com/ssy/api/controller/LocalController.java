@@ -77,6 +77,18 @@ public class LocalController {
     }
 
     /**
+     * @Description 注销登录
+     * @Author sunshaoyu
+     * @Date 2020/9/19-23:36
+     * @param empty
+     */
+    @TrxnEvent("logout")
+    @PostMapping("/logout")
+    public void logout(@EncryptedArgument Empty empty) {
+        userService.logout();
+    }
+
+    /**
      * @param key
      * @return com.github.pagehelper.PageInfo<com.ssy.api.entity.type.local.SdSearchDictOut>
      * @Description 搜索字典列表

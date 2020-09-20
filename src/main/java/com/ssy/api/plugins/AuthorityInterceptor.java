@@ -30,7 +30,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
                 //抛出异常
                 throw SdtServError.E0009();
             }
-        }else{
+        }else if(CommUtil.isNotNull(userInfo.getUserDataSource())){
             //为当前请求线程切换数据源
             DBContextHolder.switchToDataSource(userInfo.getUserDataSource());
         }

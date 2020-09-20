@@ -29,6 +29,10 @@ public class RunEnvs implements Serializable {
         this.requestStartTime = requestStartTime;
     }
 
+    public RunEnvs(){
+
+    }
+
     public String getTrxnSeq() {
         return trxnSeq;
     }

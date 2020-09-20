@@ -1,5 +1,6 @@
 package com.ssy.api;
 
+import com.ssy.api.entity.constant.SdtConst;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,7 +23,7 @@ public class SdtApplication extends SpringBootServletInitializer{
     }
 
     public static void main(String[] args) {
+        System.setProperty("jasypt.encryptor.password", SdtConst.CONFIG_ENCKEY);
         SpringApplication.run(SdtApplication.class, args);
     }
-
 }

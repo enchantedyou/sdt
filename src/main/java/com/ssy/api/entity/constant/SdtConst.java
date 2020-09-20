@@ -22,7 +22,7 @@ public class SdtConst {
     /** 当前用户的session的key **/
     public static final String USER_INFO = "userInfo";
     /** 用户登录最大有效时间 **/
-    public static final int userMaxInactiveInterval = 60 * 60 * 0;
+    public static final int userMaxInactiveInterval = 60 * 60 * 6;
     /** 项目基础路径 **/
     public static final String BASE_PATH = "basePath";
     /** POST请求方式 **/
@@ -42,6 +42,8 @@ public class SdtConst {
     public static final String ENCKEY = "encKey";
     /** 数据实体入参名 **/
     public static final String PARAMS = "params";
+    /** 配置参数加密秘钥 **/
+    public static final String CONFIG_ENCKEY = "Enchantedyou";
     /** 加密秘钥随机数的长度 **/
     public static final int ENCKEY_RAND_LENTH = 512;
     /** 敏感字段关键字 **/

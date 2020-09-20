@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public SdLoginOut login(SdLoginIn loginIn) {
         BizUtil.fieldNotNull(loginIn.getUserAcct(), SdtDict.A.user_acct.getId(), SdtDict.A.user_acct.getLongName());
         BizUtil.fieldNotNull(loginIn.getUserPwd(), SdtDict.A.user_pwd.getId(), SdtDict.A.user_pwd.getLongName());
-        BizUtil.fieldNotNull(loginIn.getDatasourceId(), SdtDict.A.datasource_id.getId(), SdtDict.A.datasource_id.getLongName());
+        //BizUtil.fieldNotNull(loginIn.getDatasourceId(), SdtDict.A.datasource_id.getId(), SdtDict.A.datasource_id.getLongName());
 
         SdbUser user = userMapper.selectByPrimaryKey(loginIn.getUserAcct());
         if(CommUtil.isNull(user)){
@@ -59,5 +59,11 @@ public class UserServiceImpl implements UserService {
 
             return new SdLoginOut(BizUtil.getRunEnvs().getRequestStartTime(), requestIp);
         }
+    }
+
+    @Override
+    public void logout() {
+        HttpSession session = SpringContextUtil.getRequest().getSession();
+        session.removeAttribute(SdtConst.USER_INFO);
     }
 }

@@ -52,9 +52,13 @@ public class DaoAspect {
      */
     @Before(value="execution(* com.ssy.api.dao.mapper.*.*.select*(..))")
     public void selectWithPageAdvice(JoinPoint point){
-        if(MethodSignature.class.cast(point.getSignature()).getMethod().isAnnotationPresent(SelectPageWithCount.class)){
+        int currentPage = BizUtil.getRunEnvs().getCurrentPage();
+        int pageSize = BizUtil.getRunEnvs().getPageSize();
+        if(MethodSignature.class.cast(point.getSignature()).getMethod().isAnnotationPresent(SelectPageWithCount.class)
+        && currentPage > 0 && pageSize > 0){
             //分页处理
-            PageHelper.startPage(BizUtil.getRunEnvs().getCurrentPage(), BizUtil.getRunEnvs().getPageSize());
+            log.info("Enable paging plugin: current page [{}], data volume per page [{}]", currentPage, pageSize);
+            PageHelper.startPage(currentPage, pageSize);
         }
     }
 
