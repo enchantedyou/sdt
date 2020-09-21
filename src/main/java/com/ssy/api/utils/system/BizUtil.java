@@ -5,7 +5,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_DATECYCLE;
-import com.ssy.api.entity.enums.E_STRGENTYPE;
 import com.ssy.api.entity.lang.RunEnvs;
 import com.ssy.api.entity.table.ap.ApbFieldNormal;
 import com.ssy.api.exception.ApPubErr;
@@ -136,13 +135,11 @@ public class BizUtil {
      * @Description 构建交易流水
      * @Author sunshaoyu
      * @Date 2020/6/11-14:18
-     * @param len   流水长度
      * @return java.lang.String
      */
-    public synchronized static String buildTrxnSeq(int len){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        len = len - 17 >= 0 ? len - 17 : 0;
-        return sdf.format(new Date()) + CommUtil.randStr(len, E_STRGENTYPE.NUMBER);
+    public synchronized static String buildTrxnSeq(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+        return sdf.format(new Date()) + SeqUtil.genSeq("TRXN_SEQ");
     }
 
     /**
@@ -352,7 +349,7 @@ public class BizUtil {
      * @Date 2020/7/6-14:50
      */
     public static void initRunEnvs(){
-        RunEnvs runEnvs = new RunEnvs(buildTrxnSeq(SdtConst.TRXN_SEQ_LENGTH), getCurSysTime());
+        RunEnvs runEnvs = new RunEnvs(buildTrxnSeq(), getCurSysTime());
         SpringContextUtil.getRequest().getSession().setAttribute(SdtConst.RUN_ENVS, runEnvs);
     }
 
@@ -363,8 +360,12 @@ public class BizUtil {
      * @return com.ssy.api.entity.lang.RunEnvs
      */
     public static RunEnvs getRunEnvs(){
-        RunEnvs runEnvs = (RunEnvs) SpringContextUtil.getRequest().getSession().getAttribute(SdtConst.RUN_ENVS);
-        return CommUtil.nvl(runEnvs, new RunEnvs());
+        try{
+            return (RunEnvs) SpringContextUtil.getRequest().getSession().getAttribute(SdtConst.RUN_ENVS);
+        }catch (Exception e){
+            log.debug("Unable to get the runtime environment, an empty runtime environment will be returned");
+            return new RunEnvs();
+        }
     }
 
     /**

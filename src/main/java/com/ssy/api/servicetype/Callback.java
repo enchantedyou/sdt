@@ -1,4 +1,4 @@
-package com.ssy.api.plugins;
+package com.ssy.api.servicetype;
 
 import java.io.IOException;
 

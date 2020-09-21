@@ -13,6 +13,7 @@ import com.ssy.api.exception.SdtException;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.plugins.DBContextHolder;
 import com.ssy.api.servicetype.SystemParamService;
+import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import com.ssy.api.utils.system.SpringContextUtil;
@@ -52,12 +53,10 @@ public class DaoAspect {
      */
     @Before(value="execution(* com.ssy.api.dao.mapper.*.*.select*(..))")
     public void selectWithPageAdvice(JoinPoint point){
-        int currentPage = BizUtil.getRunEnvs().getCurrentPage();
-        int pageSize = BizUtil.getRunEnvs().getPageSize();
-        if(MethodSignature.class.cast(point.getSignature()).getMethod().isAnnotationPresent(SelectPageWithCount.class)
-        && currentPage > 0 && pageSize > 0){
+        if(MethodSignature.class.cast(point.getSignature()).getMethod().isAnnotationPresent(SelectPageWithCount.class) && SdtBusiUtil.isEnabledPagination()){
             //分页处理
-            log.info("Enable paging plugin: current page [{}], data volume per page [{}]", currentPage, pageSize);
+            int currentPage = BizUtil.getRunEnvs().getCurrentPage();
+            int pageSize = BizUtil.getRunEnvs().getPageSize();
             PageHelper.startPage(currentPage, pageSize);
         }
     }

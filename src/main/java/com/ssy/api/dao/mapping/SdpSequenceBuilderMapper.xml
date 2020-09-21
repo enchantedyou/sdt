@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.local.SdpSequenceBuilderMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdpSequenceBuilder">
+    <constructor>
+      <idArg column="seq_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="seq_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="init_value" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="current_value" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="cache_size" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="seq_length" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    seq_code, seq_desc, init_value, current_value, cache_size, seq_length, data_create_user, 
+    data_create_time, data_update_user, data_update_time, data_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sdp_sequence_builder
+    where seq_code = #{seqCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sdp_sequence_builder
+    where seq_code = #{seqCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdpSequenceBuilder">
+    insert into sdp_sequence_builder (seq_code, seq_desc, init_value, 
+      current_value, cache_size, seq_length, 
+      data_create_user, data_create_time, data_update_user, 
+      data_update_time, data_version)
+    values (#{seqCode,jdbcType=VARCHAR}, #{seqDesc,jdbcType=VARCHAR}, #{initValue,jdbcType=BIGINT}, 
+      #{currentValue,jdbcType=BIGINT}, #{cacheSize,jdbcType=BIGINT}, #{seqLength,jdbcType=INTEGER}, 
+      #{dataCreateUser,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, 
+      #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdpSequenceBuilder">
+    insert into sdp_sequence_builder
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="seqCode != null">
+        seq_code,
+      </if>
+      <if test="seqDesc != null">
+        seq_desc,
+      </if>
+      <if test="initValue != null">
+        init_value,
+      </if>
+      <if test="currentValue != null">
+        current_value,
+      </if>
+      <if test="cacheSize != null">
+        cache_size,
+      </if>
+      <if test="seqLength != null">
+        seq_length,
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="seqCode != null">
+        #{seqCode,jdbcType=VARCHAR},
+      </if>
+      <if test="seqDesc != null">
+        #{seqDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="initValue != null">
+        #{initValue,jdbcType=BIGINT},
+      </if>
+      <if test="currentValue != null">
+        #{currentValue,jdbcType=BIGINT},
+      </if>
+      <if test="cacheSize != null">
+        #{cacheSize,jdbcType=BIGINT},
+      </if>
+      <if test="seqLength != null">
+        #{seqLength,jdbcType=INTEGER},
+      </if>
+      <if test="dataCreateUser != null">
+        #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdpSequenceBuilder">
+    update sdp_sequence_builder
+    <set>
+      <if test="seqDesc != null">
+        seq_desc = #{seqDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="initValue != null">
+        init_value = #{initValue,jdbcType=BIGINT},
+      </if>
+      <if test="currentValue != null">
+        current_value = #{currentValue,jdbcType=BIGINT},
+      </if>
+      <if test="cacheSize != null">
+        cache_size = #{cacheSize,jdbcType=BIGINT},
+      </if>
+      <if test="seqLength != null">
+        seq_length = #{seqLength,jdbcType=INTEGER},
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    where seq_code = #{seqCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdpSequenceBuilder">
+    update sdp_sequence_builder
+    set seq_desc = #{seqDesc,jdbcType=VARCHAR},
+      init_value = #{initValue,jdbcType=BIGINT},
+      current_value = #{currentValue,jdbcType=BIGINT},
+      cache_size = #{cacheSize,jdbcType=BIGINT},
+      seq_length = #{seqLength,jdbcType=INTEGER},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=INTEGER}
+    where seq_code = #{seqCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

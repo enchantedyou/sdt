@@ -37,7 +37,7 @@ public class DBContextHolder extends AbstractRoutingDataSource {
                 log.info("The current data source is switched to [{}]", dataSource);
             }
         } else {
-            ApPubErr.E0009(dataSource);
+            throw ApPubErr.E0009(dataSource);
         }
     }
 

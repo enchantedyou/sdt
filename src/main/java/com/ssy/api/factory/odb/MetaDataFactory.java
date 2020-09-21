@@ -78,7 +78,7 @@ public class MetaDataFactory {
      * @return java.util.Map<java.lang.String,java.io.File>
      */
     protected static Map<String, File> loadIntfWordFileMap(){
-        if(CommUtil.isNull(intfExcelFileMap)){
+        if(CommUtil.isNull(intfExcelFileMap) && CommUtil.isNotNull(sdtContextConfig.getIntfExcelPath())){
             StopWatch s = BizUtil.startStopWatch();
             intfExcelFileMap = loaderFactory.getFileLoader().load(sdtContextConfig.getIntfExcelPath(), false, SdtConst.INTF_EXCEL_SUFFIX);
             BizUtil.stoptStopWatch(s, "Load interface document file list");
@@ -145,10 +145,10 @@ public class MetaDataFactory {
             Map<String, SdpDictPriorty> dictPriortyMap = modulePriortyService.getDictPriortyMap();
             Map<String, Map<String, ComplexType>> map = loadComplexTypeMap();
 
-            for(Map.Entry<String, Map<String, ComplexType>> entrySet : map.entrySet()){
-                Map<String, ComplexType> cMap = entrySet.getValue();
-                for(Map.Entry<String, ComplexType> subEntrySet : cMap.entrySet()){
-                    ComplexType c = subEntrySet.getValue();
+            for(Map.Entry<String, Map<String, ComplexType>> entry : map.entrySet()){
+                Map<String, ComplexType> cMap = entry.getValue();
+                for(Map.Entry<String, ComplexType> subEntry : cMap.entrySet()){
+                    ComplexType c = subEntry.getValue();
                     if(c.isDict()){
                         c.getElementMap().forEach((id, now) -> {
                             Element before = dictMap.get(id);

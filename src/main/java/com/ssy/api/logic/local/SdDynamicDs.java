@@ -57,10 +57,12 @@ public class SdDynamicDs {
         String aesEncKey = systemParamService.getValue(SdtConst.AES_ENC_KEY);
 
         //数据源用户名密码脱敏处理
-        datasourceList.forEach(sdpDatasource -> {
-            sdpDatasource.setDatasourceUser(AesEnDecrypt.aesEncrypt(sdpDatasource.getDatasourceUser(), aesEncKey));
-            sdpDatasource.setDatasourcePwd(AesEnDecrypt.aesEncrypt(sdpDatasource.getDatasourcePwd(), aesEncKey));
-        });
+        if(SdtBusiUtil.isEnabledPagination()){
+            datasourceList.forEach(sdpDatasource -> {
+                sdpDatasource.setDatasourceUser(AesEnDecrypt.aesEncrypt(sdpDatasource.getDatasourceUser(), aesEncKey));
+                sdpDatasource.setDatasourcePwd(AesEnDecrypt.aesEncrypt(sdpDatasource.getDatasourcePwd(), aesEncKey));
+            });
+        }
         return datasourceList;
     }
 

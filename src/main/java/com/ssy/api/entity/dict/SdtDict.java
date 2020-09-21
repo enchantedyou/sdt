@@ -48,7 +48,11 @@ public class SdtDict {
         source_var_name("sourceVarName", "source variable name", "源变量名", 30, 0),
         target_entity_id("targetEntityId", "target entity identity", "目标实体类型编号", 50, 0),
         target_var_name("targetVarName", "target variable name", "目标变量名", 30, 0),
-        jira_id_length("jiraIdLength", "jira identity length", "JIRA编号长度", 15, 0)
+        jira_id_length("jiraIdLength", "jira identity length", "JIRA编号长度", 15, 0),
+        seq_code("seqCode", "sequence code", "序列码", 50, 0),
+        init_value("initValue", "initial value", "初始值", 19, 0),
+        current_value("currentValue", "current value", "当前值", 19, 0),
+        max_length("maxLength", "maximum length", "最大长度", 19, 0)
         ;
 
         private String id;

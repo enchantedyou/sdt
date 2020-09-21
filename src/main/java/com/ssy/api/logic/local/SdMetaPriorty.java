@@ -75,7 +75,7 @@ public class SdMetaPriorty {
     public static void checkDictPriortyMain(SdpDictPriorty sdpDictPriorty){
         BizUtil.fieldNotNull(sdpDictPriorty.getDictType(), SdtDict.A.dict_type.getId(), SdtDict.A.dict_type.getLongName());
         BizUtil.fieldNotNull(sdpDictPriorty.getDictPriority(), SdtDict.A.dict_priority.getId(), SdtDict.A.dict_priority.getLongName());
-        SdtBusiUtil.checkAmountNotNegate(new BigDecimal(sdpDictPriorty.getDictPriority()), SdtDict.A.dict_priority.getLongName());
+        SdtBusiUtil.checkNumberNotNegate(new BigDecimal(sdpDictPriorty.getDictPriority()), SdtDict.A.dict_priority.getLongName());
     }
 
     /**
@@ -87,7 +87,7 @@ public class SdMetaPriorty {
     public static void checkEnumPriortyMain(SdpEnumPriorty sdpEnumPriorty){
         BizUtil.fieldNotNull(sdpEnumPriorty.getEnumType(), SdtDict.A.enum_type.getId(), SdtDict.A.enum_type.getLongName());
         BizUtil.fieldNotNull(sdpEnumPriorty.getEnumPriority(), SdtDict.A.enum_priority.getId(), SdtDict.A.enum_priority.getLongName());
-        SdtBusiUtil.checkAmountNotNegate(new BigDecimal(sdpEnumPriorty.getEnumPriority()), SdtDict.A.enum_priority.getLongName());
+        SdtBusiUtil.checkNumberNotNegate(new BigDecimal(sdpEnumPriorty.getEnumPriority()), SdtDict.A.enum_priority.getLongName());
     }
 
     /**

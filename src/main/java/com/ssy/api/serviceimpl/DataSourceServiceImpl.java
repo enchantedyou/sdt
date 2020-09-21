@@ -1,12 +1,10 @@
 package com.ssy.api.serviceimpl;
 
-import com.ssy.api.dao.mapper.system.ProcessMapper;
 import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.entity.type.local.SdDatasourceEdit;
 import com.ssy.api.logic.local.SdDynamicDs;
 import com.ssy.api.servicetype.DataSourceService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +20,6 @@ import java.util.List;
 @Slf4j
 @Transactional(propagation = Propagation.SUPPORTS)
 public class DataSourceServiceImpl implements DataSourceService {
-
-    @Autowired
-    private ProcessMapper processMapper;
 
     @Override
     public List<SdpDatasource> queryDataSourceList() {

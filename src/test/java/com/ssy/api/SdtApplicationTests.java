@@ -24,10 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.jasypt.encryption.StringEncryptor;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.util.text.BasicTextEncryptor;
-import org.jasypt.util.text.StrongTextEncryptor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,9 +55,12 @@ class SdtApplicationTests extends MetaDataFactory {
     @Autowired
     private SdSqlAuditExecutor sqlAuditExecutor;
 
+    static {
+        System.setProperty("jasypt.encryptor.password", SdtConst.CONFIG_ENCKEY);
+    }
+
     @Test
     void contextLoads() throws Throwable {
-        System.out.println("hello");
     }
 
     /**

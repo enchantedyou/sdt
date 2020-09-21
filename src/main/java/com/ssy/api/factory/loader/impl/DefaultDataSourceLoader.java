@@ -3,6 +3,7 @@ package com.ssy.api.factory.loader.impl;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.table.local.SdpDatasource;
+import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.DataSourceLoader;
 import com.ssy.api.plugins.DBContextHolder;
 import com.ssy.api.servicetype.DataSourceService;
@@ -11,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,8 +68,36 @@ public class DefaultDataSourceLoader implements DataSourceLoader {
             druidDataSource.setPassword(db.getDatasourcePwd());
             druidDataSource.setDriverClassName(db.getDatasourceDriver());
             druidDataSource.setUrl(db.getDatasourceUrl());
+
+            //数据源有效性检查
+            testDruidDataSourceValid(db.getDatasourceId(), druidDataSource);
             addDataSource(db.getDatasourceId(), druidDataSource);
-            log.info("Load dynamic data source {{}-{}}", db.getDatasourceId(), db.getDatasourceDesc());
+            log.info("Load dynamic data source [{}-{}] successfully", db.getDatasourceId(), db.getDatasourceDesc());
+        }
+    }
+
+    /**
+     * @Description 数据源有效性检查
+     * @Author sunshaoyu
+     * @Date 2020/9/20-17:13
+     * @param dataSourceId
+     * @param druidDataSource
+     */
+    private void testDruidDataSourceValid(String dataSourceId, DruidDataSource druidDataSource){
+        Connection connection = null;
+        try{
+            Class.forName(druidDataSource.getDriverClassName());
+            connection = DriverManager.getConnection(druidDataSource.getUrl(), druidDataSource.getUsername(), druidDataSource.getPassword());
+        }catch (Exception e){
+            throw new SdtException("Failed to create the data source connection for ["+ dataSourceId +"],cause by: " + e.getMessage());
+        }finally {
+            if(null != connection){
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new SdtException("Failed to close the data source connection", e);
+                }
+            }
         }
     }
 }

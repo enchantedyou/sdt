@@ -1,7 +1,6 @@
 package com.ssy.api.thread;
 
 import com.ssy.api.dao.mapper.local.SdbBatchSubExecutionMapper;
-import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_BATCHEXESTATUS;
 import com.ssy.api.entity.table.edsp.TspTaskExecution;
 import com.ssy.api.entity.table.local.SdbBatchSubExecution;
@@ -60,7 +59,7 @@ public class BatchCallable extends SdEODBatchHelper implements Callable<Boolean>
     private void registerBatchSubExecuteion(Throwable e, TspTaskExecution taskExecution, SdpBatchStep batchStep, SdpBatchFlow batchFlow){
         SdbBatchSubExecution batchSubExecution = new SdbBatchSubExecution();
         //batchSubExecution.setTrxnSeq(BizUtil.getRunEnvs().getTrxnSeq());
-        batchSubExecution.setTrxnSeq(BizUtil.buildTrxnSeq(SdtConst.TRXN_SEQ_LENGTH));
+        batchSubExecution.setTrxnSeq(BizUtil.getRunEnvs().getTrxnSeq());
         batchSubExecution.setSystemCode(batchFlow.getSystemCode());
         batchSubExecution.setFlowStepId(batchStep.getFlowStepId());
 

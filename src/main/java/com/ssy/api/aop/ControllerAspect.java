@@ -180,7 +180,11 @@ public class ControllerAspect implements ResponseBodyAdvice<Object> {
         packet.setEndTime(responseData.getCommRes().getResponseTime());
         packet.setUsedTime(BizUtil.calTimeConsume(packet.getBeginTime(), packet.getEndTime()));
         packet.setHostIp(HttpServletUtil.getRemoteHostAddr(request));
-        packet.setErrorText(responseData.getSys().getErortx());
+
+        String errorText = responseData.getSys().getErortx();
+        if(CommUtil.isNotNull(errorText) && errorText.length() <= 1000){
+            packet.setErrorText(errorText);
+        }
 
         if(CommUtil.isNotNull(e)){
             Throwable cause = getRootCause(e);

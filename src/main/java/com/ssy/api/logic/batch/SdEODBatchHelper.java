@@ -25,9 +25,9 @@ import com.ssy.api.plugins.DBContextHolder;
 import com.ssy.api.plugins.SdtBatchScanner;
 import com.ssy.api.servicetype.AppDateService;
 import com.ssy.api.servicetype.SystemParamService;
+import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
-import com.ssy.api.utils.business.SdtBusiUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -189,7 +189,7 @@ public class SdEODBatchHelper {
         }else if(callBatchIn.getBatchCallMode() == E_BATCHCALLMODE.DAYS){
             BizUtil.fieldNotNull(callBatchIn.getAssignDays(), SdtDict.A.assign_days.getId(), SdtDict.A.assign_days.getLongName());
             SdtBusiUtil.checkIntegerValid(callBatchIn.getAssignDays(), SdtDict.A.assign_days.getLongName());
-            SdtBusiUtil.checkAmountPositive(new BigDecimal(callBatchIn.getAssignDays()), SdtDict.A.assign_days.getLongName());
+            SdtBusiUtil.checkNumberPositive(new BigDecimal(callBatchIn.getAssignDays()), SdtDict.A.assign_days.getLongName());
 
             final int limitDays = 1;
             if(callBatchIn.getAssignDays() != limitDays){
@@ -455,7 +455,7 @@ public class SdEODBatchHelper {
         SdbBatchExecution batchExecution = sdbBatchExecutionMapper.selectByPrimaryKey(contextConfig.getBusiOrgId(), contextConfig.getEodDomainCode(), callBatchIn.getBatchRunNo());
         if(CommUtil.isNull(batchExecution)){
             batchExecution = new SdbBatchExecution();
-            batchExecution.setTrxnSeq(BizUtil.buildTrxnSeq(SdtConst.TRXN_SEQ_LENGTH));
+            batchExecution.setTrxnSeq(BizUtil.getRunEnvs().getTrxnSeq());
             batchExecution.setTranFlowId(contextConfig.getEodDomainCode());
             batchExecution.setBatchRunNo(new StringBuffer(contextConfig.getEodDomainCode()).append("_").append(System.currentTimeMillis()).toString());
 

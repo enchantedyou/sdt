@@ -38,6 +38,7 @@ public class SdSqlAuditExecutor {
      * @Author sunshaoyu
      * @Date 2020/8/3-13:22
      */
+    @Deprecated
     public void auditExecutor(){
         try{
             //读取待校验的表
@@ -66,7 +67,7 @@ public class SdSqlAuditExecutor {
      * @Date 2020/7/29-15:31
      * @return com.ssy.api.entity.lang.TwoTuple<java.lang.String,java.lang.String>
      */
-    public TwoTuple<String, String> extractCommonSql() throws IOException {
+    private TwoTuple<String, String> extractCommonSql() throws IOException {
         String path = contextConfig.getCommonSqlMainDir();
         if(CommUtil.isNull(path)){
             throw new SdtException("The common script directory must be set");
@@ -80,7 +81,7 @@ public class SdSqlAuditExecutor {
      * @Date 2020/7/29-16:27
      * @return java.util.List<com.ssy.api.entity.lang.TwoTuple<java.lang.String,java.lang.String>>
      */
-    public List<TwoTuple<String, String>> extractBusiModuleSql() throws IOException {
+    private List<TwoTuple<String, String>> extractBusiModuleSql() throws IOException {
         List<TwoTuple<String, String>> list = new ArrayList<>();
         String modulePath = contextConfig.getModuleSqlMainDir();
         if(CommUtil.isNull(modulePath)){

@@ -5,7 +5,7 @@ import com.alibaba.fastjson.parser.Feature;
 import com.ssy.api.entity.constant.ErrCodeDef;
 import com.ssy.api.entity.enums.E_STRGENTYPE;
 import com.ssy.api.exception.SdtException;
-import com.ssy.api.plugins.Callback;
+import com.ssy.api.servicetype.Callback;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 

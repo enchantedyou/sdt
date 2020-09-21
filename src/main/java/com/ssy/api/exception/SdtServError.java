@@ -129,4 +129,9 @@ public class SdtServError {
     public static SdtException E0022() {
         throw new SdtException("The source entity type or target entity type does not exist", ErrCodeDef.FILE_NOT_EXIST);
     }
+
+    /** 无法对主数据源的进程进行操作 **/
+    public static SdtException E0023() {
+        throw new SdtException("Unable to operate the process of the main data source", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
 }

@@ -14,7 +14,6 @@ import org.apache.http.HttpResponse;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 
 /**
  * @Description 开发工具助手业务类检查
@@ -27,28 +26,28 @@ public class SdtBusiUtil {
     private static final String DEFAULT_SPLIT_TOKEN = "-";
 
     /**
-     * @Description 检查金额必须为正数
+     * @Description 检查数值必须为正数
      * @Author sunshaoyu
      * @Date 2020/6/12-16:05
-     * @param amount
+     * @param number
      * @param fieldDesc
      */
-    public static void checkAmountPositive(BigDecimal amount, String fieldDesc){
-        if (CommUtil.isNotNull(amount) && CommUtil.compare(amount, BigDecimal.ZERO) <= 0) {
-            throw SdtServError.E0001(amount.toString(), 0, fieldDesc);
+    public static void checkNumberPositive(Number number, String fieldDesc){
+        if (CommUtil.isNotNull(number) && CommUtil.compare(number.doubleValue(), 0D) <= 0) {
+            throw SdtServError.E0001(number, 0, fieldDesc);
         }
     }
 
     /**
-     * @Description 检查金额不能为负
+     * @Description 检查数值不能为负
      * @Author sunshaoyu
      * @Date 2020/6/12-16:07
-     * @param amount
+     * @param number
      * @param fielddesc
      */
-    public static void checkAmountNotNegate(BigDecimal amount, String fielddesc) {
-        if (CommUtil.isNotNull(amount) && CommUtil.compare(amount, BigDecimal.ZERO) < 0) {
-            throw SdtServError.E0001(amount.toString(), 0, fielddesc);
+    public static void checkNumberNotNegate(Number number, String fielddesc) {
+        if (CommUtil.isNotNull(number) && CommUtil.compare(number.doubleValue(), 0D) < 0) {
+            throw SdtServError.E0001(number, 0, fielddesc);
         }
     }
 
@@ -191,7 +190,7 @@ public class SdtBusiUtil {
      */
     public static Params getIcoreHeaders(String subSystemId, String serviceCode){
         Params headers = new Params();
-        String trxnSeq = BizUtil.buildTrxnSeq(SdtConst.TRXN_SEQ_LENGTH);
+        String trxnSeq = BizUtil.buildTrxnSeq();
         headers.add("dapplication", subSystemId).add("dserviceid", serviceCode).add("dgroup", "01").add("dversion", "1.0").
                 add("api_id", serviceCode).add("busiseqno", trxnSeq).add("callseqno", trxnSeq).add("Content-Type", "application/json");
         return headers;
@@ -217,5 +216,22 @@ public class SdtBusiUtil {
         //解析翻译结果
         JSONArray jsonArray = JSON.parseArray(HttpUtil.resolveResponse(response));
         return String.valueOf(jsonArray.getJSONArray(0).getJSONArray(0).get(0));
+    }
+
+    /**
+     * @Description 判断当前是否开启了分页
+     * @Author sunshaoyu
+     * @Date 2020/9/20-15:37
+     * @return boolean
+     */
+    public static boolean isEnabledPagination(){
+        int currentPage = BizUtil.getRunEnvs().getCurrentPage();
+        int pageSize = BizUtil.getRunEnvs().getPageSize();
+        boolean isEnabled = currentPage > 0 && pageSize > 0;
+
+        if(isEnabled){
+            log.info("Enable paging plugin: current page [{}], data volume per page [{}]", currentPage, pageSize);
+        }
+        return isEnabled;
     }
 }

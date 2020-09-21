@@ -2,6 +2,7 @@ package com.ssy.api.utils.system;
 
 import com.ssy.api.dao.mapper.system.ProcessMapper;
 import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.entity.table.system.DBProcess;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.plugins.DBContextHolder;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Description	JDBC工具类
@@ -156,16 +156,22 @@ public class JDBCHelper {
 			DBContextHolder.switchToDataSource(datasourceId);
 		}
 
-		AtomicInteger size = new AtomicInteger();
-		processMapper.showProcessList().forEach(dbProcess -> {
+		//不允许杀主数据源的线程
+		if(CommUtil.isNull(DBContextHolder.getCurrentDataSource())){
+			throw SdtServError.E0023();
+		}
+
+		int size = 0;
+		List<DBProcess> processList = processMapper.showProcessList();
+		for(DBProcess dbProcess : processList){
 			try{
 				processMapper.kill(dbProcess.getId());
 				log.info("Kill the process[{}] of database [{}]", dbProcess.getId(), DBContextHolder.getCurrentDataSource());
-				size.getAndIncrement();
+				size++;
 			}catch (Exception e){
 				log.info(e.getMessage());
 			}
-		});
-		return size.get();
+		}
+		return size;
 	}
 }
