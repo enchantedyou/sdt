@@ -42,7 +42,7 @@
                         <dd><a href="javascript:;" id="m1000">[1000]字典搜索</a></dd>
                         <dd><a href="javascript:;" id="m1001">[1001]PTE代码生成</a></dd>
                         <dd><a href="javascript:;" id="m1002">[1002]接口文档生成</a></dd>
-                        <dd><a href="javascript:;" id="m1003">[1003]交易模型生成</a></dd>
+                        <dd><a href="javascript:;" id="m1003" style="display: none">[1003]交易模型生成</a></dd>
                         <dd><a href="javascript:;" id="m1004">[1004]赋值语句生成</a></dd>
                     </dl>
                 </li>
@@ -65,6 +65,12 @@
                     <a href="javascript:;">脚本</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" id="m4000">[4000]交易脚本生成</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">其他</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" id="m5000">[5000]分片哈希值查询</a></dd>
                     </dl>
                 </li>
             </ul>

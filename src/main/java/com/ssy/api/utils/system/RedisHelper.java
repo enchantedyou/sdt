@@ -34,7 +34,7 @@ public class RedisHelper {
 	public static void expired(Object redisKey){
 		if(CommUtil.isNotNull(redisKey)){
 			delete(redisKey);
-			log.info("Remove key {{}} from redis cache", redisKey);
+			log.info("Remove key [{}] from redis cache", redisKey);
 		}
 	}
 
@@ -47,7 +47,7 @@ public class RedisHelper {
 	 * @return java.util.List<T>
 	 */
 	public static <T> List<T> getList(Object key, Class<T> clazz){
-		log.info("Get list from redis cache according to key {{}}, class {{}}", key, clazz);
+		log.info("Get list from redis cache according to key [{}], class [{}]", key, clazz);
 		return JSON.parseArray(JSON.toJSONString(getList(key)), clazz);
 	}
 
@@ -59,7 +59,7 @@ public class RedisHelper {
 	 * @return java.util.Map<java.lang.Object,java.lang.Object>
 	 */
 	public static Map<Object, Object> getMap(Object key) {
-		log.info("Get map from redis cache according to key {{}}", key);
+		log.info("Get map from redis cache according to key [{}]", key);
 		return redisTemplate.opsForHash().entries(key);
 	}
 
@@ -72,7 +72,7 @@ public class RedisHelper {
 	 */
 	public static void expire(Object key, long timeout){
 		if(timeout > 0){
-			log.info("Specify the valid time of the data with the key {{}} in the redis cache as {{}} seconds", key, timeout);
+			log.info("Specify the valid time of the data with the key [{}] in the redis cache as [{}] seconds", key, timeout);
 			redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
 		}
 	}
@@ -85,7 +85,7 @@ public class RedisHelper {
 	 * @return long
 	 */
 	public static long getExpire(Object key){
-		log.info("Get the valid time of the data with key {{}} in the redis cache", key);
+		log.info("Get the valid time of the data with key [{}] in the redis cache", key);
 		return redisTemplate.getExpire(key, TimeUnit.SECONDS);
 	}
 
@@ -97,8 +97,8 @@ public class RedisHelper {
 	 * @param value
 	 * @param timeout
 	 */
-	public static void addandSetValue(Object key, Object value, long timeout){
-		log.info("Add or set the value {{}} of key {{}} from the redis cache", value, key);
+	public static void addAndSetValue(Object key, Object value, long timeout){
+		log.info("Add or set the value [{}] of key [{}] from the redis cache", value, key);
 		redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
 	}
 
@@ -110,7 +110,7 @@ public class RedisHelper {
 	 * @return java.lang.Object
 	 */
 	public static Object getValue(Object key){
-		log.info("Get the value with key {{}} from the redis cache", key);
+		log.info("Get the value with key [{}] from the redis cache", key);
 		return redisTemplate.opsForValue().get(key);
 	}
 
@@ -123,7 +123,7 @@ public class RedisHelper {
 	 * @param timeout
 	 */
 	public static <T> void pushAllAsList(Object key, List<T> value, long timeout){
-		log.info("Add a list with key {{}} and valid time {{}} seconds from the redis cache", key, timeout);
+		log.info("Add a list with key [{}] and valid time [{}] seconds from the redis cache", key, timeout);
 		redisTemplate.opsForList().rightPushAll(key, value);
 		expire(key, timeout);
 	}
@@ -137,7 +137,7 @@ public class RedisHelper {
 	 * @param timeout
 	 */
 	public static void addValueToList(Object key, Object value, long timeout){
-		log.info("Add a value {{}} from the list with key {{}} in the redis cache", value, key);
+		log.info("Add a value [{}] from the list with key [{}] in the redis cache", value, key);
 		redisTemplate.opsForList().rightPush(key, value);
 		expire(key, timeout);
 	}
@@ -152,7 +152,7 @@ public class RedisHelper {
 	 * @param timeout
 	 */
 	public static void setValueFromList(Object key, long index, Object value, long timeout){
-		log.info("Reset the subscript of list {{}} to the value {{}} of {{}} from the redis cache", key, value, index);
+		log.info("Reset the subscript of list [{}] to the value [{}] of [{}] from the redis cache", key, value, index);
 		redisTemplate.opsForList().set(key, index, value);
 		expire(key, timeout);
 	}
@@ -166,7 +166,7 @@ public class RedisHelper {
 	 * @return java.lang.Object
 	 */
 	public static Object getListValue(Object key, long index){
-		log.info("Get the value of the subscript {{}} of the list with key {{}} from the redis cache", key, index);
+		log.info("Get the value of the subscript [{}] of the list with key [{}] from the redis cache", key, index);
 		return redisTemplate.opsForList().index(key, index);
 	}
 
@@ -191,7 +191,7 @@ public class RedisHelper {
 	 * @param count	大于0表示删除等于从头到尾移动的值的元素;小于0表示删除等于从尾到头移动的值的元素;等于0表示删除等于value的所有元素。
 	 */
 	public static void removeFromList(Object key, Object value, long count){
-		log.info("Delete the value {{}} of the list with key {{}} from the redis cache", value, key);
+		log.info("Delete the value [{}] of the list with key [{}] from the redis cache", value, key);
 		redisTemplate.opsForList().remove(key, count, value);
 	}
 	
@@ -204,7 +204,7 @@ public class RedisHelper {
 	 * @param value
 	 */
 	public static void putAndSetToHash(Object key,Object subKey, Object value){
-		log.info("Add or set (if the subKey {{}} already exists) value to a Map {{}} in the redis cache without setting the expiration time", subKey, key);
+		log.info("Add or set (if the subKey [{}] already exists) value to a Map [{}] in the redis cache without setting the expiration time", subKey, key);
 		putAndSetToHash(key, subKey, value,-1);
 	}
 	
@@ -218,7 +218,7 @@ public class RedisHelper {
 	 * @param timeout
 	 */
 	public static void putAndSetToHash(Object key, Object subKey, Object value,long timeout){
-		log.info("Add or set (if the subKey {{}} already exists) value to a map {{}} in the redis cache", subKey, key);
+		log.info("Add or set (if the subKey [{}] already exists) value to a map [{}] in the redis cache", subKey, key);
 		redisTemplate.opsForHash().put(key, subKey, value);
 		expire(key, timeout);
 	}
@@ -232,7 +232,7 @@ public class RedisHelper {
 	 * @return boolean
 	 */
 	public static boolean hashKeyFromHash(Object key, Object subKey){
-		log.info("Check if there is a value of {{}} in the map {{}}", subKey, key);
+		log.info("Check if there is a value of [{}] in the map [{}]", subKey, key);
 		return redisTemplate.opsForHash().hasKey(key, subKey);
 	}
 	
@@ -244,7 +244,7 @@ public class RedisHelper {
 	 * @param subKey
 	 */
 	public static void removeFromHash(Object key, Object subKey){
-		log.info("Remove a value with subKey {{}} in the map {{}} from the redis cache", subKey, key);
+		log.info("Remove a value with subKey [{}] in the map [{}] from the redis cache", subKey, key);
 		redisTemplate.opsForHash().delete(key, subKey);
 	}
 	
@@ -257,7 +257,7 @@ public class RedisHelper {
 	 * @param timeout
 	 */
 	public static void pushAllAsHash(Object key, Map<Object, Object> value, long timeout){
-		log.info("Store the entire map {{}} in the redis cache", key);
+		log.info("Store the entire map [{}] in the redis cache", key);
 		redisTemplate.opsForHash().putAll(key, value);
 		expire(key, timeout);
 	}
@@ -271,7 +271,7 @@ public class RedisHelper {
 	 * @return java.lang.Object
 	 */
 	public static Object getHashValue(Object key, Object subKey){
-		log.info("Get the value of key {{}} in the map {{}} from the redis cache", subKey, key);
+		log.info("Get the value of key [{}] in the map [{}] from the redis cache", subKey, key);
 		return redisTemplate.opsForHash().get(key, subKey);
 	}
 	
@@ -282,7 +282,7 @@ public class RedisHelper {
 	 * @param key
 	 */
 	public static void delete(Object key){
-		log.info("Delete the cache with key {{}} from the redis cache", key);
+		log.info("Delete the cache with key [{}] from the redis cache", key);
 		redisTemplate.delete(key);
 	}
 
@@ -294,7 +294,7 @@ public class RedisHelper {
 	 * @return boolean
 	 */
 	public static boolean hasKey(Object key){
-		log.info("Check whether there is a cache with key {{}} in the redis cache", key);
+		log.info("Check whether there is a cache with key [{}] in the redis cache", key);
 		return redisTemplate.hasKey(key);
 	}
 }

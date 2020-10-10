@@ -1,10 +1,14 @@
 package com.ssy.api.utils.parse;
 
 import com.ssy.api.dao.mapper.ct.SmpSysDictMapper;
+import com.ssy.api.dao.mapper.edsp.TspServiceInMapper;
 import com.ssy.api.entity.config.SdtContextConfig;
+import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.enums.E_IO;
 import com.ssy.api.entity.table.ct.SmpSysDict;
+import com.ssy.api.entity.table.edsp.TspServiceIn;
 import com.ssy.api.exception.SdtException;
+import com.ssy.api.exception.SdtServError;
 import com.ssy.api.logic.local.SdFlowtranParser;
 import com.ssy.api.logic.local.SdJavaParser;
 import com.ssy.api.logic.local.SdPTEJsonParser;
@@ -13,6 +17,7 @@ import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.flowtran.Flowtran;
 import com.ssy.api.meta.flowtran.IntfFields;
 import com.ssy.api.plugins.DBContextHolder;
+import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +49,9 @@ public class ExcelParser {
 
     private static SdtContextConfig contextConfig;
     private static SmpSysDictMapper sysDictMapper;
+    private static TspServiceInMapper tspServiceInMapper;
+    private static ModuleMapService moduleMapService;
+
     private static final ThreadLocal<Integer> curRowNumberLocal = new ThreadLocal<>();
     private static final ThreadLocal<List<String>> mandatoryLocal = new ThreadLocal<>();
 
@@ -54,6 +63,16 @@ public class ExcelParser {
     @Autowired
     public void setSysDictMapper(SmpSysDictMapper sysDictMapper) {
         ExcelParser.sysDictMapper = sysDictMapper;
+    }
+
+    @Autowired
+    public void setTspServiceInMapper(TspServiceInMapper tspServiceInMapper) {
+        ExcelParser.tspServiceInMapper = tspServiceInMapper;
+    }
+
+    @Autowired
+    public void setModuleMapService(ModuleMapService moduleMapService) {
+        ExcelParser.moduleMapService = moduleMapService;
     }
 
     /**
@@ -180,9 +199,9 @@ public class ExcelParser {
     public static void genInterfaceDoc(String flowtranId, OutputStream outputStream){
         try{
             Flowtran flowtran = SdFlowtranParser.load(flowtranId);
-            Workbook workbook = getWorkbook(ExcelParser.class.getResource("/templates/excel/intf_doc_tamplate.xlsx").getPath());
+            Workbook workbook = getWorkbook(ExcelParser.class.getResource("/templates/excel/intf_doc_template.xlsx").getPath());
             Sheet templateSheet = workbook.cloneSheet(3);
-            templateSheet.getRow(0).getCell(1).setCellValue(flowtranId);
+            templateSheet.getRow(0).getCell(1).setCellValue(moduleMapService.getServiceCode(flowtranId));
 
             //指定参数类别
             switch(flowtran.getKind()){
@@ -205,6 +224,7 @@ public class ExcelParser {
             copyRows(5, 6, curRowNumberLocal.get(), templateSheet);
             templateSheet.getRow(curRowNumberLocal.get()).getCell(0).setCellValue("输                   出");
             templateSheet.getRow(curRowNumberLocal.get() + 1).getCell(6).setCellValue("");
+            templateSheet.getRow(curRowNumberLocal.get() + 1).getCell(7).setCellValue("输出说明");
             curRowNumberLocal.set(curRowNumberLocal.get() + 2);
 
             //输出字段赋值
@@ -249,24 +269,11 @@ public class ExcelParser {
         //处理散字段
         for(Element e : fieldList){
             Row curRow = createIntfCurrentRow(sheet);
-            handleRowBaseInfo(String.valueOf(++index), e, curRow);
+            handleRowBaseInfo(String.valueOf(++index), e, curRow, cellStyle);
 
             //设置必输选项
             if(io == E_IO.INPUT){
                 curRow.createCell(6).setCellValue(mandatoryLocal.get().contains(e.getId()) ? "M" : "O");
-            }
-
-            //枚举值
-            Map<String, DefaultEnumerationType> enumMap = e.getType().getEnumerationMap();
-            if(CommUtil.isNotNull(enumMap)){
-                StringBuffer buffer = new StringBuffer();
-                enumMap.forEach((k, v) -> {
-                    SmpSysDict smpSysDict = sysDictMapper.selectByPrimaryKey(e.getType().getId(), v.getValue());
-                    buffer.append(v.getValue()).append(":").append(CommUtil.isNull(smpSysDict) ? v.getLongName() : smpSysDict.getDictName()).append(";\r\n");
-                });
-                Cell cell = curRow.createCell(7);
-                cell.setCellStyle(cellStyle);
-                cell.setCellValue(buffer.toString().substring(0,buffer.toString().lastIndexOf("\r\n")));
             }
         }
 
@@ -279,9 +286,37 @@ public class ExcelParser {
 
             for(Element e : fields.getSubFieldList()){
                 curRow = createIntfCurrentRow(sheet);
-                handleRowBaseInfo(String.format("%d.%d", index, ++subIndex), e, curRow);
+                handleRowBaseInfo(String.format("%d.%d", index, ++subIndex), e, curRow, cellStyle);
             }
         }
+    }
+
+    /**
+     * @Description 获取字段枚举信息
+     * @Author sunshaoyu
+     * @Date 2020/10/9-16:04
+     * @param e
+     * @return java.lang.String
+     */
+    private static String getIntfEnumInfo(Element e){
+        //枚举值
+        Map<String, DefaultEnumerationType> enumMap = e.getType().getEnumerationMap();
+        //按值排序
+        enumMap = CommUtil.sortMap(enumMap, new Comparator<Map.Entry<String, DefaultEnumerationType>>() {
+            @Override
+            public int compare(Map.Entry<String, DefaultEnumerationType> o1, Map.Entry<String, DefaultEnumerationType> o2) {
+                return CommUtil.compare(o1.getValue().getValue(), o2.getValue().getValue());
+            }
+        });
+        if(CommUtil.isNotNull(enumMap)){
+            StringBuffer buffer = new StringBuffer();
+            enumMap.forEach((k, v) -> {
+                SmpSysDict smpSysDict = sysDictMapper.selectByPrimaryKey(e.getType().getId(), v.getValue());
+                buffer.append(v.getValue()).append(":").append(CommUtil.isNull(smpSysDict) ? v.getLongName() : smpSysDict.getDictName()).append(";\r\n");
+            });
+            return buffer.toString().substring(0, buffer.toString().lastIndexOf("\r\n"));
+        }
+        return new String();
     }
 
     /**
@@ -291,9 +326,10 @@ public class ExcelParser {
      * @param index
      * @param e
      * @param curRow
+     * @param cellStyle
      * @return int
      */
-    private static void handleRowBaseInfo(String index, Element e, Row curRow) {
+    private static void handleRowBaseInfo(String index, Element e, Row curRow, CellStyle cellStyle) {
         curRow.createCell(0).setCellValue(index);
         curRow.createCell(1).setCellValue(e.getId());
         curRow.createCell(2).setCellValue(e.getDesc());
@@ -301,6 +337,11 @@ public class ExcelParser {
         curRow.createCell(3).setCellValue(e.getType().getBase().getValue());
         curRow.createCell(4).setCellValue(SdPTEJsonParser.determineControlMaxLength(e));
         curRow.createCell(5).setCellValue(e.getType().getFractionDigits());
+
+        //枚举值
+        Cell cell = curRow.createCell(7);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(getIntfEnumInfo(e));
     }
 
     /**
@@ -380,13 +421,60 @@ public class ExcelParser {
         } else if (srcCellType == CellType.STRING) {
             distCell.setCellValue(srcCell.getRichStringCellValue());
         } else if (srcCellType == CellType.BLANK) {
-            // nothing21
+            // nothing
         } else if (srcCellType == CellType.BOOLEAN) {
             distCell.setCellValue(srcCell.getBooleanCellValue());
         } else if (srcCellType == CellType.ERROR) {
             distCell.setCellErrorValue(srcCell.getErrorCellValue());
         } else if (srcCellType == CellType.FORMULA) {
             distCell.setCellFormula(srcCell.getCellFormula());
+        }
+    }
+
+    /**
+     * @Description 网关API生成
+     * @Author sunshaoyu
+     * @Date 2020/10/9-10:09
+     * @param protocolId
+     * @param outputStream
+     */
+    public static void genGatewayApi(String protocolId, OutputStream outputStream){
+        try{
+            BizUtil.fieldNotNull(protocolId, SdtDict.A.protocol_id.getId(), SdtDict.A.protocol_id.getLongName());
+            Workbook workbook = getWorkbook(ExcelParser.class.getResource("/templates/excel/api_template.xlsx").getPath());
+            Sheet sheet = workbook.getSheetAt(0);
+            //数据源检查
+            if(CommUtil.isNull(DBContextHolder.getCurrentDataSource())){
+                throw SdtServError.E0023();
+            }
+
+            int index = 3;
+            String moduleName = null;
+            List<TspServiceIn> innserServiceList = tspServiceInMapper.selectAll_odb1(protocolId);
+            for(TspServiceIn tspServiceIn : innserServiceList){
+                String innerServiceCode = tspServiceIn.getInnerServiceCode();
+                if(CommUtil.isNull(moduleName)){
+                    moduleName = moduleMapService.getModuleName(tspServiceIn.getSubSystemCode());
+                }
+
+                if(CommUtil.equals(tspServiceIn.getServiceCategory(), "T") && !innerServiceCode.contains("ap") && !innerServiceCode.contains("ms")){
+                    //api新增
+                    Row row = sheet.createRow(index++);
+                    row.createCell(1).setCellValue(moduleMapService.getServiceCode(tspServiceIn.getInnerServiceCode()));
+                    row.createCell(2).setCellValue(moduleName.toUpperCase());
+                    row.createCell(3).setCellValue("1.0");
+                    row.createCell(4).setCellValue("http");
+                    row.createCell(5).setCellValue("restLoad");
+                    row.createCell(7).setCellValue(String.format("{\"rpc3load_dcn_in_body_enable\":0,\"restLoad_alloc_type\":\"NO\",\"restload_uri\":\"%s\",\"restload_application\":\"%s-onl\",\"restLoad_service_type\":\"distribute\"}", tspServiceIn.getOutServiceCode(), moduleName));
+                    row.createCell(8).setCellValue("已发布");
+                    row.createCell(9).setCellValue(tspServiceIn.getDescription());
+                }
+            }
+
+            //保存并写入
+            workbook.write(outputStream);
+        }catch (Exception e){
+            throw new SdtException("Gateway Api build failed", e);
         }
     }
 }

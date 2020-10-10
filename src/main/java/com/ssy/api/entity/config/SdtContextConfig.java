@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Description
+ * @Description 全局上下文配置
  * @Author sunshaoyu
  * @Date 2020年06月13日-15:57
  */
@@ -57,6 +57,17 @@ public class SdtContextConfig {
     private String sqlToolsDir;
     /** 默认的sump数据源,用于生产接口文档 **/
     @NotBlank private String sumpDataSource;
+
+
+    private String animal;
+
+    public String getAnimal() {
+        return animal;
+    }
+
+    public void setAnimal(String animal) {
+        this.animal = animal;
+    }
 
     public String getWorkSpacePath() {
         return workSpacePath;

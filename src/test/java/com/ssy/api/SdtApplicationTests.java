@@ -1,36 +1,41 @@
 package com.ssy.api;
 
+import com.ssy.api.dao.mapper.ap.ApsAccountingEventMapper;
+import com.ssy.api.dao.mapper.edsp.TspServiceControlMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceInMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceOutMapper;
+import com.ssy.api.dao.mapper.ln.LnaBalanceMapper;
+import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_PTEMODULE;
-import com.ssy.api.entity.enums.E_STRGENTYPE;
+import com.ssy.api.entity.table.edsp.TspServiceIn;
 import com.ssy.api.entity.table.local.SdpModuleMapping;
 import com.ssy.api.entity.type.local.SdBuildPTE;
-import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.FileLoader;
 import com.ssy.api.factory.odb.MetaDataFactory;
 import com.ssy.api.logic.audit.SdSqlAuditExecutor;
 import com.ssy.api.logic.higention.SdGitlabReader;
+import com.ssy.api.logic.local.SdFlowtranParser;
 import com.ssy.api.logic.local.SdJavaParser;
 import com.ssy.api.logic.local.SdPTEJsonParser;
 import com.ssy.api.logic.request.SdIcoreRequest;
+import com.ssy.api.meta.flowtran.Flowtran;
+import com.ssy.api.meta.flowtran.IntfService;
 import com.ssy.api.plugins.DBContextHolder;
 import com.ssy.api.servicetype.DataSourceService;
+import com.ssy.api.servicetype.LoanService;
 import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.parse.ExcelParser;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +47,8 @@ class SdtApplicationTests extends MetaDataFactory {
     @Autowired
     private FileLoader fileLoader;
     @Autowired
+    private SdtContextConfig contextConfig;
+    @Autowired
     private DataSourceService dataSourceService;
     @Autowired
     private SdGitlabReader gitlab;
@@ -50,10 +57,17 @@ class SdtApplicationTests extends MetaDataFactory {
     @Autowired
     private TspServiceOutMapper tspServiceOutMapper;
     @Autowired
+    private TspServiceControlMapper tspServiceControlMapper;
+    @Autowired
     private ModuleMapService moduleMapService;
-
     @Autowired
     private SdSqlAuditExecutor sqlAuditExecutor;
+    @Autowired
+    private ApsAccountingEventMapper apsAccountingEventMapper;
+    @Autowired
+    private LnaBalanceMapper lnaBalanceMapper;
+    @Autowired
+    private LoanService loanService;
 
     static {
         System.setProperty("jasypt.encryptor.password", SdtConst.CONFIG_ENCKEY);
@@ -61,46 +75,42 @@ class SdtApplicationTests extends MetaDataFactory {
 
     @Test
     void contextLoads() throws Throwable {
+        ExcelParser.genInterfaceDoc("ln6300", null);
     }
 
-    /**
-     * @Description 白名单
-     * @Author sunshaoyu
-     * @Date 2020/9/12-16:36
-     */
-    public static void genWhiteList(int size, OutputStream outputStream){
-        try{
-            Workbook workbook = ExcelParser.getWorkbook(ExcelParser.class.getResource("/templates/excel/white_list_import_template.xlsx").getPath());
-            Sheet sheet = workbook.getSheetAt(0);
-            for(int i = 1;i <= size;i++){
-                Row row = sheet.createRow(i);
-                row.createCell(0).setCellValue("Alibaba");
-                row.createCell(1).setCellValue("1");
-                row.createCell(2).setCellValue("");
-                row.createCell(3).setCellValue(CommUtil.randStr(10, E_STRGENTYPE.LOWER));
-                row.createCell(4).setCellValue("M");
-                row.createCell(5).setCellValue("19900101");
-                row.createCell(6).setCellValue(CommUtil.randStr(11, E_STRGENTYPE.NUMBER));
-                row.createCell(7).setCellValue("");
-                row.createCell(8).setCellValue(CommUtil.randStr(10, E_STRGENTYPE.NUMBER) + "@qq.com");
-                row.createCell(9).setCellValue("90000");
-                row.createCell(10).setCellValue("IDR");
-                row.createCell(11).setCellValue("12M");
-                row.createCell(12).setCellValue("Y");
-                row.createCell(13).setCellValue("20191110");
-                row.createCell(14).setCellValue("20191231");
-                row.createCell(15).setCellValue("");
-                row.createCell(16).setCellValue("");
-                row.createCell(17).setCellValue("");
+
+    public void reversalService(){
+        List<IntfService> serviceList = new ArrayList<>();
+
+        //服务接入表
+        tspServiceInMapper.selectAll_odb1("rpc").forEach(tspServiceIn -> {
+            if("D".equals(tspServiceIn.getTransactionMode()) && "T".equals(tspServiceIn.getServiceCategory())){
+                Flowtran flowtran = SdFlowtranParser.load(tspServiceIn.getInnerServiceCode());
+                serviceList.addAll(flowtran.getServiceList());
+                log.info("交易{}的服务数:{},服务列表:{}", tspServiceIn.getInnerServiceCode(), flowtran.getServiceList().size(), flowtran.getServiceList());
             }
-            workbook.write(outputStream);
-        }catch (Exception e){
-            throw new SdtException("Failed to generate whitelist", e);
-        }
+        });
+
+        serviceList.forEach(service -> {
+            TspServiceIn tspServiceIn = tspServiceInMapper.selectOne_odb1(CommUtil.nvl(service.getId(), service.getServiceName()));
+            if(CommUtil.isNotNull(tspServiceIn)){
+                tspServiceIn.setTransactionMode("D");
+                tspServiceInMapper.updateByPrimaryKey(tspServiceIn);
+            }
+        });
+
+        //服务控制表
+        tspServiceControlMapper.selectAll_odb1().forEach(tspServiceControl -> {
+            String cancelService = tspServiceControl.getCancelService();
+            if(CommUtil.isNotNull(cancelService) && cancelService.toLowerCase().contains("cancel")){
+                tspServiceControl.setServiceTransactionMode("Required");
+                tspServiceControl.setServiceType("try");
+                tspServiceControlMapper.updateByPrimaryKey(tspServiceControl);
+            }
+        });
     }
 
     public void dockerRest(){
-        DBContextHolder.switchToDataSource("ln_dev");
         List<SdpModuleMapping> moduleMappingList = moduleMapService.queryAllModuleList();
         Map<String, String> rollbackMap = new HashMap<>();
 
@@ -122,7 +132,11 @@ class SdtApplicationTests extends MetaDataFactory {
             if(tspServiceIn.getOutServiceCode().length() > 50){
                 System.out.println(tspServiceIn.getOutServiceCode());
             }
-            //tspServiceInMapper.insert(tspServiceIn);
+            tspServiceInMapper.insert(tspServiceIn);
+        });
+        //移除rpc协议的服务接入信息
+        tspServiceInMapper.selectAll_odb1("rpc").forEach(tspServiceIn -> {
+            tspServiceInMapper.deleteByPrimaryKey(tspServiceIn.getSystemCode(),tspServiceIn.getSubSystemCode(),tspServiceIn.getOutServiceCode());
         });
 
         //服务接出表
@@ -145,8 +159,8 @@ class SdtApplicationTests extends MetaDataFactory {
 
     private String getServiceOutApp(List<SdpModuleMapping> moduleMappingList, String subSystemCode){
         for(SdpModuleMapping moduleMapping : moduleMappingList){
+            String moduleId = moduleMapping.getModuleId();
             if(CommUtil.equals(moduleMapping.getSubSystemCode(), subSystemCode)){
-                String moduleId = moduleMapping.getModuleId();
                 if(CommUtil.equals("cf", moduleId)){
                     moduleId = "us";
                 }

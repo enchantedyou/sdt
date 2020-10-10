@@ -1,6 +1,7 @@
 package com.ssy.api.utils.system;
 
 import com.ssy.api.dao.mapper.local.SdpSequenceBuilderMapper;
+import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.lang.Sequence;
 import com.ssy.api.entity.table.local.SdpSequenceBuilder;
@@ -48,6 +49,16 @@ public class SeqUtil {
             SdtBusiUtil.checkNumberNotNegate(sequenceBuilder.getCurrentValue(), SdtDict.A.current_value.getLongName());
             SdtBusiUtil.checkNumberPositive(sequenceBuilder.getSeqLength(), SdtDict.A.max_length.getLongName());
             sequence = new Sequence(sequenceBuilder.getInitValue(), sequenceBuilder.getCurrentValue(), sequenceBuilder.getCacheSize(), sequenceBuilder.getSeqLength());
+
+            //容灾机制(shutDownHook未触发)
+            Long redisCurrentValue = (Long) RedisHelper.getValue(seqCode);
+            if(CommUtil.isNotNull(redisCurrentValue) && redisCurrentValue > sequence.getCurrentValue()){
+                log.info("Based on the latest serial number in the redis cache, the serial value: {}", redisCurrentValue);
+                sequence.setCurrentValue(redisCurrentValue);
+                //更新至数据库
+                sequenceBuilder.setCurrentValue(redisCurrentValue);
+                sequenceBuilderMapper.updateByPrimaryKey(sequenceBuilder);
+            }
         }
         //根据序列信息生成序列号
         StringBuffer sequenceBuffer = new StringBuffer(sequence.getMaxLength());
@@ -55,18 +66,18 @@ public class SeqUtil {
 
         if(CommUtil.isNull(sequence.getCurrentValue())){
             currentValue = Long.valueOf(sequence.getInitValue()) + gap;
-            log.info("初始化，当前序列值:{}", currentValue);
         }else{
             currentValue += gap;
             if(String.valueOf(currentValue).length() > sequence.getMaxLength()){
                 currentValue = Long.valueOf(sequence.getInitValue()) + gap;
             }
-            log.info("自增，当前序列值:{}", currentValue);
         }
         sequenceBuffer.append(zeroLeftPadding(sequence.getMaxLength() - String.valueOf(currentValue).length())).append(currentValue);
         sequence.setCurrentValue(currentValue);
         sequence.setCachedSize(sequence.getCachedSize() - gap);
         sequenceMap.put(seqCode, sequence);
+        //存入redis
+        RedisHelper.addAndSetValue(seqCode, currentValue, SdtConst.REDIS_SEQVALUE_TIMEOUT);
 
         //同步缓存序列号至数据库
         if(sequence.getCachedSize() == 0L){

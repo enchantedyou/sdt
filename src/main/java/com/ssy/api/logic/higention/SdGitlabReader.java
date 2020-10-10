@@ -87,7 +87,7 @@ public class SdGitlabReader {
         }
         String diffStr = removeRepeate(buffer.toString());
         if(CommUtil.isNotNull(diffStr)){
-            RedisHelper.addandSetValue(md5, diffStr, SdtConst.REDIS_GITDIFFS_TIMEOUT);
+            RedisHelper.addAndSetValue(md5, diffStr, SdtConst.REDIS_GITDIFFS_TIMEOUT);
         }
         return diffStr;
     }

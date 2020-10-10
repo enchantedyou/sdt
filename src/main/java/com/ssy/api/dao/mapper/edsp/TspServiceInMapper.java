@@ -20,4 +20,7 @@ public interface TspServiceInMapper {
 
     /** 根据协议编号查询列表 **/
     List<TspServiceIn> selectAll_odb1(String protocolId);
+
+    /** 根据内部服务码查询 **/
+    TspServiceIn selectOne_odb1(String innerServiceCode);
 }

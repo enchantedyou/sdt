@@ -261,19 +261,27 @@ public class MetaDataFactory {
     }
 
     /**
-     * @Description 刷新元数据
+     * @Description 清除元数据缓存
      * @Author sunshaoyu
-     * @Date 2020/8/24-13:53
+     * @Date 2020/9/27-14:42
      */
-    protected static void refreshMetaData(){
-        StopWatch s = BizUtil.startStopWatch();
+    protected static void clear(){
         intfExcelFileMap.clear();
         restrictionTypeMap.clear();
         complexTypeMap.clear();
         dictMap.clear();
         enumMap.clear();
         tableTypeMap.clear();
+    }
 
+    /**
+     * @Description 刷新元数据
+     * @Author sunshaoyu
+     * @Date 2020/8/24-13:53
+     */
+    protected static void refreshMetaData(){
+        StopWatch s = BizUtil.startStopWatch();
+        clear();
         loadMetaDataInitially();
         BizUtil.stoptStopWatch(s, "Refresh the meta data");
     }

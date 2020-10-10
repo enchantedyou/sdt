@@ -31,7 +31,6 @@ public class SdDynamicDs {
 
     private static SdpDatasourceMapper sdpDatasourceMapper;
     private static SystemParamService systemParamService;
-    private static final String DATASOURCE_TYPE = "MYSQL";
     private static final String TLSQL_IND = "N";
     private static final String PLATFORM_TABLE_PREFIX = "MS";
     private static final String DATASOURCE_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -75,7 +74,7 @@ public class SdDynamicDs {
     public static void editDataSource(SdDatasourceEdit datasourceEdit){
         BizUtil.fieldNotNull(datasourceEdit.getDataOperateType(), SdtDict.A.data_operate_type.getId(), SdtDict.A.data_operate_type.getLongName());
         BizUtil.fieldNotNull(datasourceEdit.getDatasourceId(), SdtDict.A.datasource_id.getId(), SdtDict.A.datasource_id.getLongName());
-        SdpDatasource dataSource = sdpDatasourceMapper.selectByPrimaryKey(datasourceEdit.getDatasourceId(), DATASOURCE_TYPE, false);
+        SdpDatasource dataSource = sdpDatasourceMapper.selectByPrimaryKey(datasourceEdit.getDatasourceId(), SdtConst.DATASOURCE_TYPE, false);
 
         if(datasourceEdit.getDataOperateType() == E_DATAOPERATE.A){
             if(CommUtil.isNotNull(dataSource)){
@@ -114,7 +113,7 @@ public class SdDynamicDs {
      * @param dataSource
      */
     private static void defaultValueSet(SdpDatasource dataSource){
-        dataSource.setDatasourceType(CommUtil.nvl(dataSource.getDatasourceType(), DATASOURCE_TYPE));
+        dataSource.setDatasourceType(CommUtil.nvl(dataSource.getDatasourceType(), SdtConst.DATASOURCE_TYPE));
         dataSource.setTlsqlInd(CommUtil.nvl(dataSource.getTlsqlInd(), TLSQL_IND));
         dataSource.setPlatformTablePrefix(CommUtil.nvl(dataSource.getPlatformTablePrefix(), PLATFORM_TABLE_PREFIX));
         dataSource.setDatasourceDriver(CommUtil.nvl(dataSource.getDatasourceDriver(), DATASOURCE_DRIVER));

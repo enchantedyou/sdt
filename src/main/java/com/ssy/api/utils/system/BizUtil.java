@@ -137,7 +137,7 @@ public class BizUtil {
      * @Date 2020/6/11-14:18
      * @return java.lang.String
      */
-    public synchronized static String buildTrxnSeq(){
+    public static String buildTrxnSeq(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
         return sdf.format(new Date()) + SeqUtil.genSeq("TRXN_SEQ");
     }
@@ -165,10 +165,8 @@ public class BizUtil {
         for(String key : oldMap.keySet()){
             Object o1 = oldMap.get(key);
             Object o2 = newMap.get(key);
-            String beforeData = CommUtil.isNull(o1) ? "" : o1.toString();
-            String afterData = CommUtil.isNull(o2) ? "" : o2.toString();
 
-            if(CommUtil.equals(beforeData, afterData)){
+            if(!CommUtil.isGenericsEqual(o1, o2) && !commFieldSet.contains(key)){
                 updateNum++;
             }
         }
@@ -360,11 +358,12 @@ public class BizUtil {
      * @return com.ssy.api.entity.lang.RunEnvs
      */
     public static RunEnvs getRunEnvs(){
+        RunEnvs runEnvs = new RunEnvs();
         try{
-            return (RunEnvs) SpringContextUtil.getRequest().getSession().getAttribute(SdtConst.RUN_ENVS);
+            return CommUtil.nvl((RunEnvs) SpringContextUtil.getRequest().getSession().getAttribute(SdtConst.RUN_ENVS), runEnvs);
         }catch (Exception e){
             log.debug("Unable to get the runtime environment, an empty runtime environment will be returned");
-            return new RunEnvs();
+            return runEnvs;
         }
     }
 

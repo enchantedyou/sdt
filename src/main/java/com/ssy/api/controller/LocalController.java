@@ -18,10 +18,7 @@ import com.ssy.api.logic.builder.SdTrxnBuilder;
 import com.ssy.api.logic.higention.SdGitlabReader;
 import com.ssy.api.logic.higention.SdNexus;
 import com.ssy.api.logic.local.SdPTEJsonParser;
-import com.ssy.api.servicetype.BatchService;
-import com.ssy.api.servicetype.DataSourceService;
-import com.ssy.api.servicetype.MetaService;
-import com.ssy.api.servicetype.UserService;
+import com.ssy.api.servicetype.*;
 import com.ssy.api.utils.http.HttpServletUtil;
 import com.ssy.api.utils.parse.ExcelParser;
 import com.ssy.api.utils.system.BizUtil;
@@ -53,6 +50,8 @@ public class LocalController {
     private MetaService metaService;
     @Autowired
     private DataSourceService dataSourceService;
+    @Autowired
+    private LoanService loanService;
 
     @Autowired
     private BatchService batchService;
@@ -304,5 +303,18 @@ public class LocalController {
     public String buildFieldSetStatement(@EncryptedArgument SdFieldSetIn fieldSetIn){
         SdFieldSetBuilder.checkMain(fieldSetIn);
         return SdFieldSetBuilder.doMain(fieldSetIn);
+    }
+
+    /**
+     * @Description 表分片哈希值查询
+     * @Author sunshaoyu
+     * @Date 2020/10/10-9:53
+     * @param shardingHashIn
+     * @return java.lang.Long
+     */
+    @TrxnEvent("query Sharding hash value")
+    @PostMapping("/queryShardingHashValue")
+    public Long queryShardingHashValue(@EncryptedArgument SdShardingHashIn shardingHashIn){
+        return loanService.getGroupHashValue(shardingHashIn.getUpperLimit(), shardingHashIn.getSequence()) - 1L;
     }
 }

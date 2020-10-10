@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.ln.LnaLoanMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ln.LnaLoan">
+    <constructor>
+      <idArg column="loan_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="org_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="limit_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="ccy_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="prod_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cust_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cust_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="contract_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="loan_creation_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="start_inst_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="maturity_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="original_maturity_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="open_branch" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="acct_branch" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="loan_tenor" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="loan_tenor_gl" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="tot_periods" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="current_period_no" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="loan_classification" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="wrof_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="wrof_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="loan_status" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="close_acct_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accounting_alias" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="loan_amt" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="already_drawdown_amt" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="available_drawdown_amt" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="outstanding_prcp" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="due_prcp" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="advance_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="bal_update_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hash_value" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="attr_value" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="loan_gl_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="new_contract_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="settl_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="settl_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="original_loan_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="overdue_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="init_oldi_amt" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="int_reversal_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="already_reduce_count" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="reversal_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    loan_no, org_id, limit_code, ccy_code, prod_id, cust_no, cust_name, contract_no, 
+    loan_creation_date, start_inst_date, maturity_date, original_maturity_date, open_branch, 
+    acct_branch, loan_tenor, loan_tenor_gl, tot_periods, current_period_no, loan_classification, 
+    wrof_ind, wrof_date, loan_status, close_acct_date, accounting_alias, loan_amt, already_drawdown_amt, 
+    available_drawdown_amt, outstanding_prcp, due_prcp, advance_interest, bal_update_date, 
+    hash_value, attr_value, loan_gl_type, new_contract_ind, settl_ind, settl_date, original_loan_no, 
+    overdue_ind, init_oldi_amt, int_reversal_ind, already_reduce_count, reversal_type, 
+    data_create_time, data_update_time, data_create_user, data_update_user, data_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from lna_loan
+    where loan_no = #{loanNo,jdbcType=VARCHAR}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from lna_loan
+    where loan_no = #{loanNo,jdbcType=VARCHAR}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.ln.LnaLoan">
+    insert into lna_loan (loan_no, org_id, limit_code, 
+      ccy_code, prod_id, cust_no, 
+      cust_name, contract_no, loan_creation_date, 
+      start_inst_date, maturity_date, original_maturity_date, 
+      open_branch, acct_branch, loan_tenor, 
+      loan_tenor_gl, tot_periods, current_period_no, 
+      loan_classification, wrof_ind, wrof_date, 
+      loan_status, close_acct_date, accounting_alias, 
+      loan_amt, already_drawdown_amt, available_drawdown_amt, 
+      outstanding_prcp, due_prcp, advance_interest, 
+      bal_update_date, hash_value, attr_value, 
+      loan_gl_type, new_contract_ind, settl_ind, 
+      settl_date, original_loan_no, overdue_ind, 
+      init_oldi_amt, int_reversal_ind, already_reduce_count, 
+      reversal_type, data_create_time, data_update_time, 
+      data_create_user, data_update_user, data_version
+      )
+    values (#{loanNo,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{limitCode,jdbcType=VARCHAR}, 
+      #{ccyCode,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{custNo,jdbcType=VARCHAR}, 
+      #{custName,jdbcType=VARCHAR}, #{contractNo,jdbcType=VARCHAR}, #{loanCreationDate,jdbcType=VARCHAR}, 
+      #{startInstDate,jdbcType=VARCHAR}, #{maturityDate,jdbcType=VARCHAR}, #{originalMaturityDate,jdbcType=VARCHAR}, 
+      #{openBranch,jdbcType=VARCHAR}, #{acctBranch,jdbcType=VARCHAR}, #{loanTenor,jdbcType=VARCHAR}, 
+      #{loanTenorGl,jdbcType=BIGINT}, #{totPeriods,jdbcType=BIGINT}, #{currentPeriodNo,jdbcType=BIGINT}, 
+      #{loanClassification,jdbcType=BIGINT}, #{wrofInd,jdbcType=VARCHAR}, #{wrofDate,jdbcType=VARCHAR}, 
+      #{loanStatus,jdbcType=VARCHAR}, #{closeAcctDate,jdbcType=VARCHAR}, #{accountingAlias,jdbcType=VARCHAR}, 
+      #{loanAmt,jdbcType=DECIMAL}, #{alreadyDrawdownAmt,jdbcType=DECIMAL}, #{availableDrawdownAmt,jdbcType=DECIMAL}, 
+      #{outstandingPrcp,jdbcType=DECIMAL}, #{duePrcp,jdbcType=DECIMAL}, #{advanceInterest,jdbcType=DECIMAL}, 
+      #{balUpdateDate,jdbcType=VARCHAR}, #{hashValue,jdbcType=BIGINT}, #{attrValue,jdbcType=VARCHAR}, 
+      #{loanGlType,jdbcType=VARCHAR}, #{newContractInd,jdbcType=VARCHAR}, #{settlInd,jdbcType=VARCHAR}, 
+      #{settlDate,jdbcType=VARCHAR}, #{originalLoanNo,jdbcType=VARCHAR}, #{overdueInd,jdbcType=VARCHAR}, 
+      #{initOldiAmt,jdbcType=DECIMAL}, #{intReversalInd,jdbcType=VARCHAR}, #{alreadyReduceCount,jdbcType=BIGINT}, 
+      #{reversalType,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, 
+      #{dataCreateUser,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, #{dataVersion,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ln.LnaLoan">
+    insert into lna_loan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="loanNo != null">
+        loan_no,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="limitCode != null">
+        limit_code,
+      </if>
+      <if test="ccyCode != null">
+        ccy_code,
+      </if>
+      <if test="prodId != null">
+        prod_id,
+      </if>
+      <if test="custNo != null">
+        cust_no,
+      </if>
+      <if test="custName != null">
+        cust_name,
+      </if>
+      <if test="contractNo != null">
+        contract_no,
+      </if>
+      <if test="loanCreationDate != null">
+        loan_creation_date,
+      </if>
+      <if test="startInstDate != null">
+        start_inst_date,
+      </if>
+      <if test="maturityDate != null">
+        maturity_date,
+      </if>
+      <if test="originalMaturityDate != null">
+        original_maturity_date,
+      </if>
+      <if test="openBranch != null">
+        open_branch,
+      </if>
+      <if test="acctBranch != null">
+        acct_branch,
+      </if>
+      <if test="loanTenor != null">
+        loan_tenor,
+      </if>
+      <if test="loanTenorGl != null">
+        loan_tenor_gl,
+      </if>
+      <if test="totPeriods != null">
+        tot_periods,
+      </if>
+      <if test="currentPeriodNo != null">
+        current_period_no,
+      </if>
+      <if test="loanClassification != null">
+        loan_classification,
+      </if>
+      <if test="wrofInd != null">
+        wrof_ind,
+      </if>
+      <if test="wrofDate != null">
+        wrof_date,
+      </if>
+      <if test="loanStatus != null">
+        loan_status,
+      </if>
+      <if test="closeAcctDate != null">
+        close_acct_date,
+      </if>
+      <if test="accountingAlias != null">
+        accounting_alias,
+      </if>
+      <if test="loanAmt != null">
+        loan_amt,
+      </if>
+      <if test="alreadyDrawdownAmt != null">
+        already_drawdown_amt,
+      </if>
+      <if test="availableDrawdownAmt != null">
+        available_drawdown_amt,
+      </if>
+      <if test="outstandingPrcp != null">
+        outstanding_prcp,
+      </if>
+      <if test="duePrcp != null">
+        due_prcp,
+      </if>
+      <if test="advanceInterest != null">
+        advance_interest,
+      </if>
+      <if test="balUpdateDate != null">
+        bal_update_date,
+      </if>
+      <if test="hashValue != null">
+        hash_value,
+      </if>
+      <if test="attrValue != null">
+        attr_value,
+      </if>
+      <if test="loanGlType != null">
+        loan_gl_type,
+      </if>
+      <if test="newContractInd != null">
+        new_contract_ind,
+      </if>
+      <if test="settlInd != null">
+        settl_ind,
+      </if>
+      <if test="settlDate != null">
+        settl_date,
+      </if>
+      <if test="originalLoanNo != null">
+        original_loan_no,
+      </if>
+      <if test="overdueInd != null">
+        overdue_ind,
+      </if>
+      <if test="initOldiAmt != null">
+        init_oldi_amt,
+      </if>
+      <if test="intReversalInd != null">
+        int_reversal_ind,
+      </if>
+      <if test="alreadyReduceCount != null">
+        already_reduce_count,
+      </if>
+      <if test="reversalType != null">
+        reversal_type,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user,
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="loanNo != null">
+        #{loanNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="limitCode != null">
+        #{limitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ccyCode != null">
+        #{ccyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="custNo != null">
+        #{custNo,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null">
+        #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCreationDate != null">
+        #{loanCreationDate,jdbcType=VARCHAR},
+      </if>
+      <if test="startInstDate != null">
+        #{startInstDate,jdbcType=VARCHAR},
+      </if>
+      <if test="maturityDate != null">
+        #{maturityDate,jdbcType=VARCHAR},
+      </if>
+      <if test="originalMaturityDate != null">
+        #{originalMaturityDate,jdbcType=VARCHAR},
+      </if>
+      <if test="openBranch != null">
+        #{openBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="acctBranch != null">
+        #{acctBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="loanTenor != null">
+        #{loanTenor,jdbcType=VARCHAR},
+      </if>
+      <if test="loanTenorGl != null">
+        #{loanTenorGl,jdbcType=BIGINT},
+      </if>
+      <if test="totPeriods != null">
+        #{totPeriods,jdbcType=BIGINT},
+      </if>
+      <if test="currentPeriodNo != null">
+        #{currentPeriodNo,jdbcType=BIGINT},
+      </if>
+      <if test="loanClassification != null">
+        #{loanClassification,jdbcType=BIGINT},
+      </if>
+      <if test="wrofInd != null">
+        #{wrofInd,jdbcType=VARCHAR},
+      </if>
+      <if test="wrofDate != null">
+        #{wrofDate,jdbcType=VARCHAR},
+      </if>
+      <if test="loanStatus != null">
+        #{loanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="closeAcctDate != null">
+        #{closeAcctDate,jdbcType=VARCHAR},
+      </if>
+      <if test="accountingAlias != null">
+        #{accountingAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAmt != null">
+        #{loanAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="alreadyDrawdownAmt != null">
+        #{alreadyDrawdownAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="availableDrawdownAmt != null">
+        #{availableDrawdownAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="outstandingPrcp != null">
+        #{outstandingPrcp,jdbcType=DECIMAL},
+      </if>
+      <if test="duePrcp != null">
+        #{duePrcp,jdbcType=DECIMAL},
+      </if>
+      <if test="advanceInterest != null">
+        #{advanceInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="balUpdateDate != null">
+        #{balUpdateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="hashValue != null">
+        #{hashValue,jdbcType=BIGINT},
+      </if>
+      <if test="attrValue != null">
+        #{attrValue,jdbcType=VARCHAR},
+      </if>
+      <if test="loanGlType != null">
+        #{loanGlType,jdbcType=VARCHAR},
+      </if>
+      <if test="newContractInd != null">
+        #{newContractInd,jdbcType=VARCHAR},
+      </if>
+      <if test="settlInd != null">
+        #{settlInd,jdbcType=VARCHAR},
+      </if>
+      <if test="settlDate != null">
+        #{settlDate,jdbcType=VARCHAR},
+      </if>
+      <if test="originalLoanNo != null">
+        #{originalLoanNo,jdbcType=VARCHAR},
+      </if>
+      <if test="overdueInd != null">
+        #{overdueInd,jdbcType=VARCHAR},
+      </if>
+      <if test="initOldiAmt != null">
+        #{initOldiAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="intReversalInd != null">
+        #{intReversalInd,jdbcType=VARCHAR},
+      </if>
+      <if test="alreadyReduceCount != null">
+        #{alreadyReduceCount,jdbcType=BIGINT},
+      </if>
+      <if test="reversalType != null">
+        #{reversalType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ln.LnaLoan">
+    update lna_loan
+    <set>
+      <if test="limitCode != null">
+        limit_code = #{limitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ccyCode != null">
+        ccy_code = #{ccyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        prod_id = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="custNo != null">
+        cust_no = #{custNo,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        cust_name = #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null">
+        contract_no = #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCreationDate != null">
+        loan_creation_date = #{loanCreationDate,jdbcType=VARCHAR},
+      </if>
+      <if test="startInstDate != null">
+        start_inst_date = #{startInstDate,jdbcType=VARCHAR},
+      </if>
+      <if test="maturityDate != null">
+        maturity_date = #{maturityDate,jdbcType=VARCHAR},
+      </if>
+      <if test="originalMaturityDate != null">
+        original_maturity_date = #{originalMaturityDate,jdbcType=VARCHAR},
+      </if>
+      <if test="openBranch != null">
+        open_branch = #{openBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="acctBranch != null">
+        acct_branch = #{acctBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="loanTenor != null">
+        loan_tenor = #{loanTenor,jdbcType=VARCHAR},
+      </if>
+      <if test="loanTenorGl != null">
+        loan_tenor_gl = #{loanTenorGl,jdbcType=BIGINT},
+      </if>
+      <if test="totPeriods != null">
+        tot_periods = #{totPeriods,jdbcType=BIGINT},
+      </if>
+      <if test="currentPeriodNo != null">
+        current_period_no = #{currentPeriodNo,jdbcType=BIGINT},
+      </if>
+      <if test="loanClassification != null">
+        loan_classification = #{loanClassification,jdbcType=BIGINT},
+      </if>
+      <if test="wrofInd != null">
+        wrof_ind = #{wrofInd,jdbcType=VARCHAR},
+      </if>
+      <if test="wrofDate != null">
+        wrof_date = #{wrofDate,jdbcType=VARCHAR},
+      </if>
+      <if test="loanStatus != null">
+        loan_status = #{loanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="closeAcctDate != null">
+        close_acct_date = #{closeAcctDate,jdbcType=VARCHAR},
+      </if>
+      <if test="accountingAlias != null">
+        accounting_alias = #{accountingAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAmt != null">
+        loan_amt = #{loanAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="alreadyDrawdownAmt != null">
+        already_drawdown_amt = #{alreadyDrawdownAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="availableDrawdownAmt != null">
+        available_drawdown_amt = #{availableDrawdownAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="outstandingPrcp != null">
+        outstanding_prcp = #{outstandingPrcp,jdbcType=DECIMAL},
+      </if>
+      <if test="duePrcp != null">
+        due_prcp = #{duePrcp,jdbcType=DECIMAL},
+      </if>
+      <if test="advanceInterest != null">
+        advance_interest = #{advanceInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="balUpdateDate != null">
+        bal_update_date = #{balUpdateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="hashValue != null">
+        hash_value = #{hashValue,jdbcType=BIGINT},
+      </if>
+      <if test="attrValue != null">
+        attr_value = #{attrValue,jdbcType=VARCHAR},
+      </if>
+      <if test="loanGlType != null">
+        loan_gl_type = #{loanGlType,jdbcType=VARCHAR},
+      </if>
+      <if test="newContractInd != null">
+        new_contract_ind = #{newContractInd,jdbcType=VARCHAR},
+      </if>
+      <if test="settlInd != null">
+        settl_ind = #{settlInd,jdbcType=VARCHAR},
+      </if>
+      <if test="settlDate != null">
+        settl_date = #{settlDate,jdbcType=VARCHAR},
+      </if>
+      <if test="originalLoanNo != null">
+        original_loan_no = #{originalLoanNo,jdbcType=VARCHAR},
+      </if>
+      <if test="overdueInd != null">
+        overdue_ind = #{overdueInd,jdbcType=VARCHAR},
+      </if>
+      <if test="initOldiAmt != null">
+        init_oldi_amt = #{initOldiAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="intReversalInd != null">
+        int_reversal_ind = #{intReversalInd,jdbcType=VARCHAR},
+      </if>
+      <if test="alreadyReduceCount != null">
+        already_reduce_count = #{alreadyReduceCount,jdbcType=BIGINT},
+      </if>
+      <if test="reversalType != null">
+        reversal_type = #{reversalType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </set>
+    where loan_no = #{loanNo,jdbcType=VARCHAR}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ln.LnaLoan">
+    update lna_loan
+    set limit_code = #{limitCode,jdbcType=VARCHAR},
+      ccy_code = #{ccyCode,jdbcType=VARCHAR},
+      prod_id = #{prodId,jdbcType=VARCHAR},
+      cust_no = #{custNo,jdbcType=VARCHAR},
+      cust_name = #{custName,jdbcType=VARCHAR},
+      contract_no = #{contractNo,jdbcType=VARCHAR},
+      loan_creation_date = #{loanCreationDate,jdbcType=VARCHAR},
+      start_inst_date = #{startInstDate,jdbcType=VARCHAR},
+      maturity_date = #{maturityDate,jdbcType=VARCHAR},
+      original_maturity_date = #{originalMaturityDate,jdbcType=VARCHAR},
+      open_branch = #{openBranch,jdbcType=VARCHAR},
+      acct_branch = #{acctBranch,jdbcType=VARCHAR},
+      loan_tenor = #{loanTenor,jdbcType=VARCHAR},
+      loan_tenor_gl = #{loanTenorGl,jdbcType=BIGINT},
+      tot_periods = #{totPeriods,jdbcType=BIGINT},
+      current_period_no = #{currentPeriodNo,jdbcType=BIGINT},
+      loan_classification = #{loanClassification,jdbcType=BIGINT},
+      wrof_ind = #{wrofInd,jdbcType=VARCHAR},
+      wrof_date = #{wrofDate,jdbcType=VARCHAR},
+      loan_status = #{loanStatus,jdbcType=VARCHAR},
+      close_acct_date = #{closeAcctDate,jdbcType=VARCHAR},
+      accounting_alias = #{accountingAlias,jdbcType=VARCHAR},
+      loan_amt = #{loanAmt,jdbcType=DECIMAL},
+      already_drawdown_amt = #{alreadyDrawdownAmt,jdbcType=DECIMAL},
+      available_drawdown_amt = #{availableDrawdownAmt,jdbcType=DECIMAL},
+      outstanding_prcp = #{outstandingPrcp,jdbcType=DECIMAL},
+      due_prcp = #{duePrcp,jdbcType=DECIMAL},
+      advance_interest = #{advanceInterest,jdbcType=DECIMAL},
+      bal_update_date = #{balUpdateDate,jdbcType=VARCHAR},
+      hash_value = #{hashValue,jdbcType=BIGINT},
+      attr_value = #{attrValue,jdbcType=VARCHAR},
+      loan_gl_type = #{loanGlType,jdbcType=VARCHAR},
+      new_contract_ind = #{newContractInd,jdbcType=VARCHAR},
+      settl_ind = #{settlInd,jdbcType=VARCHAR},
+      settl_date = #{settlDate,jdbcType=VARCHAR},
+      original_loan_no = #{originalLoanNo,jdbcType=VARCHAR},
+      overdue_ind = #{overdueInd,jdbcType=VARCHAR},
+      init_oldi_amt = #{initOldiAmt,jdbcType=DECIMAL},
+      int_reversal_ind = #{intReversalInd,jdbcType=VARCHAR},
+      already_reduce_count = #{alreadyReduceCount,jdbcType=BIGINT},
+      reversal_type = #{reversalType,jdbcType=VARCHAR},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=BIGINT}
+    where loan_no = #{loanNo,jdbcType=VARCHAR}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAll_odb1" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from lna_loan
+    where org_id = #{orgId,jdbcType=VARCHAR}
+  </select>
+</mapper>

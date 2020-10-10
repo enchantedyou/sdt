@@ -243,4 +243,11 @@
     from tsp_service_in
     where protocol_id = #{protocolId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectOne_odb1" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tsp_service_in
+    where inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
+  </select>
 </mapper>

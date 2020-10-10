@@ -191,6 +191,13 @@
             <version>1.13.1</version>
         </dependency>
 
+        <!-- flyway脚本管理 -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>6.5.7</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -217,6 +224,12 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>6.5.7</version>
+            </plugin>
+
         </plugins>
         <resources>
             <resource>

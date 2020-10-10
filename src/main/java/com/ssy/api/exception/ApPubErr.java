@@ -41,7 +41,7 @@ public class ApPubErr {
 
     /** 元数据模型加载失败 **/
     public static SdtException E0007(Throwable e) {
-        throw new SdtException("Failed to load metadata model", ErrCodeDef.XML_DEAL_FAILURE);
+        throw new SdtException("Failed to load metadata model", e);
     }
 
     /** 元数据模型的优先级未配置 **/

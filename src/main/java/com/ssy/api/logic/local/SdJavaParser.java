@@ -40,6 +40,8 @@ public class SdJavaParser {
     public static final String MANDATORY_STMT = "BizUtil.fieldNotNull";
     /** 编译单元缓存 **/
     private static final Map<String, CompilationUnit> cplUnitMap = new ConcurrentHashMap<>();
+    /** 递归深度 **/
+    private static final ThreadLocal<Integer> RECURSION_DEPTH_LOCAL = new ThreadLocal<>();
 
     /**
      * @Description 搜索方法调用
@@ -87,6 +89,17 @@ public class SdJavaParser {
      */
     private static void searchMethodCalls(List<String> callList, File javaCodeFile, String methodName, NodeList<Expression> expressionNodeList, String callStatement) {
         try{
+            //最大递归深度
+            final int maxDepth = 10;
+            if(CommUtil.isNull(RECURSION_DEPTH_LOCAL.get())){
+                RECURSION_DEPTH_LOCAL.set(1);
+            }else{
+                RECURSION_DEPTH_LOCAL.set(RECURSION_DEPTH_LOCAL.get() + 1);
+                if(RECURSION_DEPTH_LOCAL.get() >= maxDepth){
+                    return;
+                }
+            }
+
             if(CommUtil.isNotNull(javaCodeFile) && callStatement.contains(".")){
                 CompilationUnit unit = getJavaCompilationUnit(javaCodeFile);
                 MethodDeclaration methodDeclaration = JavaCodeParser.findMethodDeclaration(unit, methodName, expressionNodeList);
@@ -109,11 +122,7 @@ public class SdJavaParser {
                         }
                     }
                     /** 检查类方法 **/
-                    else if(!isMandatorySearch || callName.contains(CHECK_KEY[0]) || callName.contains(CHECK_KEY[1])){
-                        if(CommUtil.isNotNull(methodDeclaration) && CommUtil.equals(methodDeclaration.getNameAsString(), methodCallExpr.getNameAsString())){
-                            continue;
-                        }
-
+                    else {
                         if(methodCallExpr.getScope().isPresent()){
                             searchMethodCalls(callList, OdbFactory.searchFile(methodCallExpr.getScope().get().toString() + SdtConst.JAVA_SUFFIX), methodCallExpr.getNameAsString(), methodCallExpr.getArguments(), callStatement);
                         }else{

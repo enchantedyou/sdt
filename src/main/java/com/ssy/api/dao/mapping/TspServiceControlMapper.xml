@@ -190,4 +190,10 @@
       and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
       and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tsp_service_control
+  </select>
 </mapper>

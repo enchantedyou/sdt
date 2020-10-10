@@ -67,7 +67,7 @@ public class SdFlowtranParser {
             //解析服务
             parseService(flowtran, rootNode);
             //存入redis缓存
-            RedisHelper.addandSetValue(flowTranId, flowtran, SdtConst.REDIS_FLOWTRAN_TIMEOUT);
+            RedisHelper.addAndSetValue(flowTranId, flowtran, SdtConst.REDIS_FLOWTRAN_TIMEOUT);
             return flowtran;
         } catch (DocumentException e) {
             throw new SdtException("Failed to parse flowtran " + flowTranId, e);

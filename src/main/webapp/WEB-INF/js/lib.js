@@ -6160,7 +6160,12 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 							successCallback(response.output);
 					    }
 					  }else{
-						  requestContext.showError(response);
+						  if(requestContext.isJSON(response) && response.sys.erorcd == "1001"){
+							  //支持异步重新登录
+							  requestContext.reLogin();
+						  }else{
+							  requestContext.showError(response);
+						  }
 					  }
 				  }else{
 					  requestContext.showError("连接服务器失败");
@@ -6207,6 +6212,28 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 			  }else{
 				  return str.toString().replace(/(^\s*)|(\s*$)/g, "");
 			  }
+		  },
+		  reLogin: function(){
+			  layer.open({
+				  type: 1,
+				  title: "登录超时，请重新登录",
+				  skin: 'layui-layer-rim',
+				  area: ['380px', '240px'],
+				  content: '<form class="layui-form" style="overflow-x: hidden; overflow-y: hidden">\n' +
+					  '\t\t<div class="layui-form-item">\n' +
+					  '\t\t\t\t<input type="text" name="userAcct" placeholder="账号" lay-verify="required" class="layui-input">\n' +
+					  '\t\t</div>\n' +
+					  '\t\t<div class="layui-form-item">\n' +
+					  '\t\t\t\t<input type="password" name="userPwd" placeholder="密码" lay-verify="required" class="layui-input" id="user-pwd">\n' +
+					  '\t\t</div>\n' +
+					  '\t\t<div class="layui-form-item">\n' +
+					  '\t\t\t\t<div class="layui-input-block">\n' +
+					  '\t\t\t\t\t<button type="button" class="layui-btn" lay-submit lay-filter="reLogin" id="relogin-btn">登录</button>\n' +
+					  '\t\t\t\t\t<button type="button" class="layui-btn" id="cancel-btn">取消</button>\n' +
+					  '\t\t\t\t</div>\n' +
+					  '\t\t</div>\n' +
+					  '</form>'
+			  });
 		  },
 		  isJSON: function(data){
 			  try {
@@ -6306,12 +6333,12 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 				  }
 			  }
 		  },
-		  searchTableRender: function(param, requestUrl, elem, cols, callback){
+		  searchTableRender: function(isPagination, param, requestUrl, elem, cols, callback){
 			  let enc = c(JSON.stringify(param));
 			  table.render({
 				  elem: elem,
 				  url: requestUrl,
-				  page: true,
+				  page: isPagination,
 				  toolbar: "#gridAdd",
 				  limits: [10, 15, 20],
 				  limit: 10,
@@ -6333,14 +6360,16 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 				  },
 				  done: function(res, curr, count){
 					  if(res.code == "1001"){
-						  layer.open({
+						  /*layer.open({
 							  title: "提示",
 							  content: res.msg,
 							  resize: false,
 							  end: function(){
 								  window.location.href = $(".basePath").val();
 							  }
-						  });
+						  });*/
+						  //支持异步登录
+						  requestContext.reLogin();
 					  }else{
 					  	  //渲染表格后回调
 						  if(typeof callback == "function"){
@@ -6397,9 +6426,16 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		  });
 	  });
 
+	  //异步重新登录
+	form.on('submit(reLogin)',function(data){
+		requestContext.doRequest("local/login", data.field, "relogin-btn", false, function(response){
+			//window.location.href = $(".basePath").val() + "index";
+		});
+	});
+
 	  //字典搜索
 	  form.on('submit(dictSearch)',function(data){
-	  	requestContext.searchTableRender(data.field, "/local/searchDictList", "#bodyTable", [[
+	  	requestContext.searchTableRender(true, data.field, "/local/searchDictList", "#bodyTable", [[
 			{title:'#', type: 'numbers'},
 			{field:'id', title:'ID'},
 			{field:'ref', title:'引用'},
@@ -6428,7 +6464,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 
 	  /** 批量登记簿查询 **/
 	form.on('submit(batchSearch)',function(data){
-		requestContext.searchTableRender(data.field, "/local/queryBatchExeList", "#bodyTable", [[
+		requestContext.searchTableRender(true, data.field, "/local/queryBatchExeList", "#bodyTable", [[
 			{title:'#', type: 'numbers'},
 			{field:'tranFlowId', title:'任务流程ID'},
 			{field:'batchRunNo', title:'批量任务执行批次号'},
@@ -6441,7 +6477,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 
 	/** 数据源列表查询 **/
 	form.on('submit(dataSourceSubmit)',function(data){
-		requestContext.searchTableRender(data.field, "/local/dataSourceList", "#bodyTable", [[
+		requestContext.searchTableRender(true, data.field, "/local/dataSourceList", "#bodyTable", [[
 			{title:'#', type: 'numbers'},
 			{field:'datasourceId', title:'数据源ID'},
 			{field:'datasourceDesc', title:'数据源描述'},
@@ -6491,6 +6527,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 	form.on('submit(buildSetFieldSubmit)',function(data){
 		requestContext.doRequest("local/buildFieldSet", data.field, "layui-btn", true, function(response){
 			$("#showSetStatement").html(response);
+		});
+	});
+
+	/** 分片表哈希值查询 **/
+	form.on('submit(shardingHashSubmit)',function(data){
+		requestContext.doRequest("local/queryShardingHashValue", data.field, "layui-btn", true, function(response){
+			$("#showShardingHash").html(response);
 		});
 	});
 
@@ -6585,6 +6628,11 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** 取消登录 **/
+	$(document).on("click","#cancel-btn",function(){
+		window.location.href = $(".basePath").val();
+	});
+
 	/** 数据源列表查询 **/
 	$(document).on("click","#m2001",function(){
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
@@ -6614,6 +6662,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 				});
 			});
 			requestContext.enableClipboard();
+		});
+	});
+
+	/** 分片表哈希值查询 **/
+	$(document).on("click","#m5000",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu5000",null, requestContext.menuClickCallback);
 		});
 	});
 

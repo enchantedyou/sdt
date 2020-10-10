@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.ap.ApsAccountingEventMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ap.ApsAccountingEvent">
+    <constructor>
+      <idArg column="trxn_seq" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="data_sort" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <idArg column="org_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="main_trxn_seq" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="acct_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sub_acct_seq" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trxn_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="double_entry_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="debit_credit" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trxn_ccy" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trxn_amt" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="acct_branch" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accounting_alias" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accounting_subject" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="bal_attributes" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hash_value" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="data_sync_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_sync_file_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="gl_ref_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="branch_settle_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="summary_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="summary_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="prod_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cust_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trxn_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accrue_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="opp_acct_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="out_opp_acct_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    trxn_seq, data_sort, org_id, main_trxn_seq, acct_no, sub_acct_seq, trxn_date, double_entry_ind, 
+    debit_credit, trxn_ccy, trxn_amt, acct_branch, accounting_alias, accounting_subject, 
+    bal_attributes, hash_value, data_sync_ind, data_sync_file_id, gl_ref_code, branch_settle_ind, 
+    summary_code, summary_name, prod_id, cust_no, trxn_code, remark, accrue_type, opp_acct_no, 
+    out_opp_acct_no, data_create_time, data_update_time, data_create_user, data_update_user, 
+    data_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from aps_accounting_event
+    where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
+      and data_sort = #{dataSort,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from aps_accounting_event
+    where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
+      and data_sort = #{dataSort,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.ap.ApsAccountingEvent">
+    insert into aps_accounting_event (trxn_seq, data_sort, org_id, 
+      main_trxn_seq, acct_no, sub_acct_seq, 
+      trxn_date, double_entry_ind, debit_credit, 
+      trxn_ccy, trxn_amt, acct_branch, 
+      accounting_alias, accounting_subject, bal_attributes, 
+      hash_value, data_sync_ind, data_sync_file_id, 
+      gl_ref_code, branch_settle_ind, summary_code, 
+      summary_name, prod_id, cust_no, 
+      trxn_code, remark, accrue_type, 
+      opp_acct_no, out_opp_acct_no, data_create_time, 
+      data_update_time, data_create_user, data_update_user, 
+      data_version)
+    values (#{trxnSeq,jdbcType=VARCHAR}, #{dataSort,jdbcType=BIGINT}, #{orgId,jdbcType=VARCHAR}, 
+      #{mainTrxnSeq,jdbcType=VARCHAR}, #{acctNo,jdbcType=VARCHAR}, #{subAcctSeq,jdbcType=VARCHAR}, 
+      #{trxnDate,jdbcType=VARCHAR}, #{doubleEntryInd,jdbcType=VARCHAR}, #{debitCredit,jdbcType=VARCHAR}, 
+      #{trxnCcy,jdbcType=VARCHAR}, #{trxnAmt,jdbcType=DECIMAL}, #{acctBranch,jdbcType=VARCHAR}, 
+      #{accountingAlias,jdbcType=VARCHAR}, #{accountingSubject,jdbcType=VARCHAR}, #{balAttributes,jdbcType=VARCHAR}, 
+      #{hashValue,jdbcType=BIGINT}, #{dataSyncInd,jdbcType=VARCHAR}, #{dataSyncFileId,jdbcType=VARCHAR}, 
+      #{glRefCode,jdbcType=VARCHAR}, #{branchSettleInd,jdbcType=VARCHAR}, #{summaryCode,jdbcType=VARCHAR}, 
+      #{summaryName,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{custNo,jdbcType=VARCHAR}, 
+      #{trxnCode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{accrueType,jdbcType=VARCHAR}, 
+      #{oppAcctNo,jdbcType=VARCHAR}, #{outOppAcctNo,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, 
+      #{dataUpdateTime,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, 
+      #{dataVersion,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ap.ApsAccountingEvent">
+    insert into aps_accounting_event
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="trxnSeq != null">
+        trxn_seq,
+      </if>
+      <if test="dataSort != null">
+        data_sort,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="mainTrxnSeq != null">
+        main_trxn_seq,
+      </if>
+      <if test="acctNo != null">
+        acct_no,
+      </if>
+      <if test="subAcctSeq != null">
+        sub_acct_seq,
+      </if>
+      <if test="trxnDate != null">
+        trxn_date,
+      </if>
+      <if test="doubleEntryInd != null">
+        double_entry_ind,
+      </if>
+      <if test="debitCredit != null">
+        debit_credit,
+      </if>
+      <if test="trxnCcy != null">
+        trxn_ccy,
+      </if>
+      <if test="trxnAmt != null">
+        trxn_amt,
+      </if>
+      <if test="acctBranch != null">
+        acct_branch,
+      </if>
+      <if test="accountingAlias != null">
+        accounting_alias,
+      </if>
+      <if test="accountingSubject != null">
+        accounting_subject,
+      </if>
+      <if test="balAttributes != null">
+        bal_attributes,
+      </if>
+      <if test="hashValue != null">
+        hash_value,
+      </if>
+      <if test="dataSyncInd != null">
+        data_sync_ind,
+      </if>
+      <if test="dataSyncFileId != null">
+        data_sync_file_id,
+      </if>
+      <if test="glRefCode != null">
+        gl_ref_code,
+      </if>
+      <if test="branchSettleInd != null">
+        branch_settle_ind,
+      </if>
+      <if test="summaryCode != null">
+        summary_code,
+      </if>
+      <if test="summaryName != null">
+        summary_name,
+      </if>
+      <if test="prodId != null">
+        prod_id,
+      </if>
+      <if test="custNo != null">
+        cust_no,
+      </if>
+      <if test="trxnCode != null">
+        trxn_code,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="accrueType != null">
+        accrue_type,
+      </if>
+      <if test="oppAcctNo != null">
+        opp_acct_no,
+      </if>
+      <if test="outOppAcctNo != null">
+        out_opp_acct_no,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user,
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="trxnSeq != null">
+        #{trxnSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSort != null">
+        #{dataSort,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="mainTrxnSeq != null">
+        #{mainTrxnSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="acctNo != null">
+        #{acctNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subAcctSeq != null">
+        #{subAcctSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnDate != null">
+        #{trxnDate,jdbcType=VARCHAR},
+      </if>
+      <if test="doubleEntryInd != null">
+        #{doubleEntryInd,jdbcType=VARCHAR},
+      </if>
+      <if test="debitCredit != null">
+        #{debitCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnCcy != null">
+        #{trxnCcy,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnAmt != null">
+        #{trxnAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="acctBranch != null">
+        #{acctBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="accountingAlias != null">
+        #{accountingAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="accountingSubject != null">
+        #{accountingSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="balAttributes != null">
+        #{balAttributes,jdbcType=VARCHAR},
+      </if>
+      <if test="hashValue != null">
+        #{hashValue,jdbcType=BIGINT},
+      </if>
+      <if test="dataSyncInd != null">
+        #{dataSyncInd,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSyncFileId != null">
+        #{dataSyncFileId,jdbcType=VARCHAR},
+      </if>
+      <if test="glRefCode != null">
+        #{glRefCode,jdbcType=VARCHAR},
+      </if>
+      <if test="branchSettleInd != null">
+        #{branchSettleInd,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryCode != null">
+        #{summaryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryName != null">
+        #{summaryName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="custNo != null">
+        #{custNo,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnCode != null">
+        #{trxnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="accrueType != null">
+        #{accrueType,jdbcType=VARCHAR},
+      </if>
+      <if test="oppAcctNo != null">
+        #{oppAcctNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outOppAcctNo != null">
+        #{outOppAcctNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ap.ApsAccountingEvent">
+    update aps_accounting_event
+    <set>
+      <if test="mainTrxnSeq != null">
+        main_trxn_seq = #{mainTrxnSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="acctNo != null">
+        acct_no = #{acctNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subAcctSeq != null">
+        sub_acct_seq = #{subAcctSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnDate != null">
+        trxn_date = #{trxnDate,jdbcType=VARCHAR},
+      </if>
+      <if test="doubleEntryInd != null">
+        double_entry_ind = #{doubleEntryInd,jdbcType=VARCHAR},
+      </if>
+      <if test="debitCredit != null">
+        debit_credit = #{debitCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnCcy != null">
+        trxn_ccy = #{trxnCcy,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnAmt != null">
+        trxn_amt = #{trxnAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="acctBranch != null">
+        acct_branch = #{acctBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="accountingAlias != null">
+        accounting_alias = #{accountingAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="accountingSubject != null">
+        accounting_subject = #{accountingSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="balAttributes != null">
+        bal_attributes = #{balAttributes,jdbcType=VARCHAR},
+      </if>
+      <if test="hashValue != null">
+        hash_value = #{hashValue,jdbcType=BIGINT},
+      </if>
+      <if test="dataSyncInd != null">
+        data_sync_ind = #{dataSyncInd,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSyncFileId != null">
+        data_sync_file_id = #{dataSyncFileId,jdbcType=VARCHAR},
+      </if>
+      <if test="glRefCode != null">
+        gl_ref_code = #{glRefCode,jdbcType=VARCHAR},
+      </if>
+      <if test="branchSettleInd != null">
+        branch_settle_ind = #{branchSettleInd,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryCode != null">
+        summary_code = #{summaryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryName != null">
+        summary_name = #{summaryName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        prod_id = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="custNo != null">
+        cust_no = #{custNo,jdbcType=VARCHAR},
+      </if>
+      <if test="trxnCode != null">
+        trxn_code = #{trxnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="accrueType != null">
+        accrue_type = #{accrueType,jdbcType=VARCHAR},
+      </if>
+      <if test="oppAcctNo != null">
+        opp_acct_no = #{oppAcctNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outOppAcctNo != null">
+        out_opp_acct_no = #{outOppAcctNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </set>
+    where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
+      and data_sort = #{dataSort,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ap.ApsAccountingEvent">
+    update aps_accounting_event
+    set main_trxn_seq = #{mainTrxnSeq,jdbcType=VARCHAR},
+      acct_no = #{acctNo,jdbcType=VARCHAR},
+      sub_acct_seq = #{subAcctSeq,jdbcType=VARCHAR},
+      trxn_date = #{trxnDate,jdbcType=VARCHAR},
+      double_entry_ind = #{doubleEntryInd,jdbcType=VARCHAR},
+      debit_credit = #{debitCredit,jdbcType=VARCHAR},
+      trxn_ccy = #{trxnCcy,jdbcType=VARCHAR},
+      trxn_amt = #{trxnAmt,jdbcType=DECIMAL},
+      acct_branch = #{acctBranch,jdbcType=VARCHAR},
+      accounting_alias = #{accountingAlias,jdbcType=VARCHAR},
+      accounting_subject = #{accountingSubject,jdbcType=VARCHAR},
+      bal_attributes = #{balAttributes,jdbcType=VARCHAR},
+      hash_value = #{hashValue,jdbcType=BIGINT},
+      data_sync_ind = #{dataSyncInd,jdbcType=VARCHAR},
+      data_sync_file_id = #{dataSyncFileId,jdbcType=VARCHAR},
+      gl_ref_code = #{glRefCode,jdbcType=VARCHAR},
+      branch_settle_ind = #{branchSettleInd,jdbcType=VARCHAR},
+      summary_code = #{summaryCode,jdbcType=VARCHAR},
+      summary_name = #{summaryName,jdbcType=VARCHAR},
+      prod_id = #{prodId,jdbcType=VARCHAR},
+      cust_no = #{custNo,jdbcType=VARCHAR},
+      trxn_code = #{trxnCode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      accrue_type = #{accrueType,jdbcType=VARCHAR},
+      opp_acct_no = #{oppAcctNo,jdbcType=VARCHAR},
+      out_opp_acct_no = #{outOppAcctNo,jdbcType=VARCHAR},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=BIGINT}
+    where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
+      and data_sort = #{dataSort,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selSumAmtByBalAttribute" parameterType="map" resultType="java.math.BigDecimal">
+    select
+    sum(trxn_amt)
+    from aps_accounting_event
+    where debit_credit = #{debitCredit,jdbcType=VARCHAR}
+    and acct_no = #{acctNo,jdbcType=VARCHAR}
+    and bal_attributes = #{balAttributes,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from aps_accounting_event
+    where acct_no = #{acctNo,jdbcType=VARCHAR}
+    and org_id = #{orgId,jdbcType=VARCHAR}
+  </select>
+</mapper>

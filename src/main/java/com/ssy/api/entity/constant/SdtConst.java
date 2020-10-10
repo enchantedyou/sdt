@@ -22,7 +22,7 @@ public class SdtConst {
     /** 当前用户的session的key **/
     public static final String USER_INFO = "userInfo";
     /** 用户登录最大有效时间 **/
-    public static final int userMaxInactiveInterval = 60 * 60 * 6;
+    public static final int userMaxInactiveInterval = 60 * 15;
     /** 项目基础路径 **/
     public static final String BASE_PATH = "basePath";
     /** POST请求方式 **/
@@ -37,6 +37,8 @@ public class SdtConst {
     public static final String RESPONSE_DATA = "responseData";
     /** 列表分隔符 **/
     public static final String LIST_SPLIT_TOKEN = ";";
+    /** 默认数据源类型 **/
+    public static final String DATASOURCE_TYPE = "MYSQL";
 
     /** 加密秘钥入参名 **/
     public static final String ENCKEY = "encKey";
@@ -56,7 +58,7 @@ public class SdtConst {
     public static final String ENUMERATION_NODE_NAME = "enumeration";
     public static final String TABLE_NODE_NAME = "table";
     public static final String FIELD_NODE_NAME = "field";
-    public static final int DEFAULT_RESTRICTION_LENGTH = 20;
+    public static final int DEFAULT_RESTRICTION_LENGTH = -1;
     public static final int DEFAULT_RESTRICTION_DIGITS = 0;
     public static final String DICT_SUFFIX = ".d_schema.xml";
     public static final String COMPLEX_SUFFIX = ".c_schema.xml";
@@ -107,4 +109,5 @@ public class SdtConst {
     /** redis缓存相关 **/
     public static final long REDIS_FLOWTRAN_TIMEOUT = 60 * 10;//10分钟
     public static final long REDIS_GITDIFFS_TIMEOUT = 60 * 60 * 24 * 15;//15天
+    public static final long REDIS_SEQVALUE_TIMEOUT = 60 * 60 * 24 * 365;//一年
 }

@@ -167,6 +167,15 @@ public class OdbFactory {
     }
 
     /**
+     * @Description 清除元数据缓存
+     * @Author sunshaoyu
+     * @Date 2020/9/27-14:42
+     */
+    public static void clear(){
+        MetaDataFactory.clear();
+    }
+
+    /**
      * @Description 刷新元数据
      * @Author sunshaoyu
      * @Date 2020/7/23-13:17
@@ -194,5 +203,24 @@ public class OdbFactory {
      */
     public static void metaDataNormalization(String module, Map<String, TwoTuple<String, String>> customReplaceMap){
         MetaDataFactory.metaDataNormalization(module, customReplaceMap);
+    }
+
+    /**
+     * @Description 初始化加载元数据
+     * @Author sunshaoyu
+     * @Date 2020/7/8-15:57
+     */
+    public static void loadMetaDataInitially() {
+        MetaDataFactory.loadMetaDataInitially();
+    }
+
+    /**
+     * @Description 加载动态数据源(优先从缓存中获取)
+     * @Author sunshaoyu
+     * @Date 2020/7/3-13:25
+     * @return java.util.Map<java.lang.Object,java.lang.Object>
+     */
+    public static Map<Object, Object> loadDynamicDataSource(){
+        return MetaDataFactory.loadDynamicDataSource();
     }
 }

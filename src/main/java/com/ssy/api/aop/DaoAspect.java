@@ -110,20 +110,6 @@ public class DaoAspect {
     }
 
     /**
-     * @Description 增强远程dao方法,在执行dao之前切换到用户当前的动态数据源,执行完成后恢复
-     * @Author sunshaoyu
-     * @Date 2020/7/15-14:23
-     * @param point
-     * @return java.lang.Object
-     */
-    /*@Around(value="execution(* com.ssy.api.dao.mapper.ap.*.*(..))) && execution(* com.ssy.api.dao.mapper.edsp.*.*(..)))" +
-            "&& execution(* com.ssy.api.dao.mapper.msap.*.*(..))) && execution(* com.ssy.api.dao.mapper.system.*.*(..)))")
-    public Object remoteDaoAdvice(ProceedingJoinPoint point) throws Throwable {
-        DBContextHolder.determineCurrentDataSourceType(E_DATASOURCETYPE.REMOTE);
-        return point.proceed(point.getArgs());
-    }*/
-
-    /**
      * @Description odb查询增强:查询的结果为空时抛出异常
      * @Author sunshaoyu
      * @Date 2020/7/2-18:52

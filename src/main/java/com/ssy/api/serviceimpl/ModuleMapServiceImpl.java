@@ -5,6 +5,7 @@ import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.table.local.SdpModuleMapping;
 import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.system.BizUtil;
+import com.ssy.api.utils.system.CommUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -46,5 +47,16 @@ public class ModuleMapServiceImpl implements ModuleMapService {
         String moduleId = innerServiceCode.substring(0, 2);
         String serviceCode = innerServiceCode.substring(2);
         return getModuleMapping(moduleId).getServiceCodePrefix() + serviceCode;
+    }
+
+    @Override
+    public String getModuleName(String subSystemCode) {
+        List<SdpModuleMapping> moduleMappingList = queryAllModuleList();
+        for(SdpModuleMapping moduleMapping : moduleMappingList){
+            if(CommUtil.equals(subSystemCode, moduleMapping.getSubSystemCode())){
+                return moduleMapping.getModuleId();
+            }
+        }
+        return null;
     }
 }

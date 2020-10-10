@@ -44,4 +44,13 @@ public interface ModuleMapService {
      * @return java.lang.String
      */
     public String getServiceCode(String innerServiceCode);
+
+    /**
+     * @Description 获取模块名
+     * @Author sunshaoyu
+     * @Date 2020/10/9-9:56
+     * @param subSystemCode
+     * @return java.lang.String
+     */
+    public String getModuleName(String subSystemCode);
 }

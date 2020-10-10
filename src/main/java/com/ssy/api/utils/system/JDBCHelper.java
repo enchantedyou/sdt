@@ -165,9 +165,11 @@ public class JDBCHelper {
 		List<DBProcess> processList = processMapper.showProcessList();
 		for(DBProcess dbProcess : processList){
 			try{
-				processMapper.kill(dbProcess.getId());
-				log.info("Kill the process[{}] of database [{}]", dbProcess.getId(), DBContextHolder.getCurrentDataSource());
-				size++;
+				if(CommUtil.equals("sleep", dbProcess.getCommand().toLowerCase())){
+					processMapper.kill(dbProcess.getId());
+					log.info("Kill the process[{}] of database [{}]", dbProcess.getId(), DBContextHolder.getCurrentDataSource());
+					size++;
+				}
 			}catch (Exception e){
 				log.info(e.getMessage());
 			}

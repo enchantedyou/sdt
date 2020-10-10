@@ -52,7 +52,10 @@ public class SdtDict {
         seq_code("seqCode", "sequence code", "序列码", 50, 0),
         init_value("initValue", "initial value", "初始值", 19, 0),
         current_value("currentValue", "current value", "当前值", 19, 0),
-        max_length("maxLength", "maximum length", "最大长度", 19, 0)
+        max_length("maxLength", "maximum length", "最大长度", 19, 0),
+        protocol_id("protocolId", "protocol identity", "协议编号", 20, 0),
+        upper_limit("upperLimit", "upper limit", "上限", 19, 0),
+        sequence("sequence", "sequence", "序列号", 100, 0),
         ;
 
         private String id;

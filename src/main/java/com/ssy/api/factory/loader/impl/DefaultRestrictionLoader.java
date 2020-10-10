@@ -52,7 +52,21 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
                         List<Element> enumerationList = XmlParser.searchTargetAllXmlElement(e, SdtConst.ENUMERATION_NODE_NAME);
                         AbstractRestrictionType currentRestrictionType = null;
 
-                        Integer maxLength = CommUtil.isNull(e.attributeValue("maxLength")) ? SdtConst.DEFAULT_RESTRICTION_LENGTH : Integer.parseInt(e.attributeValue("maxLength"));
+                        //获取限制类型长度
+                        Integer maxLength = SdtConst.DEFAULT_RESTRICTION_LENGTH;
+                        String max = e.attributeValue("maxLength");
+                        if(CommUtil.isNotNull(max)){
+                            maxLength = Integer.parseInt(max);
+                        }else{
+                            String base = e.attributeValue("base");
+                            if(CommUtil.isNotNull(base) && !base.toLowerCase().equals("string")){
+                                String[] splitArray = base.split("MsType.U_BYTE");
+                                if(splitArray.length > 1){
+                                    maxLength = Integer.parseInt(splitArray[1]);
+                                }
+                            }
+                        }
+
                         Integer fractionDigits = CommUtil.isNull(e.attributeValue("fractionDigits")) ? SdtConst.DEFAULT_RESTRICTION_DIGITS : Integer.parseInt(e.attributeValue("fractionDigits"));
                         //复用类型
                         if(CommUtil.isNull(enumerationList)){

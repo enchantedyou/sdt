@@ -164,4 +164,15 @@ public class PathController {
     public String menu4000(){
         return "component/menu4000";
     }
+
+    /**
+     * @Description
+     * @Author sunshaoyu
+     * @Date 2020/10/10-9:49
+     * @return java.lang.String
+     */
+    @RequestMapping("/menu5000")
+    public String menu5000(){
+        return "component/menu5000";
+    }
 }

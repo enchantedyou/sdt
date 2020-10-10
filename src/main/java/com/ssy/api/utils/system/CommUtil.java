@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -205,6 +206,34 @@ public class CommUtil {
         }
 
         return o1.compareTo(o2);
+    }
+
+    /**
+     * @Description 判断两个泛型是否相等
+     * @Author sunshaoyu
+     * @Date 2020/9/22-9:46
+     * @param o1
+     * @param o2
+     * @return boolean
+     */
+    public static <T> boolean isGenericsEqual(T o1, T o2) {
+        if((CommUtil.isNull(o1) && CommUtil.isNotNull(o2)) || (CommUtil.isNull(o2) && CommUtil.isNotNull(o1))) {
+            //两者一个为空一个不为空,不相等
+            return false;
+        }else if(CommUtil.isNull(o1) && CommUtil.isNull(o2)) {
+            //两者都为空,相等
+            return true;
+        }else if(o1 instanceof BigDecimal) {
+            //BigDecimal判断
+            return CommUtil.compare(BigDecimal.class.cast(o1), BigDecimal.class.cast(o2)) == 0;
+        }else if(o1 instanceof String) {
+            //String判断
+            return CommUtil.compare(String.valueOf(o1), String.valueOf(o2)) == 0;
+        }else if(o1 instanceof Long) {
+            //Long判断
+            return CommUtil.compare(Long.class.cast(o1), Long.class.cast(o2)) == 0;
+        }
+        return o1 == o2;
     }
 
     /**
@@ -426,5 +455,47 @@ public class CommUtil {
             }
         }
         return true;
+    }
+
+    /**
+     * @Description 检查某字符是否为整型
+     * @Author sunshaoyu
+     * @Date 2020/10/9-13:45
+     * @param number
+     * @return boolean
+     */
+    public static boolean isInteger(String number){
+        try{
+            new Long(number);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
+
+    /**
+     * @Author sunshaoyu
+     *         <p>
+     *         <li>2020年1月3日-下午2:10:51</li>
+     *         <li>功能说明：对map进行排序</li>
+     *         </p>
+     * @param map	map
+     * @param comparator	比较器,通过重写比较器的compare方法决定对键或值排序
+     * @return
+     */
+    public static <K,V> Map<K, V> sortMap(Map<K, V> map, Comparator<Map.Entry<K, V>> comparator) {
+        if(isNull(map)){
+            return map;
+        }
+        Map<K, V> sortedMap = new LinkedHashMap<>();
+        List<Map.Entry<K, V>> entryList = new ArrayList<>(map.entrySet());
+        Collections.sort(entryList, comparator);
+        Iterator<Map.Entry<K, V>> iterator = entryList.iterator();
+
+        while(iterator.hasNext()){
+            Map.Entry<K, V> entry = iterator.next();
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
     }
 }

@@ -86,7 +86,7 @@ public class ControllerAspect implements ResponseBodyAdvice<Object> {
 
         StringBuffer buffer = new StringBuffer();
         for(Object argument : args){
-            buffer.append(String.valueOf(argument)).append(";");
+            buffer.append(argument).append(";");
         }
 
         Object responseData = null;
