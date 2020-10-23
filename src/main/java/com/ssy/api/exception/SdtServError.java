@@ -134,4 +134,29 @@ public class SdtServError {
     public static SdtException E0023() {
         throw new SdtException("Unable to operate the process of the main data source", ErrCodeDef.FIELD_NO_PASS_CHECK);
     }
+
+    /** 当前用户已被锁定 **/
+    public static SdtException E0024(String userName) {
+        throw new SdtException("Current user ["+userName+"] has been locked", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
+
+    /** 用户已存在 **/
+    public static SdtException E0025(String userName) {
+        throw new SdtException("User ["+userName+"] already exists", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
+
+    /** 请登录后操作 **/
+    public static SdtException E0026() {
+        throw new SdtException("Please login before operation", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
+
+    /** 两次输入的密码不一致 **/
+    public static SdtException E0027() {
+        throw new SdtException("The entered passwords are inconsistent, please confirm", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
+
+    /** 请配置gitlab session后再执行操作 **/
+    public static SdtException E0028() {
+        throw new SdtException("Please operate after configuring gitlab session", ErrCodeDef.FIELD_NO_PASS_CHECK);
+    }
 }

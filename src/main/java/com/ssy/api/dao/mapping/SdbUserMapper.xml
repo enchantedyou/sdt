@@ -9,6 +9,7 @@
       <arg column="login_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="lock_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="user_permission" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="gitlab_session" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -17,8 +18,8 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    user_acct, user_pwd, login_ip, login_time, lock_ind, user_permission, data_create_user, 
-    data_create_time, data_update_user, data_update_time, data_version
+    user_acct, user_pwd, login_ip, login_time, lock_ind, user_permission, gitlab_session, 
+    data_create_user, data_create_time, data_update_user, data_update_time, data_version
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -33,12 +34,14 @@
   <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdbUser">
     insert into sdb_user (user_acct, user_pwd, login_ip, 
       login_time, lock_ind, user_permission, 
-      data_create_user, data_create_time, data_update_user, 
-      data_update_time, data_version)
+      gitlab_session, data_create_user, data_create_time, 
+      data_update_user, data_update_time, data_version
+      )
     values (#{userAcct,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, #{loginIp,jdbcType=VARCHAR}, 
       #{loginTime,jdbcType=VARCHAR}, #{lockInd,jdbcType=VARCHAR}, #{userPermission,jdbcType=VARCHAR}, 
-      #{dataCreateUser,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, 
-      #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER})
+      #{gitlabSession,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, 
+      #{dataUpdateUser,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdbUser">
     insert into sdb_user
@@ -60,6 +63,9 @@
       </if>
       <if test="userPermission != null">
         user_permission,
+      </if>
+      <if test="gitlabSession != null">
+        gitlab_session,
       </if>
       <if test="dataCreateUser != null">
         data_create_user,
@@ -96,6 +102,9 @@
       <if test="userPermission != null">
         #{userPermission,jdbcType=VARCHAR},
       </if>
+      <if test="gitlabSession != null">
+        #{gitlabSession,jdbcType=VARCHAR},
+      </if>
       <if test="dataCreateUser != null">
         #{dataCreateUser,jdbcType=VARCHAR},
       </if>
@@ -131,6 +140,9 @@
       <if test="userPermission != null">
         user_permission = #{userPermission,jdbcType=VARCHAR},
       </if>
+      <if test="gitlabSession != null">
+        gitlab_session = #{gitlabSession,jdbcType=VARCHAR},
+      </if>
       <if test="dataCreateUser != null">
         data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
       </if>
@@ -156,6 +168,7 @@
       login_time = #{loginTime,jdbcType=VARCHAR},
       lock_ind = #{lockInd,jdbcType=VARCHAR},
       user_permission = #{userPermission,jdbcType=VARCHAR},
+      gitlab_session = #{gitlabSession,jdbcType=VARCHAR},
       data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
       data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
       data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},

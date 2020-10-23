@@ -3,6 +3,7 @@ package com.ssy.api.plugins;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ssy.api.entity.annotation.DisableXss;
 import com.ssy.api.entity.annotation.EncryptedArgument;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.exception.ApPubErr;
@@ -31,7 +32,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @Description
+ * @Description 控制层入参加密
  * @Author sunshaoyu
  * @Date 2020年07月11日-12:36
  */
@@ -41,6 +42,7 @@ public class SdtArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Autowired
     private SystemParamService systemParamService;
+    private static final ThreadLocal<Boolean> disableXssLocal = new ThreadLocal<>();
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
@@ -51,6 +53,7 @@ public class SdtArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         try{
             HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+            disableXssLocal.set(methodParameter.hasMethodAnnotation(DisableXss.class));
 
             /** 获取入参和加密秘钥 **/
             String params = request.getParameter(SdtConst.PARAMS);
@@ -187,6 +190,11 @@ public class SdtArgumentResolver implements HandlerMethodArgumentResolver {
      * @return java.lang.String
      */
     private String xssFilter(String paramValue) {
+        //禁用字符转义
+        if(disableXssLocal.get()){
+            return paramValue;
+        }
+
         StringBuilder sb = new StringBuilder(paramValue.length() + 16);
         for (int i = 0; i < paramValue.length(); i++) {
             char c = paramValue.charAt(i);

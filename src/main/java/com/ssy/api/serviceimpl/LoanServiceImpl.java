@@ -183,4 +183,9 @@ public class LoanServiceImpl implements LoanService {
         }
         return Long.valueOf(sequence) % upperLimit + 1;
     }
+
+    @Override
+    public List<LnaLoan> queryLoanList() {
+        return lnaLoanMapper.selectAll_odb1(contextConfig.getBusiOrgId());
+    }
 }

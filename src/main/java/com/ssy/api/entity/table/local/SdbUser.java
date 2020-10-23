@@ -13,6 +13,8 @@ public class SdbUser {
 
     private String userPermission;
 
+    private String gitlabSession;
+
     private String dataCreateUser;
 
     private String dataCreateTime;
@@ -23,13 +25,14 @@ public class SdbUser {
 
     private Integer dataVersion;
 
-    public SdbUser(String userAcct, String userPwd, String loginIp, String loginTime, String lockInd, String userPermission, String dataCreateUser, String dataCreateTime, String dataUpdateUser, String dataUpdateTime, Integer dataVersion) {
+    public SdbUser(String userAcct, String userPwd, String loginIp, String loginTime, String lockInd, String userPermission, String gitlabSession, String dataCreateUser, String dataCreateTime, String dataUpdateUser, String dataUpdateTime, Integer dataVersion) {
         this.userAcct = userAcct;
         this.userPwd = userPwd;
         this.loginIp = loginIp;
         this.loginTime = loginTime;
         this.lockInd = lockInd;
         this.userPermission = userPermission;
+        this.gitlabSession = gitlabSession;
         this.dataCreateUser = dataCreateUser;
         this.dataCreateTime = dataCreateTime;
         this.dataUpdateUser = dataUpdateUser;
@@ -89,6 +92,14 @@ public class SdbUser {
         this.userPermission = userPermission == null ? null : userPermission.trim();
     }
 
+    public String getGitlabSession() {
+        return gitlabSession;
+    }
+
+    public void setGitlabSession(String gitlabSession) {
+        this.gitlabSession = gitlabSession == null ? null : gitlabSession.trim();
+    }
+
     public String getDataCreateUser() {
         return dataCreateUser;
     }
@@ -141,6 +152,7 @@ public class SdbUser {
         sb.append(", loginTime=").append(loginTime);
         sb.append(", lockInd=").append(lockInd);
         sb.append(", userPermission=").append(userPermission);
+        sb.append(", gitlabSession=").append(gitlabSession);
         sb.append(", dataCreateUser=").append(dataCreateUser);
         sb.append(", dataCreateTime=").append(dataCreateTime);
         sb.append(", dataUpdateUser=").append(dataUpdateUser);

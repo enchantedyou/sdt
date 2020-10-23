@@ -21,9 +21,9 @@ public class SdtApplicationStartupLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         StopWatch s = BizUtil.startStopWatch();
         /** 初始化元数据 **/
-        //OdbFactory.loadMetaDataInitially();
+        OdbFactory.loadMetaDataInitially();
         /** 初始化动态数据源 **/
-        //OdbFactory.loadDynamicDataSource();
+        OdbFactory.loadDynamicDataSource();
         BizUtil.stoptStopWatch(s, "Load all metadata");
     }
 }

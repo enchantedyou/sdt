@@ -249,8 +249,8 @@ public class CommUtil {
             Field[] fieldArray = obj.getClass().getDeclaredFields();
             for(Field f : fieldArray){
                 try{
-                    map.put(f.getName(), obj.getClass().getMethod(buildGetterMethodName(f.getName())));
-                }catch (NoSuchMethodException e){
+                    map.put(f.getName(), obj.getClass().getMethod(buildGetterMethodName(f.getName())).invoke(obj));
+                }catch (Exception e){
                     throw new SdtException(e);
                 }
             }

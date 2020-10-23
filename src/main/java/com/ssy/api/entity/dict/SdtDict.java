@@ -56,6 +56,7 @@ public class SdtDict {
         protocol_id("protocolId", "protocol identity", "协议编号", 20, 0),
         upper_limit("upperLimit", "upper limit", "上限", 19, 0),
         sequence("sequence", "sequence", "序列号", 100, 0),
+        request_body("requestBody", "request body", "请求体", 2048, 0),
         ;
 
         private String id;

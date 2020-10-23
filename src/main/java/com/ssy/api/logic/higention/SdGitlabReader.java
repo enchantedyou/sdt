@@ -2,10 +2,12 @@ package com.ssy.api.logic.higention;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.ssy.api.dao.mapper.local.SdbUserMapper;
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.lang.Params;
+import com.ssy.api.entity.session.UserInfo;
 import com.ssy.api.exception.SdtException;
 import com.ssy.api.exception.SdtServError;
 import com.ssy.api.servicetype.ModuleMapService;
@@ -14,6 +16,7 @@ import com.ssy.api.utils.security.Md5Encrypt;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.CommUtil;
 import com.ssy.api.utils.system.RedisHelper;
+import com.ssy.api.utils.system.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -38,6 +42,9 @@ public class SdGitlabReader {
     @Autowired
     private SdtContextConfig contextConfig;
     @Autowired
+    private SdbUserMapper userMapper;
+
+    @Autowired
     private ModuleMapService moduleMapService;
     private final String GIT_BASE_PATH = "http://e-git.yfb.sunline.cn/";
     private final int JIRA_MIN_LENGTH = 11;
@@ -50,7 +57,12 @@ public class SdGitlabReader {
      * @return java.lang.String
      */
     public String doGet(String url) throws IOException {
-        return HttpUtil.doGet(url, new Params().add("Cookie", String.format("_gitlab_session=%s", contextConfig.getGitlabSession())));
+        UserInfo userInfo = SpringContextUtil.getSessionAttribute(SdtConst.USER_INFO, UserInfo.class);
+        String gitlabSession = userMapper.selectByPrimaryKey(userInfo.getUserAcct(), true).getGitlabSession();
+        if(CommUtil.isNull(gitlabSession)){
+            throw SdtServError.E0028();
+        }
+        return HttpUtil.doGet(url, new Params().add("Cookie", String.format("_gitlab_session=%s", gitlabSession)));
     }
 
     /**
@@ -105,6 +117,7 @@ public class SdGitlabReader {
             StringBuffer buffer = new StringBuffer();
             String[] diffs = diffStr.split(splitToken);
             List<String> diffList = new ArrayList<>(new LinkedHashSet<>(CommUtil.asList(diffs)));
+            Collections.sort(diffList);
 
             for(String d : diffList){
                 buffer.append(d).append(splitToken);

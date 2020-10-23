@@ -88,6 +88,14 @@ public abstract class AbstractRestrictionType extends AbstractMetaData implement
         this.enumerationMap = enumerationMap;
     }
 
+    public Map<String, Element> getElementMap() {
+        return elementMap;
+    }
+
+    public void setElementMap(Map<String, Element> elementMap) {
+        this.elementMap = elementMap;
+    }
+
     @Override
     public String toString() {
         return getFullId();

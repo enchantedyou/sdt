@@ -59,4 +59,15 @@ public class ModuleMapServiceImpl implements ModuleMapService {
         }
         return null;
     }
+
+    @Override
+    public String getInnerServiceCode(String outServiceCode) {
+        List<SdpModuleMapping> moduleMappingList = queryAllModuleList();
+        for(SdpModuleMapping moduleMapping : moduleMappingList){
+            if(CommUtil.equals(outServiceCode.substring(0, 2), moduleMapping.getServiceCodePrefix())){
+                return moduleMapping.getModuleId() + outServiceCode.substring(2);
+            }
+        }
+        return null;
+    }
 }

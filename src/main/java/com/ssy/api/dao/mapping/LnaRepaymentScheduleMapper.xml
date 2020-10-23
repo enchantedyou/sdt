@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.ln.LnaRepaymentScheduleMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ln.LnaRepaymentSchedule">
+    <constructor>
+      <idArg column="loan_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="period_no" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <idArg column="sub_period_no" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <idArg column="org_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="phase_no" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="due_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="standard_due_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="grace_due_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="normal_interest_rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="accrual_prcp" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="installment" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="period_prcp" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="period_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="early_rpym_principal" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="total_penalty_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="total_compound_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="principal" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="accrual_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="due_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="accrual_penalty_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="due_penalty_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="accrual_comp_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="due_comp_interest" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="owe_overdue_fee" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="owe_rpymfail_fee" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="owe_advance_fee" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="loan_classification" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="due_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="settl_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="serial_no" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    loan_no, period_no, sub_period_no, org_id, phase_no, due_date, standard_due_date, 
+    grace_due_date, normal_interest_rate, accrual_prcp, installment, period_prcp, period_interest, 
+    early_rpym_principal, total_penalty_interest, total_compound_interest, principal, 
+    accrual_interest, due_interest, accrual_penalty_interest, due_penalty_interest, accrual_comp_interest, 
+    due_comp_interest, owe_overdue_fee, owe_rpymfail_fee, owe_advance_fee, loan_classification, 
+    due_ind, settl_ind, serial_no, data_create_time, data_update_time, data_create_user, 
+    data_update_user, data_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from lna_repayment_schedule
+    where loan_no = #{loanNo,jdbcType=VARCHAR}
+      and period_no = #{periodNo,jdbcType=BIGINT}
+      and sub_period_no = #{subPeriodNo,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from lna_repayment_schedule
+    where loan_no = #{loanNo,jdbcType=VARCHAR}
+      and period_no = #{periodNo,jdbcType=BIGINT}
+      and sub_period_no = #{subPeriodNo,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.ln.LnaRepaymentSchedule">
+    insert into lna_repayment_schedule (loan_no, period_no, sub_period_no, 
+      org_id, phase_no, due_date, 
+      standard_due_date, grace_due_date, normal_interest_rate, 
+      accrual_prcp, installment, period_prcp, 
+      period_interest, early_rpym_principal, total_penalty_interest, 
+      total_compound_interest, principal, accrual_interest, 
+      due_interest, accrual_penalty_interest, due_penalty_interest, 
+      accrual_comp_interest, due_comp_interest, owe_overdue_fee, 
+      owe_rpymfail_fee, owe_advance_fee, loan_classification, 
+      due_ind, settl_ind, serial_no, 
+      data_create_time, data_update_time, data_create_user, 
+      data_update_user, data_version)
+    values (#{loanNo,jdbcType=VARCHAR}, #{periodNo,jdbcType=BIGINT}, #{subPeriodNo,jdbcType=BIGINT}, 
+      #{orgId,jdbcType=VARCHAR}, #{phaseNo,jdbcType=BIGINT}, #{dueDate,jdbcType=VARCHAR}, 
+      #{standardDueDate,jdbcType=VARCHAR}, #{graceDueDate,jdbcType=VARCHAR}, #{normalInterestRate,jdbcType=DECIMAL}, 
+      #{accrualPrcp,jdbcType=DECIMAL}, #{installment,jdbcType=DECIMAL}, #{periodPrcp,jdbcType=DECIMAL}, 
+      #{periodInterest,jdbcType=DECIMAL}, #{earlyRpymPrincipal,jdbcType=DECIMAL}, #{totalPenaltyInterest,jdbcType=DECIMAL}, 
+      #{totalCompoundInterest,jdbcType=DECIMAL}, #{principal,jdbcType=DECIMAL}, #{accrualInterest,jdbcType=DECIMAL}, 
+      #{dueInterest,jdbcType=DECIMAL}, #{accrualPenaltyInterest,jdbcType=DECIMAL}, #{duePenaltyInterest,jdbcType=DECIMAL}, 
+      #{accrualCompInterest,jdbcType=DECIMAL}, #{dueCompInterest,jdbcType=DECIMAL}, #{oweOverdueFee,jdbcType=DECIMAL}, 
+      #{oweRpymfailFee,jdbcType=DECIMAL}, #{oweAdvanceFee,jdbcType=DECIMAL}, #{loanClassification,jdbcType=BIGINT}, 
+      #{dueInd,jdbcType=VARCHAR}, #{settlInd,jdbcType=VARCHAR}, #{serialNo,jdbcType=BIGINT}, 
+      #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, 
+      #{dataUpdateUser,jdbcType=VARCHAR}, #{dataVersion,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ln.LnaRepaymentSchedule">
+    insert into lna_repayment_schedule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="loanNo != null">
+        loan_no,
+      </if>
+      <if test="periodNo != null">
+        period_no,
+      </if>
+      <if test="subPeriodNo != null">
+        sub_period_no,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="phaseNo != null">
+        phase_no,
+      </if>
+      <if test="dueDate != null">
+        due_date,
+      </if>
+      <if test="standardDueDate != null">
+        standard_due_date,
+      </if>
+      <if test="graceDueDate != null">
+        grace_due_date,
+      </if>
+      <if test="normalInterestRate != null">
+        normal_interest_rate,
+      </if>
+      <if test="accrualPrcp != null">
+        accrual_prcp,
+      </if>
+      <if test="installment != null">
+        installment,
+      </if>
+      <if test="periodPrcp != null">
+        period_prcp,
+      </if>
+      <if test="periodInterest != null">
+        period_interest,
+      </if>
+      <if test="earlyRpymPrincipal != null">
+        early_rpym_principal,
+      </if>
+      <if test="totalPenaltyInterest != null">
+        total_penalty_interest,
+      </if>
+      <if test="totalCompoundInterest != null">
+        total_compound_interest,
+      </if>
+      <if test="principal != null">
+        principal,
+      </if>
+      <if test="accrualInterest != null">
+        accrual_interest,
+      </if>
+      <if test="dueInterest != null">
+        due_interest,
+      </if>
+      <if test="accrualPenaltyInterest != null">
+        accrual_penalty_interest,
+      </if>
+      <if test="duePenaltyInterest != null">
+        due_penalty_interest,
+      </if>
+      <if test="accrualCompInterest != null">
+        accrual_comp_interest,
+      </if>
+      <if test="dueCompInterest != null">
+        due_comp_interest,
+      </if>
+      <if test="oweOverdueFee != null">
+        owe_overdue_fee,
+      </if>
+      <if test="oweRpymfailFee != null">
+        owe_rpymfail_fee,
+      </if>
+      <if test="oweAdvanceFee != null">
+        owe_advance_fee,
+      </if>
+      <if test="loanClassification != null">
+        loan_classification,
+      </if>
+      <if test="dueInd != null">
+        due_ind,
+      </if>
+      <if test="settlInd != null">
+        settl_ind,
+      </if>
+      <if test="serialNo != null">
+        serial_no,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user,
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="loanNo != null">
+        #{loanNo,jdbcType=VARCHAR},
+      </if>
+      <if test="periodNo != null">
+        #{periodNo,jdbcType=BIGINT},
+      </if>
+      <if test="subPeriodNo != null">
+        #{subPeriodNo,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="phaseNo != null">
+        #{phaseNo,jdbcType=BIGINT},
+      </if>
+      <if test="dueDate != null">
+        #{dueDate,jdbcType=VARCHAR},
+      </if>
+      <if test="standardDueDate != null">
+        #{standardDueDate,jdbcType=VARCHAR},
+      </if>
+      <if test="graceDueDate != null">
+        #{graceDueDate,jdbcType=VARCHAR},
+      </if>
+      <if test="normalInterestRate != null">
+        #{normalInterestRate,jdbcType=DECIMAL},
+      </if>
+      <if test="accrualPrcp != null">
+        #{accrualPrcp,jdbcType=DECIMAL},
+      </if>
+      <if test="installment != null">
+        #{installment,jdbcType=DECIMAL},
+      </if>
+      <if test="periodPrcp != null">
+        #{periodPrcp,jdbcType=DECIMAL},
+      </if>
+      <if test="periodInterest != null">
+        #{periodInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="earlyRpymPrincipal != null">
+        #{earlyRpymPrincipal,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPenaltyInterest != null">
+        #{totalPenaltyInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="totalCompoundInterest != null">
+        #{totalCompoundInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="principal != null">
+        #{principal,jdbcType=DECIMAL},
+      </if>
+      <if test="accrualInterest != null">
+        #{accrualInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="dueInterest != null">
+        #{dueInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="accrualPenaltyInterest != null">
+        #{accrualPenaltyInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="duePenaltyInterest != null">
+        #{duePenaltyInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="accrualCompInterest != null">
+        #{accrualCompInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="dueCompInterest != null">
+        #{dueCompInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="oweOverdueFee != null">
+        #{oweOverdueFee,jdbcType=DECIMAL},
+      </if>
+      <if test="oweRpymfailFee != null">
+        #{oweRpymfailFee,jdbcType=DECIMAL},
+      </if>
+      <if test="oweAdvanceFee != null">
+        #{oweAdvanceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="loanClassification != null">
+        #{loanClassification,jdbcType=BIGINT},
+      </if>
+      <if test="dueInd != null">
+        #{dueInd,jdbcType=VARCHAR},
+      </if>
+      <if test="settlInd != null">
+        #{settlInd,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNo != null">
+        #{serialNo,jdbcType=BIGINT},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ln.LnaRepaymentSchedule">
+    update lna_repayment_schedule
+    <set>
+      <if test="phaseNo != null">
+        phase_no = #{phaseNo,jdbcType=BIGINT},
+      </if>
+      <if test="dueDate != null">
+        due_date = #{dueDate,jdbcType=VARCHAR},
+      </if>
+      <if test="standardDueDate != null">
+        standard_due_date = #{standardDueDate,jdbcType=VARCHAR},
+      </if>
+      <if test="graceDueDate != null">
+        grace_due_date = #{graceDueDate,jdbcType=VARCHAR},
+      </if>
+      <if test="normalInterestRate != null">
+        normal_interest_rate = #{normalInterestRate,jdbcType=DECIMAL},
+      </if>
+      <if test="accrualPrcp != null">
+        accrual_prcp = #{accrualPrcp,jdbcType=DECIMAL},
+      </if>
+      <if test="installment != null">
+        installment = #{installment,jdbcType=DECIMAL},
+      </if>
+      <if test="periodPrcp != null">
+        period_prcp = #{periodPrcp,jdbcType=DECIMAL},
+      </if>
+      <if test="periodInterest != null">
+        period_interest = #{periodInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="earlyRpymPrincipal != null">
+        early_rpym_principal = #{earlyRpymPrincipal,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPenaltyInterest != null">
+        total_penalty_interest = #{totalPenaltyInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="totalCompoundInterest != null">
+        total_compound_interest = #{totalCompoundInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="principal != null">
+        principal = #{principal,jdbcType=DECIMAL},
+      </if>
+      <if test="accrualInterest != null">
+        accrual_interest = #{accrualInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="dueInterest != null">
+        due_interest = #{dueInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="accrualPenaltyInterest != null">
+        accrual_penalty_interest = #{accrualPenaltyInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="duePenaltyInterest != null">
+        due_penalty_interest = #{duePenaltyInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="accrualCompInterest != null">
+        accrual_comp_interest = #{accrualCompInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="dueCompInterest != null">
+        due_comp_interest = #{dueCompInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="oweOverdueFee != null">
+        owe_overdue_fee = #{oweOverdueFee,jdbcType=DECIMAL},
+      </if>
+      <if test="oweRpymfailFee != null">
+        owe_rpymfail_fee = #{oweRpymfailFee,jdbcType=DECIMAL},
+      </if>
+      <if test="oweAdvanceFee != null">
+        owe_advance_fee = #{oweAdvanceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="loanClassification != null">
+        loan_classification = #{loanClassification,jdbcType=BIGINT},
+      </if>
+      <if test="dueInd != null">
+        due_ind = #{dueInd,jdbcType=VARCHAR},
+      </if>
+      <if test="settlInd != null">
+        settl_ind = #{settlInd,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNo != null">
+        serial_no = #{serialNo,jdbcType=BIGINT},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </set>
+    where loan_no = #{loanNo,jdbcType=VARCHAR}
+      and period_no = #{periodNo,jdbcType=BIGINT}
+      and sub_period_no = #{subPeriodNo,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ln.LnaRepaymentSchedule">
+    update lna_repayment_schedule
+    set phase_no = #{phaseNo,jdbcType=BIGINT},
+      due_date = #{dueDate,jdbcType=VARCHAR},
+      standard_due_date = #{standardDueDate,jdbcType=VARCHAR},
+      grace_due_date = #{graceDueDate,jdbcType=VARCHAR},
+      normal_interest_rate = #{normalInterestRate,jdbcType=DECIMAL},
+      accrual_prcp = #{accrualPrcp,jdbcType=DECIMAL},
+      installment = #{installment,jdbcType=DECIMAL},
+      period_prcp = #{periodPrcp,jdbcType=DECIMAL},
+      period_interest = #{periodInterest,jdbcType=DECIMAL},
+      early_rpym_principal = #{earlyRpymPrincipal,jdbcType=DECIMAL},
+      total_penalty_interest = #{totalPenaltyInterest,jdbcType=DECIMAL},
+      total_compound_interest = #{totalCompoundInterest,jdbcType=DECIMAL},
+      principal = #{principal,jdbcType=DECIMAL},
+      accrual_interest = #{accrualInterest,jdbcType=DECIMAL},
+      due_interest = #{dueInterest,jdbcType=DECIMAL},
+      accrual_penalty_interest = #{accrualPenaltyInterest,jdbcType=DECIMAL},
+      due_penalty_interest = #{duePenaltyInterest,jdbcType=DECIMAL},
+      accrual_comp_interest = #{accrualCompInterest,jdbcType=DECIMAL},
+      due_comp_interest = #{dueCompInterest,jdbcType=DECIMAL},
+      owe_overdue_fee = #{oweOverdueFee,jdbcType=DECIMAL},
+      owe_rpymfail_fee = #{oweRpymfailFee,jdbcType=DECIMAL},
+      owe_advance_fee = #{oweAdvanceFee,jdbcType=DECIMAL},
+      loan_classification = #{loanClassification,jdbcType=BIGINT},
+      due_ind = #{dueInd,jdbcType=VARCHAR},
+      settl_ind = #{settlInd,jdbcType=VARCHAR},
+      serial_no = #{serialNo,jdbcType=BIGINT},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=BIGINT}
+    where loan_no = #{loanNo,jdbcType=VARCHAR}
+      and period_no = #{periodNo,jdbcType=BIGINT}
+      and sub_period_no = #{subPeriodNo,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from lna_repayment_schedule
+  </select>
+</mapper>

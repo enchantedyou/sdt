@@ -6216,7 +6216,7 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		  reLogin: function(){
 			  layer.open({
 				  type: 1,
-				  title: "登录超时，请重新登录",
+				  title: "登录失效，请重新登录",
 				  skin: 'layui-layer-rim',
 				  area: ['380px', '240px'],
 				  content: '<form class="layui-form" style="overflow-x: hidden; overflow-y: hidden">\n' +
@@ -6542,6 +6542,18 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		requestContext.doRequest("local/buildTrxn", data.field, "layui-btn", true);
 	});
 
+	/** gitlab session维护 **/
+	form.on('submit(gitSessionMntSubmit)',function(data){
+		requestContext.doRequest("local/modifyUser", data.field, "layui-btn", true);
+	});
+
+	/** 密码修改 **/
+	form.on('submit(pwdMntSubmit)',function(data){
+		requestContext.doRequest("local/modifyUser", data.field, "layui-btn", true, function(response){
+			window.location.href = $(".basePath").val();
+		});
+	});
+
 	/** 数据库解锁 **/
 	form.on('submit(dbUnlock)',function(data){
 		requestContext.doRequest("local/dbUnlock", data.field, "layui-btn", false, function (response) {
@@ -6553,6 +6565,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 	form.on('submit(trxnScriptSubmit)',function(data){
 		requestContext.doRequest("local/trxnScript", data.field, "layui-btn", true, function(response){
 			$("#showTrxnScript").html(response);
+		});
+	});
+
+	/** 请求报文转换为单元测试代码 **/
+	form.on('submit(msgConvertSubmit)',function(data){
+		requestContext.doRequest("local/buildTestCode", data.field, "layui-btn", true, function(response){
+			$("#showUnitTestCode").html(response);
 		});
 	});
 
@@ -6665,10 +6684,25 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
-	/** 分片表哈希值查询 **/
-	$(document).on("click","#m5000",function(){
+	/** gitlab seesion维护 **/
+	$(document).on("click","#m3002",function(){
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
-			$(".layui-body").load($(".basePath").val()+"menu5000",null, requestContext.menuClickCallback);
+			$(".layui-body").load($(".basePath").val()+"menu3002",null, requestContext.menuClickCallback);
+		});
+	});
+
+	/** 分片表哈希值查询 **/
+	$(document).on("click","#m1005",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu1005",null, requestContext.menuClickCallback);
+		});
+	});
+
+	/** 请求报文转换 **/
+	$(document).on("click","#m1006",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu1006",null, requestContext.menuClickCallback);
+			requestContext.enableClipboard();
 		});
 	});
 
@@ -6689,6 +6723,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
 			$(".layui-body").load($(".basePath").val()+"menu4000",null, requestContext.menuClickCallback);
 			requestContext.enableClipboard();
+		});
+	});
+
+	/** 密码修改 **/
+	$(document).on("click","#m5000",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu5000",null, requestContext.menuClickCallback);
 		});
 	});
 
@@ -6741,7 +6782,6 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 
 		}else if(layEvent == 'dsAdd'){
 			data.dataOperateType = "A";
-
 		}
 	});
 });

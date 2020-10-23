@@ -45,8 +45,6 @@ public class SdtContextConfig {
 
     /** 批量任务轮询线程池大小 **/
     private int batchPollThreadPoolSize;
-    /** gitlab session,用于操作git,获取合并文件 **/
-    @NotBlank private String gitlabSession;
 
     /** 公共脚本主目录 **/
     private String commonSqlMainDir;
@@ -57,17 +55,6 @@ public class SdtContextConfig {
     private String sqlToolsDir;
     /** 默认的sump数据源,用于生产接口文档 **/
     @NotBlank private String sumpDataSource;
-
-
-    private String animal;
-
-    public String getAnimal() {
-        return animal;
-    }
-
-    public void setAnimal(String animal) {
-        this.animal = animal;
-    }
 
     public String getWorkSpacePath() {
         return workSpacePath;
@@ -155,14 +142,6 @@ public class SdtContextConfig {
 
     public void setBatchPollThreadPoolSize(int batchPollThreadPoolSize) {
         this.batchPollThreadPoolSize = batchPollThreadPoolSize;
-    }
-
-    public String getGitlabSession() {
-        return gitlabSession;
-    }
-
-    public void setGitlabSession(String gitlabSession) {
-        this.gitlabSession = gitlabSession;
     }
 
     public String getCommonSqlMainDir() {

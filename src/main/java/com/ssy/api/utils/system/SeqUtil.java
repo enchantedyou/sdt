@@ -50,7 +50,7 @@ public class SeqUtil {
             SdtBusiUtil.checkNumberPositive(sequenceBuilder.getSeqLength(), SdtDict.A.max_length.getLongName());
             sequence = new Sequence(sequenceBuilder.getInitValue(), sequenceBuilder.getCurrentValue(), sequenceBuilder.getCacheSize(), sequenceBuilder.getSeqLength());
 
-            //容灾机制(shutDownHook未触发)
+            //容灾机制(shutdownHook未触发)
             Long redisCurrentValue = (Long) RedisHelper.getValue(seqCode);
             if(CommUtil.isNotNull(redisCurrentValue) && redisCurrentValue > sequence.getCurrentValue()){
                 log.info("Based on the latest serial number in the redis cache, the serial value: {}", redisCurrentValue);

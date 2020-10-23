@@ -7,6 +7,7 @@ import com.ssy.api.exception.SdtException;
 import com.ssy.api.servicetype.ModuleMapService;
 import com.ssy.api.utils.parse.XmlParser;
 import com.ssy.api.utils.system.BizUtil;
+import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,6 +57,10 @@ public class SdNexus {
         List<SdpModuleMapping> moduleMapList = moduleMapService.queryAllModuleList();
 
         moduleMapList.forEach(module -> {
+            //过滤掉附属模块
+            if(CommUtil.isNull(module.getSubSystemCode()) || CommUtil.isNull(module.getSystemCode())){
+                return;
+            }
             String url = String.format(NEXUS_VER_FORMAT, repositoryType, module.getModuleId(), module.getModuleId(), E_BUSIMODULE.iobus);
             try {
                 buffer.append(String.format("%s-%s", module.getModuleId(), E_BUSIMODULE.iobus)).append(":").append(XmlParser.searchXmlElement(XmlParser.getUrlRootElement(url), "latest").getText());

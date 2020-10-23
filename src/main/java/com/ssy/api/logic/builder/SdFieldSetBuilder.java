@@ -74,6 +74,7 @@ public class SdFieldSetBuilder {
         Map<String, Element> sourceElementMap = fieldSetIn.getSourceElementMap();
         Map<String, Element> targetElementMap = fieldSetIn.getTargetElementMap();
         StringBuffer buffer = new StringBuffer();
+        buffer.append(fieldSetIn.getTargetEntityId()).append(" ").append(fieldSetIn.getTargetVarName()).append(" = ").append("BizUtil.getInstance("+ fieldSetIn.getTargetEntityId() +".class);").append("\r\n");
 
         targetElementMap.forEach((k, e) -> {
             if(sourceElementMap.containsKey(k)){

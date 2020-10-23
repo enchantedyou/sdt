@@ -44,6 +44,8 @@
                         <dd><a href="javascript:;" id="m1002">[1002]接口文档生成</a></dd>
                         <dd><a href="javascript:;" id="m1003" style="display: none">[1003]交易模型生成</a></dd>
                         <dd><a href="javascript:;" id="m1004">[1004]赋值语句生成</a></dd>
+                        <dd><a href="javascript:;" id="m1005">[1005]分片哈希值查询</a></dd>
+                        <dd><a href="javascript:;" id="m1006">[1006]请求报文转换</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -57,8 +59,9 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">私服</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" id="m3000">[3000]合并请求差异</a></dd>
+                        <dd><a href="javascript:;" id="m3000">[3000]Gitlab合并文件查询</a></dd>
                         <dd><a href="javascript:;" id="m3001">[3001]服务总线最新版本</a></dd>
+                        <dd><a href="javascript:;" id="m3002">[3002]Gitlab session维护</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -68,9 +71,9 @@
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">其他</a>
+                    <a href="javascript:;">系统管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" id="m5000">[5000]分片哈希值查询</a></dd>
+                        <dd><a href="javascript:;" id="m5000">[5000]密码修改</a></dd>
                     </dl>
                 </li>
             </ul>

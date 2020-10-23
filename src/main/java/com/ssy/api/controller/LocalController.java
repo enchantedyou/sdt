@@ -1,12 +1,14 @@
 package com.ssy.api.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.ssy.api.entity.annotation.DisableXss;
 import com.ssy.api.entity.annotation.EncryptedArgument;
 import com.ssy.api.entity.annotation.TrxnEvent;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.lang.ResponseData;
 import com.ssy.api.entity.table.local.SdbBatchExecution;
+import com.ssy.api.entity.table.local.SdbUser;
 import com.ssy.api.entity.table.local.SdpBatchDate;
 import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.entity.type.local.*;
@@ -17,6 +19,7 @@ import com.ssy.api.logic.builder.SdScriptBuilder;
 import com.ssy.api.logic.builder.SdTrxnBuilder;
 import com.ssy.api.logic.higention.SdGitlabReader;
 import com.ssy.api.logic.higention.SdNexus;
+import com.ssy.api.logic.local.SdMessageConvert;
 import com.ssy.api.logic.local.SdPTEJsonParser;
 import com.ssy.api.servicetype.*;
 import com.ssy.api.utils.http.HttpServletUtil;
@@ -61,6 +64,8 @@ public class LocalController {
     private FileLoader fileLoader;
     @Autowired
     private JDBCHelper jdbcHelper;
+    @Autowired
+    private SdMessageConvert messageConvert;
 
     /**
      * @param loginIn
@@ -316,5 +321,31 @@ public class LocalController {
     @PostMapping("/queryShardingHashValue")
     public Long queryShardingHashValue(@EncryptedArgument SdShardingHashIn shardingHashIn){
         return loanService.getGroupHashValue(shardingHashIn.getUpperLimit(), shardingHashIn.getSequence()) - 1L;
+    }
+
+    /**
+     * @Description 维护用户信息
+     * @Author sunshaoyu
+     * @Date 2020/10/23-11:09
+     * @param mntUser
+     */
+    @TrxnEvent("modify user information")
+    @PostMapping("/modifyUser")
+    public void modifyUserInfo(@EncryptedArgument SdMntUser mntUser){
+        userService.modifyUserInfo(mntUser);
+    }
+
+    /**
+     * @Description 请求报文转换为单元测试代码
+     * @Author sunshaoyu
+     * @Date 2020/10/23-16:48
+     * @param requestBody
+     * @return java.lang.String
+     */
+    @DisableXss
+    @TrxnEvent("build unit test java code")
+    @PostMapping("/buildTestCode")
+    public String buildTestCode(@EncryptedArgument String requestBody){
+        return messageConvert.toUnitTestCode(requestBody);
     }
 }

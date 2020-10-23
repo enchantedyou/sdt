@@ -94,7 +94,7 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
             com.ssy.api.meta.defaults.Element currentElement = new com.ssy.api.meta.defaults.Element(
                     location, elementId, e.attributeValue("longname"), getElementRestrictionType(cpxMap, e.attributeValue("type")), e.attributeValue("desc"), ref
             );
-
+            currentElement.setMulti(Boolean.valueOf(e.attributeValue("multi")));
             map.put(elementId, currentElement);
         }
         return map;
@@ -120,12 +120,14 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
                 Map<String, ComplexType> map = cpxMap.get(arr[0]);
                 if(CommUtil.isNotNull(map)){
                     return map.get(arr[1]);
+                }else{
+                    //延迟加载
+                    return new ComplexType(arr[0], arr[1], null, false, new HashMap<>());
                 }
             }else{
                 return restrictionType;
             }
         }
-        return null;
     }
 
     /**

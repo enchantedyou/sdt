@@ -170,7 +170,7 @@ public class SdFlowtranParser {
      * @param flowtran
      * @param rootNode
      */
-    private static void parseService(Flowtran flowtran, Element rootNode){
+    private static void parseService(Flowtran flowtran, Element rootNode) throws DocumentException {
         List<Element> serviceNodeList = XmlParser.searchTargetAllXmlElement(rootNode, "service");
         List<IntfService> serviceList = new ArrayList<>();
         for(Element e : serviceNodeList){
@@ -178,8 +178,51 @@ public class SdFlowtranParser {
             service.setMappingToProperty(Boolean.valueOf(e.attributeValue("mappingToProperty")));
             service.setServiceName(e.attributeValue("serviceName"));
             service.setTest(e.attributeValue("test"));
+
+            //解析输入输出接口
+            String[] serviceComponent = service.getServiceName().split("\\.");
+            File serviceTypeFile = OdbFactory.searchFile(serviceComponent[0] + SdtConst.SERVICETYPE_SUFFIX);
+            Element serviceRoot = XmlParser.getXmlRootElement(serviceTypeFile);
+
+            List<com.ssy.api.meta.defaults.Element> inputList = new ArrayList<>();
+            List<com.ssy.api.meta.defaults.Element> outputList = new ArrayList<>();
+            List<Element> serviceTypeNodeList = XmlParser.searchTargetAllXmlElement(serviceRoot, "service");
+            for(Element serviceNode : serviceTypeNodeList){
+                if(CommUtil.equals(serviceNode.attributeValue("id"), serviceComponent[1])){
+                    //输入接口
+                    parseServiceIntfField("input", inputList, serviceNode);
+                    service.setServiceInput(inputList);
+
+                    //输出接口
+                    parseServiceIntfField("output", outputList, serviceNode);
+                    service.setServiceOutput(outputList);
+                }
+            }
             serviceList.add(service);
         }
         flowtran.setServiceList(serviceList);
+    }
+
+    /**
+     * @Description 解析服务接口字段
+     * @Author sunshaoyu
+     * @Date 2020/10/23-14:39
+     * @param intfName
+     * @param fieldList
+     * @param serviceNode
+     */
+    private static void parseServiceIntfField(String intfName, List<com.ssy.api.meta.defaults.Element> fieldList, Element serviceNode) {
+        List<Element> input = serviceNode.element("interface").element(intfName).elements();
+        for(Element i : input){
+            com.ssy.api.meta.defaults.Element dict = OdbFactory.searchDict(i.attributeValue("id"));
+            if(CommUtil.isNull(dict)){
+                String[] typeComponent = i.attributeValue("type").split("\\.");
+                com.ssy.api.meta.defaults.Element e = new com.ssy.api.meta.defaults.Element(null, i.attributeValue("id"), null, OdbFactory.searchComplexType(typeComponent[0], typeComponent[1]), null, null);
+                e.setMulti(CommUtil.equals(String.valueOf(i.attributeValue("multi")), "true"));
+                fieldList.add(e);
+            }else{
+                fieldList.add(dict);
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@
 	<div class="layui-form-item">
 		<label class="layui-form-label"><i class="layui-icon input-icon">*</i>分组数</label>
 		<div class="layui-input-block">
-			<input type="text" name="upperLimit" max="6" lay-verify="int" id="upperLimit" class="layui-input">
+			<input type="text" name="upperLimit" max="6" lay-verify="int" id="upperLimit" class="layui-input" value="20">
 		</div>
 	</div>
 	<div class="layui-form-item">

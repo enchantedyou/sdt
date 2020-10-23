@@ -4,11 +4,12 @@ import com.ssy.api.dao.mapper.ap.ApsAccountingEventMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceControlMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceInMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceOutMapper;
-import com.ssy.api.dao.mapper.ln.LnaBalanceMapper;
+import com.ssy.api.dao.mapper.ln.LnaRepaymentScheduleMapper;
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.enums.E_PTEMODULE;
 import com.ssy.api.entity.table.edsp.TspServiceIn;
+import com.ssy.api.entity.table.local.SdbUser;
 import com.ssy.api.entity.table.local.SdpModuleMapping;
 import com.ssy.api.entity.type.local.SdBuildPTE;
 import com.ssy.api.factory.loader.FileLoader;
@@ -17,15 +18,17 @@ import com.ssy.api.logic.audit.SdSqlAuditExecutor;
 import com.ssy.api.logic.higention.SdGitlabReader;
 import com.ssy.api.logic.local.SdFlowtranParser;
 import com.ssy.api.logic.local.SdJavaParser;
+import com.ssy.api.logic.local.SdMessageConvert;
 import com.ssy.api.logic.local.SdPTEJsonParser;
 import com.ssy.api.logic.request.SdIcoreRequest;
+import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.flowtran.Flowtran;
 import com.ssy.api.meta.flowtran.IntfService;
 import com.ssy.api.plugins.DBContextHolder;
 import com.ssy.api.servicetype.DataSourceService;
 import com.ssy.api.servicetype.LoanService;
 import com.ssy.api.servicetype.ModuleMapService;
-import com.ssy.api.utils.parse.ExcelParser;
+import com.ssy.api.servicetype.UserService;
 import com.ssy.api.utils.system.CommUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -33,8 +36,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,13 +66,17 @@ class SdtApplicationTests extends MetaDataFactory {
     @Autowired
     private ModuleMapService moduleMapService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private SdSqlAuditExecutor sqlAuditExecutor;
     @Autowired
     private ApsAccountingEventMapper apsAccountingEventMapper;
     @Autowired
-    private LnaBalanceMapper lnaBalanceMapper;
+    private LnaRepaymentScheduleMapper lnaRepaymentScheduleMapper;
     @Autowired
     private LoanService loanService;
+    @Autowired
+    private SdMessageConvert messageConvert;
 
     static {
         System.setProperty("jasypt.encryptor.password", SdtConst.CONFIG_ENCKEY);
@@ -75,9 +84,20 @@ class SdtApplicationTests extends MetaDataFactory {
 
     @Test
     void contextLoads() throws Throwable {
-        ExcelParser.genInterfaceDoc("ln6300", null);
+        System.out.println(messageConvert.toUnitTestCode(new String(Files.readAllBytes(Paths.get("C:\\Users\\DELL\\Desktop\\1.json")), SdtConst.DEFAULT_ENCODING)));
     }
 
+    public void fixSharding() throws IOException {
+        DBContextHolder.switchToDataSource("ln_fat2");
+        StringBuilder builder = new StringBuilder();
+        loanService.queryLoanList().forEach(lnaLoan -> {
+            long hashValue = loanService.getGroupHashValue(20, lnaLoan.getLoanNo()) - 1L;
+            builder.append("delete from lna_repayment_schedule_" + hashValue+" where loan_no = '").append(lnaLoan.getLoanNo()).append("';\r\n");
+            builder.append("insert into lna_repayment_schedule_" + hashValue+" select * from lna_repayment_schedule where loan_no = '" + lnaLoan.getLoanNo()).append("';\r\n");
+        });
+        builder.append("commit;");
+        fileLoader.saveFile(builder.toString(), "C:\\Users\\DELL\\Desktop\\1.sql");
+    }
 
     public void reversalService(){
         List<IntfService> serviceList = new ArrayList<>();

@@ -165,7 +165,6 @@ public class BizUtil {
         for(String key : oldMap.keySet()){
             Object o1 = oldMap.get(key);
             Object o2 = newMap.get(key);
-
             if(!CommUtil.isGenericsEqual(o1, o2) && !commFieldSet.contains(key)){
                 updateNum++;
             }
