@@ -128,4 +128,21 @@ public class SdMetaGen {
     public void setValName(String valName) {
         this.valName = valName;
     }
+
+    @Override
+    public String toString() {
+        return "SdMetaGen{" +
+                "originalFlowtranId='" + originalFlowtranId + '\'' +
+                ", flowtranId='" + flowtranId + '\'' +
+                ", longname='" + longname + '\'' +
+                ", trxnKind=" + trxnKind +
+                ", serviceLocation='" + serviceLocation + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", complexLocation='" + complexLocation + '\'' +
+                ", complexId='" + complexId + '\'' +
+                ", valName='" + valName + '\'' +
+                ", inputFields='" + inputFields + '\'' +
+                ", outputFields='" + outputFields + '\'' +
+                '}';
+    }
 }

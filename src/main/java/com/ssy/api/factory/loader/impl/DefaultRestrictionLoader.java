@@ -79,7 +79,7 @@ public class DefaultRestrictionLoader implements RestrictionLoader {
                             //加载枚举子元素列表
                             Map<String, DefaultEnumerationType> enumerationMap = new HashMap<>();
                             for(Element enumeration : enumerationList){
-                                enumerationMap.put(enumeration.attributeValue("id"), new DefaultEnumerationType(
+                                enumerationMap.put(enumeration.attributeValue("value"), new DefaultEnumerationType(
                                         location, enumeration.attributeValue("id"), enumeration.attributeValue("longname"), enumeration.attributeValue("value")
                                 ));
                             }

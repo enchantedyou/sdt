@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,8 +96,8 @@ public class JDBCHelper {
 			if(resultSet.next()){
 				T obj = clazz.newInstance();
 				for(Field field : clazz.getDeclaredFields()){
-					Method method = clazz.getMethod(CommUtil.buildSetterMethodName(field.getName()), field.getClass());
-					method.invoke(obj, resultSet.getObject(colMap.get(field.getName())));
+					field.setAccessible(true);
+					field.set(obj, resultSet.getObject(colMap.get(field.getName())));
 				}
 				return obj;
 			}

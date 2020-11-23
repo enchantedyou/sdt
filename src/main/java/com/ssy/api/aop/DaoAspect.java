@@ -149,33 +149,34 @@ public class DaoAspect {
 
         try{
             for(Field field : fields){
+                field.setAccessible(true);
                 /** 数据创建者 **/
                 if(CommUtil.equals(field.getName(), SdtDict.A.data_create_user.getId()) && operateType == E_ODBOPERATE.INSERT){
-                    clazz.getMethod(CommUtil.buildSetterMethodName(SdtDict.A.data_create_user.getId()), String.class).invoke(obj, currentUser);
+                    field.set(obj, currentUser);
                 }
 
                 /** 数据创建时间 **/
                 if(CommUtil.equals(field.getName(), SdtDict.A.data_create_time.getId()) && operateType == E_ODBOPERATE.INSERT){
-                    clazz.getMethod(CommUtil.buildSetterMethodName(SdtDict.A.data_create_time.getId()), String.class).invoke(obj, BizUtil.getCurSysTime());
+                    field.set(obj, BizUtil.getCurSysTime());
                 }
 
                 /** 数据更新者 **/
                 if(CommUtil.equals(field.getName(), SdtDict.A.data_update_user.getId()) && operateType == E_ODBOPERATE.UPDATE){
-                    clazz.getMethod(CommUtil.buildSetterMethodName(SdtDict.A.data_update_user.getId()), String.class).invoke(obj, currentUser);
+                    field.set(obj, currentUser);
                 }
 
                 /** 数据更新时间 **/
                 if(CommUtil.equals(field.getName(), SdtDict.A.data_update_time.getId()) && operateType == E_ODBOPERATE.UPDATE){
-                    clazz.getMethod(CommUtil.buildSetterMethodName(SdtDict.A.data_update_time.getId()), String.class).invoke(obj, BizUtil.getCurSysTime());
+                    field.set(obj, BizUtil.getCurSysTime());
                 }
 
                 /** 数据版本号 **/
                 if(CommUtil.equals(field.getName(), SdtDict.A.data_version.getId())){
                     if(operateType == E_ODBOPERATE.INSERT){
-                        clazz.getMethod(CommUtil.buildSetterMethodName(SdtDict.A.data_version.getId()), Integer.class).invoke(obj, 0);
+                        field.set(obj, 0);
                     }else if(operateType == E_ODBOPERATE.UPDATE){
                         Integer dataVersion = (Integer) clazz.getMethod(CommUtil.buildGetterMethodName(SdtDict.A.data_version.getId())).invoke(obj);
-                        clazz.getMethod(CommUtil.buildSetterMethodName(SdtDict.A.data_version.getId()), Integer.class).invoke(obj, CommUtil.nvl(dataVersion, 0) + 1);
+                        field.set(obj, CommUtil.nvl(dataVersion, 0) + 1);
                     }
                 }
             }

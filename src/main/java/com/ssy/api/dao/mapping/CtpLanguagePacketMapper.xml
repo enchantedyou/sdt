@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.ct.CtpLanguagePacketMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ct.CtpLanguagePacket">
+    <constructor>
+      <idArg column="language_resource_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="language_resource_key" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="ui_language" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="language_resource_value" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    language_resource_type, language_resource_key, ui_language, language_resource_value, 
+    data_create_time, data_update_time, data_create_user, data_update_user, data_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ctp_language_packet
+    where language_resource_type = #{languageResourceType,jdbcType=VARCHAR}
+      and language_resource_key = #{languageResourceKey,jdbcType=VARCHAR}
+      and ui_language = #{uiLanguage,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from ctp_language_packet
+    where language_resource_type = #{languageResourceType,jdbcType=VARCHAR}
+      and language_resource_key = #{languageResourceKey,jdbcType=VARCHAR}
+      and ui_language = #{uiLanguage,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.ct.CtpLanguagePacket">
+    insert into ctp_language_packet (language_resource_type, language_resource_key, 
+      ui_language, language_resource_value, data_create_time, 
+      data_update_time, data_create_user, data_update_user, 
+      data_version)
+    values (#{languageResourceType,jdbcType=VARCHAR}, #{languageResourceKey,jdbcType=VARCHAR}, 
+      #{uiLanguage,jdbcType=VARCHAR}, #{languageResourceValue,jdbcType=VARCHAR}, #{dataCreateTime,jdbcType=VARCHAR}, 
+      #{dataUpdateTime,jdbcType=VARCHAR}, #{dataCreateUser,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, 
+      #{dataVersion,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ct.CtpLanguagePacket">
+    insert into ctp_language_packet
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="languageResourceType != null">
+        language_resource_type,
+      </if>
+      <if test="languageResourceKey != null">
+        language_resource_key,
+      </if>
+      <if test="uiLanguage != null">
+        ui_language,
+      </if>
+      <if test="languageResourceValue != null">
+        language_resource_value,
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time,
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time,
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user,
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="languageResourceType != null">
+        #{languageResourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="languageResourceKey != null">
+        #{languageResourceKey,jdbcType=VARCHAR},
+      </if>
+      <if test="uiLanguage != null">
+        #{uiLanguage,jdbcType=VARCHAR},
+      </if>
+      <if test="languageResourceValue != null">
+        #{languageResourceValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ct.CtpLanguagePacket">
+    update ctp_language_packet
+    <set>
+      <if test="languageResourceValue != null">
+        language_resource_value = #{languageResourceValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateTime != null">
+        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateTime != null">
+        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dataCreateUser != null">
+        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataUpdateUser != null">
+        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=BIGINT},
+      </if>
+    </set>
+    where language_resource_type = #{languageResourceType,jdbcType=VARCHAR}
+      and language_resource_key = #{languageResourceKey,jdbcType=VARCHAR}
+      and ui_language = #{uiLanguage,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ct.CtpLanguagePacket">
+    update ctp_language_packet
+    set language_resource_value = #{languageResourceValue,jdbcType=VARCHAR},
+      data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+      data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+      data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+      data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+      data_version = #{dataVersion,jdbcType=BIGINT}
+    where language_resource_type = #{languageResourceType,jdbcType=VARCHAR}
+      and language_resource_key = #{languageResourceKey,jdbcType=VARCHAR}
+      and ui_language = #{uiLanguage,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAll_odb1" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ctp_language_packet
+    where language_resource_value regexp 'Interest|interest|Benifit|benifit|Benefit|benefit|Loan|loan'
+  </select>
+</mapper>

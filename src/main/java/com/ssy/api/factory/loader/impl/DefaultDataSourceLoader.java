@@ -70,7 +70,7 @@ public class DefaultDataSourceLoader implements DataSourceLoader {
             druidDataSource.setUrl(db.getDatasourceUrl());
 
             //数据源有效性检查
-            testDruidDataSourceValid(db.getDatasourceId(), druidDataSource);
+            //testDruidDataSourceValid(db.getDatasourceId(), druidDataSource);
             addDataSource(db.getDatasourceId(), druidDataSource);
             log.info("Load dynamic data source [{}-{}] successfully", db.getDatasourceId(), db.getDatasourceDesc());
         }

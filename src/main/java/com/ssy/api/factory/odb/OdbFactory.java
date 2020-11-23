@@ -125,6 +125,16 @@ public class OdbFactory {
     }
 
     /**
+     * @Description 获取枚举的map
+     * @Author sunshaoyu
+     * @Date 2020/11/13-11:06
+     * @return java.util.Map<java.lang.String,com.ssy.api.meta.abstracts.AbstractRestrictionType>
+     */
+    public static Map<String, AbstractRestrictionType> getEnumMap(){
+        return MetaDataFactory.loadEnumMap();
+    }
+
+    /**
      * @Description 搜索表模型
      * @Author sunshaoyu
      * @Date 2020/6/14-14:17
@@ -222,5 +232,25 @@ public class OdbFactory {
      */
     public static Map<Object, Object> loadDynamicDataSource(){
         return MetaDataFactory.loadDynamicDataSource();
+    }
+
+    /**
+     * @Description 获取限制类型Map
+     * @Author sunshaoyu
+     * @Date 2020/10/30-14:17
+     * @return java.util.Map<java.lang.String,java.util.Map<java.lang.String,com.ssy.api.meta.abstracts.AbstractRestrictionType>>
+     */
+    public static Map<String, Map<String, AbstractRestrictionType>> getRestrictionTypeMap(){
+        return MetaDataFactory.loadRestrictionTypeMap();
+    }
+
+    /**
+     * @Description 获取复合类型Map
+     * @Author sunshaoyu
+     * @Date 2020/11/2-14:05
+     * @return java.util.Map<java.lang.String,java.util.Map<java.lang.String,com.ssy.api.meta.defaults.ComplexType>>
+     */
+    public static Map<String, Map<String, ComplexType>> getComplexMap(){
+        return MetaDataFactory.loadComplexTypeMap();
     }
 }

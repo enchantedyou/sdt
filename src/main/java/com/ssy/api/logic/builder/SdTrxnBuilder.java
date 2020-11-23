@@ -25,6 +25,7 @@ public class SdTrxnBuilder {
 
     private static final ThreadLocal<String> COMPLEX_PATH_LOCAL = new ThreadLocal<>();
     private static final ThreadLocal<String> SERVICE_PATH_LOCAL = new ThreadLocal<>();
+    private static final String SPLIT_TOKEN = ";";
 
     /**
      * @Description 构建交易模型
@@ -132,7 +133,8 @@ public class SdTrxnBuilder {
         Element input = flowtranInterface.addElement("input");
         input.addAttribute("packMode", "true");
 
-        for(String field : metaGen.getInputFields().split("\r\n")){
+        for(String field : metaGen.getInputFields().split(SPLIT_TOKEN)){
+            field = field.trim();
             if(CommUtil.isNull(field)){
                 continue;
             }
@@ -155,7 +157,8 @@ public class SdTrxnBuilder {
                 output.addAttribute("longname", metaGen.getLongname() + " output");
                 output.addAttribute("array", "false");
             }
-            for(String field : metaGen.getOutputFields().split("\r\n")){
+            for(String field : metaGen.getOutputFields().split(SPLIT_TOKEN)){
+                field = field.trim();
                 if(CommUtil.isNull(field)){
                     continue;
                 }
@@ -177,7 +180,7 @@ public class SdTrxnBuilder {
 
         Element inMappings = service.addElement("in_mappings");
         inMappings.addAttribute("by_interface", "true");
-        for(String field : metaGen.getInputFields().split("\r\n")){
+        for(String field : metaGen.getInputFields().split(SPLIT_TOKEN)){
             if(CommUtil.isNull(field)){
                 continue;
             }
@@ -192,7 +195,7 @@ public class SdTrxnBuilder {
         Element outMappings = service.addElement("out_mappings");
         outMappings.addAttribute("by_interface", "true");
         if(CommUtil.isNotNull(metaGen.getOutputFields())){
-            for(String field : metaGen.getInputFields().split("\r\n")) {
+            for(String field : metaGen.getInputFields().split(SPLIT_TOKEN)) {
                 if (CommUtil.isNull(field)) {
                     continue;
                 }
@@ -221,6 +224,9 @@ public class SdTrxnBuilder {
      * @param e
      */
     private static void addFlowtranFields(Element input, com.ssy.api.meta.defaults.Element e) {
+        if(null == e){
+            return;
+        }
         Element field = input.addElement("field");
         field.addAttribute("id", e.getId());
         field.addAttribute("type", e.getType().getFullId());
@@ -295,12 +301,17 @@ public class SdTrxnBuilder {
             addComplexType.addAttribute("abstract", "false");
             addComplexType.addAttribute("introduct", "false");
 
-            for(String field : fields.split("\r\n")){
+            String[] array = fields.split(SPLIT_TOKEN);
+            for(String field : array){
+                field = field.trim();
                 if(CommUtil.isNull(field)) {
                     continue;
                 }
 
                 com.ssy.api.meta.defaults.Element e = OdbFactory.searchDict(field);
+                if(null == e){
+                    continue;
+                }
                 Element addComplexTypeElement = addComplexType.addElement("element");
                 addComplexTypeElement.addAttribute("id", e.getId());
                 addComplexTypeElement.addAttribute("longname", e.getLongName());

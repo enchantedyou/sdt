@@ -61,6 +61,11 @@ public class PathController {
         return "component/menu1006";
     }
 
+    @RequestMapping("/menu1007")
+    public String menu1007(){
+        return "component/menu1007";
+    }
+
     @RequestMapping("/menu2000")
     public String menu2000(){
         return "component/menu2000";

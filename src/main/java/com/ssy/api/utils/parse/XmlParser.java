@@ -2,6 +2,7 @@ package com.ssy.api.utils.parse;
 
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.utils.system.CommUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -28,6 +29,7 @@ import java.util.List;
  * @Author sunshaoyu
  * @Date 2020年06月11日-13:23
  */
+@Slf4j
 public class XmlParser {
 
     /**
@@ -109,6 +111,7 @@ public class XmlParser {
         try{
             writer = new XMLWriter(new FileOutputStream(xmlFile), format);
             writer.write(doc);
+            log.info("Write xml file -> {}", xmlFile.getName());
         }finally {
            if(null != writer){
                writer.flush();

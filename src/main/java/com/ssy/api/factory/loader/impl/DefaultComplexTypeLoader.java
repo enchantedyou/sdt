@@ -95,7 +95,10 @@ public class DefaultComplexTypeLoader implements ComplexTypeLoader {
                     location, elementId, e.attributeValue("longname"), getElementRestrictionType(cpxMap, e.attributeValue("type")), e.attributeValue("desc"), ref
             );
             currentElement.setMulti(Boolean.valueOf(e.attributeValue("multi")));
-            map.put(elementId, currentElement);
+
+            if(CommUtil.isNotNull(elementId)){
+                map.put(elementId, currentElement);
+            }
         }
         return map;
     }

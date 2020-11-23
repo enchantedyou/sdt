@@ -24,6 +24,6 @@ public class SdtApplicationStartupLoader implements ApplicationRunner {
         OdbFactory.loadMetaDataInitially();
         /** 初始化动态数据源 **/
         OdbFactory.loadDynamicDataSource();
-        BizUtil.stoptStopWatch(s, "Load all metadata");
+        BizUtil.stopStopWatch(s, "Load all metadata");
     }
 }

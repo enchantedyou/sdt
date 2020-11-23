@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssy.api.dao.mapper.ct.SmpSysDictLanguageMapper">
+  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ct.SmpSysDictLanguage">
+    <constructor>
+      <idArg column="DICT_ID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="DICT_TYPE" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="LANGUAGE_TYPE" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="DICT_NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    DICT_ID, DICT_TYPE, LANGUAGE_TYPE, DICT_NAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from smp_sys_dict_language
+    where DICT_ID = #{dictId,jdbcType=VARCHAR}
+      and DICT_TYPE = #{dictType,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from smp_sys_dict_language
+    where DICT_ID = #{dictId,jdbcType=VARCHAR}
+      and DICT_TYPE = #{dictType,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ssy.api.entity.table.ct.SmpSysDictLanguage">
+    insert into smp_sys_dict_language (DICT_ID, DICT_TYPE, LANGUAGE_TYPE, 
+      DICT_NAME)
+    values (#{dictId,jdbcType=VARCHAR}, #{dictType,jdbcType=VARCHAR}, #{languageType,jdbcType=VARCHAR}, 
+      #{dictName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ct.SmpSysDictLanguage">
+    insert into smp_sys_dict_language
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dictId != null">
+        DICT_ID,
+      </if>
+      <if test="dictType != null">
+        DICT_TYPE,
+      </if>
+      <if test="languageType != null">
+        LANGUAGE_TYPE,
+      </if>
+      <if test="dictName != null">
+        DICT_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dictId != null">
+        #{dictId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictType != null">
+        #{dictType,jdbcType=VARCHAR},
+      </if>
+      <if test="languageType != null">
+        #{languageType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictName != null">
+        #{dictName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ct.SmpSysDictLanguage">
+    update smp_sys_dict_language
+    <set>
+      <if test="languageType != null">
+        LANGUAGE_TYPE = #{languageType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictName != null">
+        DICT_NAME = #{dictName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DICT_ID = #{dictId,jdbcType=VARCHAR}
+      and DICT_TYPE = #{dictType,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ct.SmpSysDictLanguage">
+    update smp_sys_dict_language
+    set LANGUAGE_TYPE = #{languageType,jdbcType=VARCHAR},
+      DICT_NAME = #{dictName,jdbcType=VARCHAR}
+    where DICT_ID = #{dictId,jdbcType=VARCHAR}
+      and DICT_TYPE = #{dictType,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAll_odb1" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from smp_sys_dict_language
+    where DICT_NAME regexp 'Interest|interest|Benifit|benifit|Benefit|benefit|Loan|loan'
+  </select>
+</mapper>

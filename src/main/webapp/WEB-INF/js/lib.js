@@ -6568,6 +6568,13 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 		});
 	});
 
+	/** RDP域后事件生成 **/
+	form.on('submit(rdpEventCommit)',function(data){
+		requestContext.doRequest("local/buildRdpEvent", data.field, "layui-btn", true, function(response){
+			$("#showRdpEventCode").html(response);
+		});
+	});
+
 	/** 请求报文转换为单元测试代码 **/
 	form.on('submit(msgConvertSubmit)',function(data){
 		requestContext.doRequest("local/buildTestCode", data.field, "layui-btn", true, function(response){
@@ -6702,6 +6709,14 @@ layui.use(['form','element','jquery','layer','table','laypage','code','util'], f
 	$(document).on("click","#m1006",function(){
 		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
 			$(".layui-body").load($(".basePath").val()+"menu1006",null, requestContext.menuClickCallback);
+			requestContext.enableClipboard();
+		});
+	});
+
+	/** RDP域后事件生成 **/
+	$(document).on("click","#m1007",function(){
+		requestContext.doRequest("local/checkAuth", {}, "", false, function () {
+			$(".layui-body").load($(".basePath").val()+"menu1007",null, requestContext.menuClickCallback);
 			requestContext.enableClipboard();
 		});
 	});

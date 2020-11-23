@@ -8,7 +8,6 @@ import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.dict.SdtDict;
 import com.ssy.api.entity.lang.ResponseData;
 import com.ssy.api.entity.table.local.SdbBatchExecution;
-import com.ssy.api.entity.table.local.SdbUser;
 import com.ssy.api.entity.table.local.SdpBatchDate;
 import com.ssy.api.entity.table.local.SdpDatasource;
 import com.ssy.api.entity.type.local.*;
@@ -21,6 +20,7 @@ import com.ssy.api.logic.higention.SdGitlabReader;
 import com.ssy.api.logic.higention.SdNexus;
 import com.ssy.api.logic.local.SdMessageConvert;
 import com.ssy.api.logic.local.SdPTEJsonParser;
+import com.ssy.api.logic.local.SdRdpEventBuilder;
 import com.ssy.api.servicetype.*;
 import com.ssy.api.utils.http.HttpServletUtil;
 import com.ssy.api.utils.parse.ExcelParser;
@@ -347,5 +347,19 @@ public class LocalController {
     @PostMapping("/buildTestCode")
     public String buildTestCode(@EncryptedArgument String requestBody){
         return messageConvert.toUnitTestCode(requestBody);
+    }
+
+    /**
+     * @Description rdp事件构建
+     * @Author sunshaoyu
+     * @Date 2020/11/19-13:09
+     * @param jsonName
+     * @param fieldName
+     * @return java.lang.String
+     */
+    @TrxnEvent("build rdp event")
+    @PostMapping("/buildRdpEvent")
+    public String buildRdpEvent(@EncryptedArgument String jsonName, @EncryptedArgument String fieldName){
+        return SdRdpEventBuilder.build(jsonName, fieldName);
     }
 }

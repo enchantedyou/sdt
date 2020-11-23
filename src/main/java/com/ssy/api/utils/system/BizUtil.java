@@ -206,7 +206,7 @@ public class BizUtil {
      * @param s
      * @param msg
      */
-    public static void stoptStopWatch(StopWatch s, String msg){
+    public static void stopStopWatch(StopWatch s, String msg){
         s.stop();
         log.info("{} finished,cost: {}ms", msg, s.getTotalTimeMillis());
     }

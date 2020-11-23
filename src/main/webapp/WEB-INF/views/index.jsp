@@ -42,10 +42,11 @@
                         <dd><a href="javascript:;" id="m1000">[1000]字典搜索</a></dd>
                         <dd><a href="javascript:;" id="m1001">[1001]PTE代码生成</a></dd>
                         <dd><a href="javascript:;" id="m1002">[1002]接口文档生成</a></dd>
-                        <dd><a href="javascript:;" id="m1003" style="display: none">[1003]交易模型生成</a></dd>
+                        <dd><a href="javascript:;" id="m1003" style="display: block">[1003]交易模型生成</a></dd>
                         <dd><a href="javascript:;" id="m1004">[1004]赋值语句生成</a></dd>
                         <dd><a href="javascript:;" id="m1005">[1005]分片哈希值查询</a></dd>
                         <dd><a href="javascript:;" id="m1006">[1006]请求报文转换</a></dd>
+                        <dd><a href="javascript:;" id="m1007">[1007]RDP域后事件生成</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">

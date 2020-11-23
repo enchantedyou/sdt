@@ -1,27 +1,30 @@
 package com.ssy.api;
 
 import com.ssy.api.dao.mapper.ap.ApsAccountingEventMapper;
+import com.ssy.api.dao.mapper.ct.CtpLanguagePacketMapper;
+import com.ssy.api.dao.mapper.ct.SmpSysDictLanguageMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceControlMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceInMapper;
 import com.ssy.api.dao.mapper.edsp.TspServiceOutMapper;
+import com.ssy.api.dao.mapper.ln.LnaContractMapper;
+import com.ssy.api.dao.mapper.ln.LnaLoanMapper;
 import com.ssy.api.dao.mapper.ln.LnaRepaymentScheduleMapper;
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
-import com.ssy.api.entity.enums.E_PTEMODULE;
+import com.ssy.api.entity.table.ct.CtpLanguagePacket;
+import com.ssy.api.entity.table.ct.SmpSysDictLanguage;
 import com.ssy.api.entity.table.edsp.TspServiceIn;
-import com.ssy.api.entity.table.local.SdbUser;
 import com.ssy.api.entity.table.local.SdpModuleMapping;
-import com.ssy.api.entity.type.local.SdBuildPTE;
 import com.ssy.api.factory.loader.FileLoader;
 import com.ssy.api.factory.odb.MetaDataFactory;
 import com.ssy.api.logic.audit.SdSqlAuditExecutor;
+import com.ssy.api.logic.builder.SdRdpDictBuilder;
+import com.ssy.api.logic.builder.SdRdpEnumBuilder;
 import com.ssy.api.logic.higention.SdGitlabReader;
 import com.ssy.api.logic.local.SdFlowtranParser;
-import com.ssy.api.logic.local.SdJavaParser;
 import com.ssy.api.logic.local.SdMessageConvert;
-import com.ssy.api.logic.local.SdPTEJsonParser;
+import com.ssy.api.logic.local.SdRdpEventBuilder;
 import com.ssy.api.logic.request.SdIcoreRequest;
-import com.ssy.api.meta.defaults.Element;
 import com.ssy.api.meta.flowtran.Flowtran;
 import com.ssy.api.meta.flowtran.IntfService;
 import com.ssy.api.plugins.DBContextHolder;
@@ -38,7 +41,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,6 +79,14 @@ class SdtApplicationTests extends MetaDataFactory {
     private LoanService loanService;
     @Autowired
     private SdMessageConvert messageConvert;
+    @Autowired
+    private LnaContractMapper lnaContractMapper;
+    @Autowired
+    private LnaLoanMapper lnaLoanMapper;
+    @Autowired
+    private SmpSysDictLanguageMapper smpSysDictLanguageMapper;
+    @Autowired
+    private CtpLanguagePacketMapper ctpLanguagePacketMapper;
 
     static {
         System.setProperty("jasypt.encryptor.password", SdtConst.CONFIG_ENCKEY);
@@ -84,19 +94,66 @@ class SdtApplicationTests extends MetaDataFactory {
 
     @Test
     void contextLoads() throws Throwable {
-        System.out.println(messageConvert.toUnitTestCode(new String(Files.readAllBytes(Paths.get("C:\\Users\\DELL\\Desktop\\1.json")), SdtConst.DEFAULT_ENCODING)));
+        SdRdpDictBuilder.build("us", "C:\\Users\\DELL\\Desktop\\");
+        SdRdpEnumBuilder.build("us", "C:\\Users\\DELL\\Desktop\\Enum");
     }
 
-    public void fixSharding() throws IOException {
-        DBContextHolder.switchToDataSource("ln_fat2");
-        StringBuilder builder = new StringBuilder();
-        loanService.queryLoanList().forEach(lnaLoan -> {
-            long hashValue = loanService.getGroupHashValue(20, lnaLoan.getLoanNo()) - 1L;
-            builder.append("delete from lna_repayment_schedule_" + hashValue+" where loan_no = '").append(lnaLoan.getLoanNo()).append("';\r\n");
-            builder.append("insert into lna_repayment_schedule_" + hashValue+" select * from lna_repayment_schedule where loan_no = '" + lnaLoan.getLoanNo()).append("';\r\n");
+    private String replace(String orgStr){
+        orgStr = orgStr.replaceAll("Interest", "Profit");
+        orgStr = orgStr.replaceAll("interest", "profit");
+        orgStr = orgStr.replaceAll("Benifit", "Profit");
+        orgStr = orgStr.replaceAll("benifit", "profit");
+        orgStr = orgStr.replaceAll("Benefit", "Profit");
+        orgStr = orgStr.replaceAll("benefit", "profit");
+        orgStr = orgStr.replaceAll("Loan", "Financing");
+        orgStr = orgStr.replaceAll("loan", "financing");
+        return orgStr;
+    }
+
+    void IslamicPpocSmp_sys_dict_language() throws Exception {
+        StringBuilder baseLineBuilder = new StringBuilder(1 << 10);
+        StringBuilder addBuilder = new StringBuilder(1 << 10);
+        String deleteFormat = "delete from smp_sys_dict_language where dict_type = '%s' and dict_id = '%s' and language_type = '%s';";
+        String insertFormat = "INSERT INTO smp_sys_dict_language (DICT_TYPE, DICT_ID, LANGUAGE_TYPE, DICT_NAME) VALUES ('%s', '%s', '%s', '%s');";
+        DBContextHolder.switchToDataSource("cgc_sump");
+        List<SmpSysDictLanguage> dictList = smpSysDictLanguageMapper.selectAll_odb1();
+
+        dictList.forEach(e -> {
+            baseLineBuilder.append(String.format(deleteFormat, e.getDictType(), e.getDictId(), e.getLanguageType())).append("\r\n");
+            addBuilder.append(String.format(deleteFormat, e.getDictType(), e.getDictId(), e.getLanguageType())).append("\r\n");
         });
-        builder.append("commit;");
-        fileLoader.saveFile(builder.toString(), "C:\\Users\\DELL\\Desktop\\1.sql");
+
+        dictList.forEach(e -> {
+            baseLineBuilder.append(String.format(insertFormat, e.getDictType(), e.getDictId(), e.getLanguageType(), e.getDictName())).append("\r\n");
+            addBuilder.append(String.format(insertFormat, e.getDictType(), e.getDictId(), e.getLanguageType(), replace(e.getDictName()))).append("\r\n");
+        });
+        baseLineBuilder.append("commit;");
+        addBuilder.append("commit;");
+        Files.write(Paths.get("C:\\Users\\DELL\\Desktop\\smp_sys_dict_language_add.sql"), addBuilder.toString().getBytes("utf-8"));
+        Files.write(Paths.get("C:\\Users\\DELL\\Desktop\\smp_sys_dict_language_baseline.sql"), baseLineBuilder.toString().getBytes("utf-8"));
+    }
+
+    void IslamicPpocCtp_language_packet() throws Exception {
+        StringBuilder baseLineBuilder = new StringBuilder(1 << 10);
+        StringBuilder addBuilder = new StringBuilder(1 << 10);
+        String deleteFormat = "delete from ctp_language_packet where language_resource_type = '%s' and language_resource_key = '%s' and ui_language = '%s';";
+        String insertFormat = "INSERT INTO ctp_language_packet (language_resource_type, language_resource_key, ui_language, language_resource_value, data_create_time, data_update_time, data_create_user, data_update_user, data_version) VALUES ('%s', '%s', '%s', '%s', 'S####', '20170301 09:30:11 233', NULL, NULL, '0');";
+        DBContextHolder.switchToDataSource("cgc_ct");
+        List<CtpLanguagePacket> ctpLanguagePacketList = ctpLanguagePacketMapper.selectAll_odb1();
+
+        ctpLanguagePacketList.forEach(e -> {
+            addBuilder.append(String.format(deleteFormat, e.getLanguageResourceType(), e.getLanguageResourceKey(), e.getUiLanguage())).append("\r\n");
+            baseLineBuilder.append(String.format(deleteFormat, e.getLanguageResourceType(), e.getLanguageResourceKey(), e.getUiLanguage())).append("\r\n");
+        });
+
+        ctpLanguagePacketList.forEach(e -> {
+            addBuilder.append(String.format(insertFormat, e.getLanguageResourceType(), e.getLanguageResourceKey(), e.getUiLanguage(), replace(e.getLanguageResourceValue()))).append("\r\n");
+            baseLineBuilder.append(String.format(insertFormat, e.getLanguageResourceType(), e.getLanguageResourceKey(), e.getUiLanguage(), e.getLanguageResourceValue())).append("\r\n");
+        });
+        baseLineBuilder.append("commit;");
+        addBuilder.append("commit;");
+        Files.write(Paths.get("C:\\Users\\DELL\\Desktop\\ctp_language_packet_baseline.sql"), baseLineBuilder.toString().getBytes("utf-8"));
+        Files.write(Paths.get("C:\\Users\\DELL\\Desktop\\ctp_language_packet_add.sql"), addBuilder.toString().getBytes("utf-8"));
     }
 
     public void reversalService(){
@@ -194,20 +251,5 @@ class SdtApplicationTests extends MetaDataFactory {
         String url = "http://10.22.63.72:9009/gateway";
         String body = fileLoader.loadAsString(new File("C:\\Users\\DELL\\Desktop\\312020.json"), SdtConst.DEFAULT_ENCODING);
         SdIcoreRequest.doRequest(url, body, concurrentNum);
-    }
-
-    void PTE(){
-        SdBuildPTE buildPTE = new SdBuildPTE();
-        buildPTE.setFlowtranId("ln6020");
-        buildPTE.setPteModule(E_PTEMODULE.dynamicTabs);
-        System.out.println(SdPTEJsonParser.buildPTEJson(buildPTE));
-    }
-
-    void javaParse() throws Exception {
-        String path = "D:\\Sunline\\sunlineWorkspace\\icore3.0\\ln-busi\\ln-serv\\src\\main\\java\\cn\\sunline\\icore\\ln\\serv\\serviceimpl\\loan\\SrvIoLnLoanOpenImpl.java";
-        List<String> fieldNameList = SdJavaParser.searchMethodCalls(new File(path), "loanNormalOpenAndCheck", SdJavaParser.MANDATORY_STMT);
-        for(String name : fieldNameList){
-            System.out.println(name);
-        }
     }
 }

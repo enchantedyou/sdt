@@ -79,7 +79,7 @@ public class SdPTEJsonParser {
      */
     protected static void parsePTEJsonByModule() throws IOException {
         //加载所有的json文件
-        Map<String, File> fileMap = fileLoader.load(sdtContextConfig.getSumpResourcePath(), false, ".json");
+        Map<String, File> fileMap = fileLoader.load(sdtContextConfig.getSumpResourcePath(), false, "json");
         for(String fileName : fileMap.keySet()){
             String jsonStr = fileLoader.loadAsString(fileMap.get(fileName), SdtConst.DEFAULT_ENCODING);
 

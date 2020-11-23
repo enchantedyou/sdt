@@ -81,7 +81,7 @@ public class MetaDataFactory {
         if(CommUtil.isNull(intfExcelFileMap) && CommUtil.isNotNull(sdtContextConfig.getIntfExcelPath())){
             StopWatch s = BizUtil.startStopWatch();
             intfExcelFileMap = loaderFactory.getFileLoader().load(sdtContextConfig.getIntfExcelPath(), false, SdtConst.INTF_EXCEL_SUFFIX);
-            BizUtil.stoptStopWatch(s, "Load interface document file list");
+            BizUtil.stopStopWatch(s, "Load interface document file list");
         }
         return intfExcelFileMap;
     }
@@ -96,7 +96,7 @@ public class MetaDataFactory {
         if(CommUtil.isNull(projectFileMap)){
             StopWatch s = BizUtil.startStopWatch();
             projectFileMap = loaderFactory.getFileLoader().load(sdtContextConfig.getWorkSpacePath(), true, SdtConst.PROJECT_FILE_SUFFIX);
-            BizUtil.stoptStopWatch(s, "Load project file list");
+            BizUtil.stopStopWatch(s, "Load project file list");
         }
         return projectFileMap;
     }
@@ -112,7 +112,7 @@ public class MetaDataFactory {
             Map<String, File> map = loadProjectFileMap();
             StopWatch s = BizUtil.startStopWatch();
             restrictionTypeMap = loaderFactory.getRestrictionLoader().load(map);
-            BizUtil.stoptStopWatch(s, "Load restricted types into containers");
+            BizUtil.stopStopWatch(s, "Load restricted types into containers");
         }
         return restrictionTypeMap;
     }
@@ -128,7 +128,7 @@ public class MetaDataFactory {
             StopWatch s = BizUtil.startStopWatch();
             Map<String, File> map = loadProjectFileMap();
             complexTypeMap = loaderFactory.getComplexTypeLoader().load(map);
-            BizUtil.stoptStopWatch(s, "Load complex types into containers");
+            BizUtil.stopStopWatch(s, "Load complex types into containers");
         }
         return complexTypeMap;
     }
@@ -161,7 +161,7 @@ public class MetaDataFactory {
                     }
                 }
             }
-            BizUtil.stoptStopWatch(s, "Load dict into containers");
+            BizUtil.stopStopWatch(s, "Load dict into containers");
         }
         return dictMap;
     }
@@ -190,7 +190,7 @@ public class MetaDataFactory {
                     }
                 });
             });
-            BizUtil.stoptStopWatch(s, "Load enum into containers");
+            BizUtil.stopStopWatch(s, "Load enum into containers");
         }
         return enumMap;
     }
@@ -206,7 +206,7 @@ public class MetaDataFactory {
             StopWatch s = BizUtil.startStopWatch();
             Map<String, File> map = loadProjectFileMap();
             tableTypeMap = loaderFactory.getTableTypeLoader().load(map);
-            BizUtil.stoptStopWatch(s, "Load table model into containers");
+            BizUtil.stopStopWatch(s, "Load table model into containers");
         }
         return tableTypeMap;
     }
@@ -220,7 +220,7 @@ public class MetaDataFactory {
     protected static Map<Object, Object> refreshDynamicDataSource(){
         StopWatch s = BizUtil.startStopWatch();
         dataSourceMap = loaderFactory.getDataSourceLoader().initDynamicDataSource();
-        BizUtil.stoptStopWatch(s, "Refresh the dynamic data source");
+        BizUtil.stopStopWatch(s, "Refresh the dynamic data source");
         return dataSourceMap;
     }
 
@@ -234,7 +234,7 @@ public class MetaDataFactory {
         if(CommUtil.isNull(dataSourceMap)){
             StopWatch s = BizUtil.startStopWatch();
             dataSourceMap = loaderFactory.getDataSourceLoader().initDynamicDataSource();
-            BizUtil.stoptStopWatch(s, "Load the dynamic data source");
+            BizUtil.stopStopWatch(s, "Load the dynamic data source");
         }
         return dataSourceMap;
     }
@@ -245,6 +245,8 @@ public class MetaDataFactory {
      * @Date 2020/7/8-15:57
      */
     protected static void loadMetaDataInitially() {
+        //初始化项目文件
+        loadProjectFileMap();
         //初始化接口文档文件
         loadIntfWordFileMap();
         //初始化限制类型
@@ -266,6 +268,7 @@ public class MetaDataFactory {
      * @Date 2020/9/27-14:42
      */
     protected static void clear(){
+        projectFileMap.clear();
         intfExcelFileMap.clear();
         restrictionTypeMap.clear();
         complexTypeMap.clear();
@@ -283,7 +286,7 @@ public class MetaDataFactory {
         StopWatch s = BizUtil.startStopWatch();
         clear();
         loadMetaDataInitially();
-        BizUtil.stoptStopWatch(s, "Refresh the meta data");
+        BizUtil.stopStopWatch(s, "Refresh the meta data");
     }
 
     /**
