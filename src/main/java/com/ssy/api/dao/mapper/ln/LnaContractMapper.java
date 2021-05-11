@@ -6,17 +6,17 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface LnaContractMapper {
-    int deleteByPrimaryKey(@Param("contractNo") String contractNo, @Param("orgId") String orgId);
+	int deleteByPrimaryKey(@Param("contractNo") String contractNo, @Param("orgId") String orgId);
 
-    int insert(LnaContract record);
+	int insert(LnaContract record);
 
-    int insertSelective(LnaContract record);
+	int insertSelective(LnaContract record);
 
-    LnaContract selectByPrimaryKey(@Param("contractNo") String contractNo, @Param("orgId") String orgId);
+	LnaContract selectByPrimaryKey(@Param("contractNo") String contractNo, @Param("orgId") String orgId);
 
-    int updateByPrimaryKeySelective(LnaContract record);
+	int updateByPrimaryKeySelective(LnaContract record);
 
-    int updateByPrimaryKey(LnaContract record);
+	int updateByPrimaryKey(LnaContract record);
 
-    List<LnaContract> selectAll_odb1();
+	List<LnaContract> selectAll();
 }

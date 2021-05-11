@@ -43,10 +43,6 @@ public class Params extends HashMap<String, Object> {
 		return this;
 	}
 
-	public String toString() {
-		return super.toString();
-	}
-
 	public Params del(String key) {
 		remove(key);
 		return this;

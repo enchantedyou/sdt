@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssy.api.dao.mapper.edsp.TspServiceControlMapper">
-  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.edsp.TspServiceControl">
-    <constructor>
-      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="sub_system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="service_invoke_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="inner_service_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="inner_service_impl_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="route_keys" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="cancel_service" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="confirm_service" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="service_transaction_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="service_type" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="regist_call_log" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="service_executor_type" javaType="java.lang.String" jdbcType="CHAR" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.edsp.TspServiceControl">
+        <constructor>
+            <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="sub_system_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="service_invoke_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="inner_service_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="inner_service_impl_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="route_keys" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="cancel_service" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="confirm_service" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="service_transaction_mode" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="service_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="regist_call_log" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="service_executor_type" javaType="java.lang.String" jdbcType="CHAR"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
     system_code, sub_system_code, service_invoke_id, inner_service_code, inner_service_impl_code, 
     description, route_keys, cancel_service, confirm_service, service_transaction_mode, 
     service_type, regist_call_log, service_executor_type
   </sql>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tsp_service_control
-    where system_code = #{systemCode,jdbcType=VARCHAR}
-      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
-      and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
-      and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tsp_service_control
+        where system_code = #{systemCode,jdbcType=VARCHAR}
+        and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+        and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
+        and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
     delete from tsp_service_control
     where system_code = #{systemCode,jdbcType=VARCHAR}
       and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
       and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
       and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.ssy.api.entity.table.edsp.TspServiceControl">
+    <insert id="insert" parameterType="com.ssy.api.entity.table.edsp.TspServiceControl">
     insert into tsp_service_control (system_code, sub_system_code, service_invoke_id, 
       inner_service_code, inner_service_impl_code, 
       description, route_keys, cancel_service, 
@@ -53,128 +53,128 @@
       #{serviceType,jdbcType=VARCHAR}, #{registCallLog,jdbcType=INTEGER}, #{serviceExecutorType,jdbcType=CHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.edsp.TspServiceControl">
-    insert into tsp_service_control
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="systemCode != null">
-        system_code,
-      </if>
-      <if test="subSystemCode != null">
-        sub_system_code,
-      </if>
-      <if test="serviceInvokeId != null">
-        service_invoke_id,
-      </if>
-      <if test="innerServiceCode != null">
-        inner_service_code,
-      </if>
-      <if test="innerServiceImplCode != null">
-        inner_service_impl_code,
-      </if>
-      <if test="description != null">
-        description,
-      </if>
-      <if test="routeKeys != null">
-        route_keys,
-      </if>
-      <if test="cancelService != null">
-        cancel_service,
-      </if>
-      <if test="confirmService != null">
-        confirm_service,
-      </if>
-      <if test="serviceTransactionMode != null">
-        service_transaction_mode,
-      </if>
-      <if test="serviceType != null">
-        service_type,
-      </if>
-      <if test="registCallLog != null">
-        regist_call_log,
-      </if>
-      <if test="serviceExecutorType != null">
-        service_executor_type,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="systemCode != null">
-        #{systemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="subSystemCode != null">
-        #{subSystemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceInvokeId != null">
-        #{serviceInvokeId,jdbcType=VARCHAR},
-      </if>
-      <if test="innerServiceCode != null">
-        #{innerServiceCode,jdbcType=VARCHAR},
-      </if>
-      <if test="innerServiceImplCode != null">
-        #{innerServiceImplCode,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null">
-        #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="routeKeys != null">
-        #{routeKeys,jdbcType=VARCHAR},
-      </if>
-      <if test="cancelService != null">
-        #{cancelService,jdbcType=VARCHAR},
-      </if>
-      <if test="confirmService != null">
-        #{confirmService,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceTransactionMode != null">
-        #{serviceTransactionMode,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceType != null">
-        #{serviceType,jdbcType=VARCHAR},
-      </if>
-      <if test="registCallLog != null">
-        #{registCallLog,jdbcType=INTEGER},
-      </if>
-      <if test="serviceExecutorType != null">
-        #{serviceExecutorType,jdbcType=CHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.edsp.TspServiceControl">
-    update tsp_service_control
-    <set>
-      <if test="innerServiceImplCode != null">
-        inner_service_impl_code = #{innerServiceImplCode,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null">
-        description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="routeKeys != null">
-        route_keys = #{routeKeys,jdbcType=VARCHAR},
-      </if>
-      <if test="cancelService != null">
-        cancel_service = #{cancelService,jdbcType=VARCHAR},
-      </if>
-      <if test="confirmService != null">
-        confirm_service = #{confirmService,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceTransactionMode != null">
-        service_transaction_mode = #{serviceTransactionMode,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceType != null">
-        service_type = #{serviceType,jdbcType=VARCHAR},
-      </if>
-      <if test="registCallLog != null">
-        regist_call_log = #{registCallLog,jdbcType=INTEGER},
-      </if>
-      <if test="serviceExecutorType != null">
-        service_executor_type = #{serviceExecutorType,jdbcType=CHAR},
-      </if>
-    </set>
-    where system_code = #{systemCode,jdbcType=VARCHAR}
-      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
-      and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
-      and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.edsp.TspServiceControl">
+    <insert id="insertSelective" parameterType="com.ssy.api.entity.table.edsp.TspServiceControl">
+        insert into tsp_service_control
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="systemCode != null">
+                system_code,
+            </if>
+            <if test="subSystemCode != null">
+                sub_system_code,
+            </if>
+            <if test="serviceInvokeId != null">
+                service_invoke_id,
+            </if>
+            <if test="innerServiceCode != null">
+                inner_service_code,
+            </if>
+            <if test="innerServiceImplCode != null">
+                inner_service_impl_code,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="routeKeys != null">
+                route_keys,
+            </if>
+            <if test="cancelService != null">
+                cancel_service,
+            </if>
+            <if test="confirmService != null">
+                confirm_service,
+            </if>
+            <if test="serviceTransactionMode != null">
+                service_transaction_mode,
+            </if>
+            <if test="serviceType != null">
+                service_type,
+            </if>
+            <if test="registCallLog != null">
+                regist_call_log,
+            </if>
+            <if test="serviceExecutorType != null">
+                service_executor_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="systemCode != null">
+                #{systemCode,jdbcType=VARCHAR},
+            </if>
+            <if test="subSystemCode != null">
+                #{subSystemCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceInvokeId != null">
+                #{serviceInvokeId,jdbcType=VARCHAR},
+            </if>
+            <if test="innerServiceCode != null">
+                #{innerServiceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="innerServiceImplCode != null">
+                #{innerServiceImplCode,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="routeKeys != null">
+                #{routeKeys,jdbcType=VARCHAR},
+            </if>
+            <if test="cancelService != null">
+                #{cancelService,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmService != null">
+                #{confirmService,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceTransactionMode != null">
+                #{serviceTransactionMode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                #{serviceType,jdbcType=VARCHAR},
+            </if>
+            <if test="registCallLog != null">
+                #{registCallLog,jdbcType=INTEGER},
+            </if>
+            <if test="serviceExecutorType != null">
+                #{serviceExecutorType,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.edsp.TspServiceControl">
+        update tsp_service_control
+        <set>
+            <if test="innerServiceImplCode != null">
+                inner_service_impl_code = #{innerServiceImplCode,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="routeKeys != null">
+                route_keys = #{routeKeys,jdbcType=VARCHAR},
+            </if>
+            <if test="cancelService != null">
+                cancel_service = #{cancelService,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmService != null">
+                confirm_service = #{confirmService,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceTransactionMode != null">
+                service_transaction_mode = #{serviceTransactionMode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                service_type = #{serviceType,jdbcType=VARCHAR},
+            </if>
+            <if test="registCallLog != null">
+                regist_call_log = #{registCallLog,jdbcType=INTEGER},
+            </if>
+            <if test="serviceExecutorType != null">
+                service_executor_type = #{serviceExecutorType,jdbcType=CHAR},
+            </if>
+        </set>
+        where system_code = #{systemCode,jdbcType=VARCHAR}
+        and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+        and service_invoke_id = #{serviceInvokeId,jdbcType=VARCHAR}
+        and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.edsp.TspServiceControl">
     update tsp_service_control
     set inner_service_impl_code = #{innerServiceImplCode,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
@@ -191,9 +191,9 @@
       and inner_service_code = #{innerServiceCode,jdbcType=VARCHAR}
   </update>
 
-  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from tsp_service_control
-  </select>
+    <select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tsp_service_control
+    </select>
 </mapper>

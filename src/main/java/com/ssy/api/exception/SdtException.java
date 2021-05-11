@@ -10,77 +10,65 @@ import com.ssy.api.utils.system.CommUtil;
  */
 public class SdtException extends RuntimeException {
 
-    private String errorMsg;
-    private String errorCode;
+	private final String errorMsg;
+	private final String errorCode;
 
-    public SdtException(Throwable cause) {
-        super(cause);
-        if(cause instanceof SdtException){
-            this.errorCode = ((SdtException) cause).getErrorCode();
-            this.errorMsg = ((SdtException) cause).getErrorMsg();
-        }else{
-            this.errorCode = ErrCodeDef.UNKNOWN_ERROR;
-            this.errorMsg = cause.getMessage();
-        }
-    }
+	public SdtException(Throwable cause) {
+		super(cause);
+		if (cause instanceof SdtException) {
+			this.errorCode = ((SdtException) cause).getErrorCode();
+			this.errorMsg = ((SdtException) cause).getErrorMsg();
+		} else {
+			this.errorCode = ErrCodeDef.UNKNOWN_ERROR;
+			this.errorMsg = cause.getMessage();
+		}
+	}
 
-    public SdtException(Throwable cause, String errorCode) {
-        super(cause);
-        if(cause instanceof SdtException){
-            this.errorCode = ((SdtException) cause).getErrorCode();
-            this.errorMsg = ((SdtException) cause).getErrorMsg();
-        }else{
-            this.errorCode = errorCode;
-            this.errorMsg = cause.getMessage();
-        }
-    }
+	public SdtException(Throwable cause, String errorCode) {
+		super(cause);
+		if (cause instanceof SdtException) {
+			this.errorCode = ((SdtException) cause).getErrorCode();
+			this.errorMsg = ((SdtException) cause).getErrorMsg();
+		} else {
+			this.errorCode = errorCode;
+			this.errorMsg = cause.getMessage();
+		}
+	}
 
-    public SdtException(String message, Throwable cause) {
-        super(message, cause);
-        if(cause instanceof SdtException){
-            this.errorMsg = ((SdtException) cause).getErrorMsg();
-            this.errorCode = ((SdtException) cause).getErrorCode();
-        }else{
-            this.errorCode = ErrCodeDef.SYSTEM_ERROR;
-            this.errorMsg = cause.getMessage();
-        }
-    }
+	public SdtException(String message, Throwable cause) {
+		super(message, cause);
+		if (cause instanceof SdtException) {
+			this.errorMsg = ((SdtException) cause).getErrorMsg();
+			this.errorCode = ((SdtException) cause).getErrorCode();
+		} else {
+			this.errorCode = ErrCodeDef.SYSTEM_ERROR;
+			this.errorMsg = cause.getMessage();
+		}
+	}
 
-    public SdtException(String errorMsg, String errorCode) {
-        super("[" + CommUtil.nvl(errorCode, ErrCodeDef.UNKNOWN_ERROR) + "]" + errorMsg);
-        this.errorMsg = errorMsg;
-        this.errorCode = errorCode;
-    }
+	public SdtException(String errorMsg, String errorCode) {
+		super("[" + CommUtil.nvl(errorCode, ErrCodeDef.UNKNOWN_ERROR) + "]" + errorMsg);
+		this.errorMsg = errorMsg;
+		this.errorCode = errorCode;
+	}
 
-    public SdtException(String errorMsg, String errorCode, Throwable e) {
-        super("[" + CommUtil.nvl(errorCode, ErrCodeDef.UNKNOWN_ERROR) + "]" + errorMsg, e);
-        this.errorMsg = errorMsg;
-        this.errorCode = errorCode;
-    }
+	public SdtException(String errorMsg, String errorCode, Throwable e) {
+		super("[" + CommUtil.nvl(errorCode, ErrCodeDef.UNKNOWN_ERROR) + "]" + errorMsg, e);
+		this.errorMsg = errorMsg;
+		this.errorCode = errorCode;
+	}
 
-    public SdtException(String errorMsg) {
-        super("[" + ErrCodeDef.SYSTEM_ERROR + "]" + errorMsg);
-        this.errorMsg = errorMsg;
-        this.errorCode = ErrCodeDef.SYSTEM_ERROR;
-    }
+	public SdtException(String errorMsg) {
+		super("[" + ErrCodeDef.SYSTEM_ERROR + "]" + errorMsg);
+		this.errorMsg = errorMsg;
+		this.errorCode = ErrCodeDef.SYSTEM_ERROR;
+	}
 
-    public SdtException() {
+	public String getErrorMsg() {
+		return errorMsg;
+	}
 
-    }
-
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
+	public String getErrorCode() {
+		return errorCode;
+	}
 }

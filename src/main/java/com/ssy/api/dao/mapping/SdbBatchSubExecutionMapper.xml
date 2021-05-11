@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssy.api.dao.mapper.local.SdbBatchSubExecutionMapper">
-  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdbBatchSubExecution">
-    <constructor>
-      <idArg column="trxn_seq" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="flow_step_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="trxn_date" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="tran_state" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
-    </constructor>
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.ssy.api.entity.table.local.SdbBatchSubExecution">
-    <constructor>
-      <idArg column="trxn_seq" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="flow_step_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="trxn_date" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="tran_state" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="error_message" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
-      <arg column="error_stack" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdbBatchSubExecution">
+        <constructor>
+            <idArg column="trxn_seq" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="flow_step_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="trxn_date" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="tran_state" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        </constructor>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.ssy.api.entity.table.local.SdbBatchSubExecution">
+        <constructor>
+            <idArg column="trxn_seq" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="flow_step_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="trxn_date" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="tran_state" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="tran_group_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="error_message" javaType="java.lang.String" jdbcType="LONGVARCHAR"/>
+            <arg column="error_stack" javaType="java.lang.String" jdbcType="LONGVARCHAR"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
     trxn_seq, system_code, flow_step_id, trxn_date, tran_state, tran_group_id, data_create_user, 
     data_create_time, data_update_user, data_update_time, data_version
   </sql>
-  <sql id="Blob_Column_List">
+    <sql id="Blob_Column_List">
     error_message, error_stack
   </sql>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from sdb_batch_sub_execution
-    where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
-      and system_code = #{systemCode,jdbcType=VARCHAR}
-      and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from sdb_batch_sub_execution
+        where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
+        and system_code = #{systemCode,jdbcType=VARCHAR}
+        and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
     delete from sdb_batch_sub_execution
     where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
       and system_code = #{systemCode,jdbcType=VARCHAR}
       and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
+    <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
     insert into sdb_batch_sub_execution (trxn_seq, system_code, flow_step_id, 
       trxn_date, tran_state, tran_group_id, 
       data_create_user, data_create_time, data_update_user, 
@@ -68,130 +68,130 @@
       #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER}, #{errorMessage,jdbcType=LONGVARCHAR}, 
       #{errorStack,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
-    insert into sdb_batch_sub_execution
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="trxnSeq != null">
-        trxn_seq,
-      </if>
-      <if test="systemCode != null">
-        system_code,
-      </if>
-      <if test="flowStepId != null">
-        flow_step_id,
-      </if>
-      <if test="trxnDate != null">
-        trxn_date,
-      </if>
-      <if test="tranState != null">
-        tran_state,
-      </if>
-      <if test="tranGroupId != null">
-        tran_group_id,
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user,
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time,
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user,
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time,
-      </if>
-      <if test="dataVersion != null">
-        data_version,
-      </if>
-      <if test="errorMessage != null">
-        error_message,
-      </if>
-      <if test="errorStack != null">
-        error_stack,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="trxnSeq != null">
-        #{trxnSeq,jdbcType=VARCHAR},
-      </if>
-      <if test="systemCode != null">
-        #{systemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="flowStepId != null">
-        #{flowStepId,jdbcType=VARCHAR},
-      </if>
-      <if test="trxnDate != null">
-        #{trxnDate,jdbcType=VARCHAR},
-      </if>
-      <if test="tranState != null">
-        #{tranState,jdbcType=VARCHAR},
-      </if>
-      <if test="tranGroupId != null">
-        #{tranGroupId,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateUser != null">
-        #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        #{dataVersion,jdbcType=INTEGER},
-      </if>
-      <if test="errorMessage != null">
-        #{errorMessage,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="errorStack != null">
-        #{errorStack,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
-    update sdb_batch_sub_execution
-    <set>
-      <if test="trxnDate != null">
-        trxn_date = #{trxnDate,jdbcType=VARCHAR},
-      </if>
-      <if test="tranState != null">
-        tran_state = #{tranState,jdbcType=VARCHAR},
-      </if>
-      <if test="tranGroupId != null">
-        tran_group_id = #{tranGroupId,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        data_version = #{dataVersion,jdbcType=INTEGER},
-      </if>
-      <if test="errorMessage != null">
-        error_message = #{errorMessage,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="errorStack != null">
-        error_stack = #{errorStack,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
-      and system_code = #{systemCode,jdbcType=VARCHAR}
-      and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
+    <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
+        insert into sdb_batch_sub_execution
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trxnSeq != null">
+                trxn_seq,
+            </if>
+            <if test="systemCode != null">
+                system_code,
+            </if>
+            <if test="flowStepId != null">
+                flow_step_id,
+            </if>
+            <if test="trxnDate != null">
+                trxn_date,
+            </if>
+            <if test="tranState != null">
+                tran_state,
+            </if>
+            <if test="tranGroupId != null">
+                tran_group_id,
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user,
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time,
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user,
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time,
+            </if>
+            <if test="dataVersion != null">
+                data_version,
+            </if>
+            <if test="errorMessage != null">
+                error_message,
+            </if>
+            <if test="errorStack != null">
+                error_stack,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trxnSeq != null">
+                #{trxnSeq,jdbcType=VARCHAR},
+            </if>
+            <if test="systemCode != null">
+                #{systemCode,jdbcType=VARCHAR},
+            </if>
+            <if test="flowStepId != null">
+                #{flowStepId,jdbcType=VARCHAR},
+            </if>
+            <if test="trxnDate != null">
+                #{trxnDate,jdbcType=VARCHAR},
+            </if>
+            <if test="tranState != null">
+                #{tranState,jdbcType=VARCHAR},
+            </if>
+            <if test="tranGroupId != null">
+                #{tranGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateUser != null">
+                #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                #{dataVersion,jdbcType=INTEGER},
+            </if>
+            <if test="errorMessage != null">
+                #{errorMessage,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="errorStack != null">
+                #{errorStack,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
+        update sdb_batch_sub_execution
+        <set>
+            <if test="trxnDate != null">
+                trxn_date = #{trxnDate,jdbcType=VARCHAR},
+            </if>
+            <if test="tranState != null">
+                tran_state = #{tranState,jdbcType=VARCHAR},
+            </if>
+            <if test="tranGroupId != null">
+                tran_group_id = #{tranGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                data_version = #{dataVersion,jdbcType=INTEGER},
+            </if>
+            <if test="errorMessage != null">
+                error_message = #{errorMessage,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="errorStack != null">
+                error_stack = #{errorStack,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
+        and system_code = #{systemCode,jdbcType=VARCHAR}
+        and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
     update sdb_batch_sub_execution
     set trxn_date = #{trxnDate,jdbcType=VARCHAR},
       tran_state = #{tranState,jdbcType=VARCHAR},
@@ -207,7 +207,7 @@
       and system_code = #{systemCode,jdbcType=VARCHAR}
       and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
+    <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdbBatchSubExecution">
     update sdb_batch_sub_execution
     set trxn_date = #{trxnDate,jdbcType=VARCHAR},
       tran_state = #{tranState,jdbcType=VARCHAR},
@@ -222,13 +222,13 @@
       and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
   </update>
 
-  <select id="selectAll_odb1" parameterType="map" resultMap="ResultMapWithBLOBs">
-    select
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from sdb_batch_sub_execution
-    where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
-    and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
-  </select>
+    <select id="selectAll" parameterType="map" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from sdb_batch_sub_execution
+        where trxn_seq = #{trxnSeq,jdbcType=VARCHAR}
+        and flow_step_id = #{flowStepId,jdbcType=VARCHAR}
+    </select>
 </mapper>

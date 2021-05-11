@@ -8,18 +8,20 @@ import java.util.List;
 
 @TableType(name = "lna_balance", desc = "loan balance")
 public interface LnaBalanceMapper {
-    int deleteByPrimaryKey(@Param("loanNo") String loanNo, @Param("balAttributes") String balAttributes, @Param("orgId") String orgId);
+	int deleteByPrimaryKey(@Param("loanNo") String loanNo, @Param("balAttributes") String balAttributes,
+			@Param("orgId") String orgId);
 
-    int insert(LnaBalance record);
+	int insert(LnaBalance record);
 
-    int insertSelective(LnaBalance record);
+	int insertSelective(LnaBalance record);
 
-    LnaBalance selectByPrimaryKey(@Param("loanNo") String loanNo, @Param("balAttributes") String balAttributes, @Param("orgId") String orgId);
+	LnaBalance selectByPrimaryKey(@Param("loanNo") String loanNo, @Param("balAttributes") String balAttributes,
+			@Param("orgId") String orgId);
 
-    int updateByPrimaryKeySelective(LnaBalance record);
+	int updateByPrimaryKeySelective(LnaBalance record);
 
-    int updateByPrimaryKey(LnaBalance record);
+	int updateByPrimaryKey(LnaBalance record);
 
-    /** 查出某个借据的所有余额 **/
-    List<LnaBalance> selectAll_odb1(@Param("loanNo") String loanNo, @Param("orgId") String orgId);
+	/** 查出某个借据的所有余额 **/
+	List<LnaBalance> selectAll(@Param("loanNo") String loanNo, @Param("orgId") String orgId);
 }

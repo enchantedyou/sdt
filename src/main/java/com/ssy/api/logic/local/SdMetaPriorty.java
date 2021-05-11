@@ -27,180 +27,190 @@ import java.util.Map;
 @Component
 public class SdMetaPriorty {
 
-    private static SdpDictPriortyMapper sdpDictPriortyMapper;
-    private static SdpEnumPriortyMapper sdpEnumPriortyMapper;
-    private static SdtContextConfig contextConfig;
+	private static SdpDictPriortyMapper sdpDictPriortyMapper;
+	private static SdpEnumPriortyMapper sdpEnumPriortyMapper;
+	private static SdtContextConfig contextConfig;
 
-    @Autowired
-    public void setSdpDictPriortyMapper(SdpDictPriortyMapper sdpDictPriortyMapper) {
-        SdMetaPriorty.sdpDictPriortyMapper = sdpDictPriortyMapper;
-    }
+	@Autowired
+	public void setSdpDictPriortyMapper(SdpDictPriortyMapper sdpDictPriortyMapper) {
+		SdMetaPriorty.sdpDictPriortyMapper = sdpDictPriortyMapper;
+	}
 
-    @Autowired
-    public void setSdpEnumPriortyMapper(SdpEnumPriortyMapper sdpEnumPriortyMapper) {
-        SdMetaPriorty.sdpEnumPriortyMapper = sdpEnumPriortyMapper;
-    }
+	@Autowired
+	public void setSdpEnumPriortyMapper(SdpEnumPriortyMapper sdpEnumPriortyMapper) {
+		SdMetaPriorty.sdpEnumPriortyMapper = sdpEnumPriortyMapper;
+	}
 
-    @Autowired
-    public void setContextConfig(SdtContextConfig contextConfig) {
-        SdMetaPriorty.contextConfig = contextConfig;
-    }
+	@Autowired
+	public void setContextConfig(SdtContextConfig contextConfig) {
+		SdMetaPriorty.contextConfig = contextConfig;
+	}
 
-    /**
-     * @Description 查询有效的字典优先级列表
-     * @Author sunshaoyu
-     * @Date 2020/6/12-13:46
-     * @return java.util.List<com.ssy.api.entity.db.local.SdpDictPriorty>
-     */
-    public static List<SdpDictPriorty> queryEffectDictPriortyList(){
-        return sdpDictPriortyMapper.selectAll_odb1(true);
-    }
+	/**
+	 * @Description 查询有效的字典优先级列表
+	 * @Author sunshaoyu
+	 * @Date 2020/6/12-13:46
+	 * @return java.util.List<com.ssy.api.entity.db.local.SdpDictPriorty>
+	 */
+	public static List<SdpDictPriorty> queryEffectDictPriortyList() {
+		return sdpDictPriortyMapper.selectAll(true);
+	}
 
-    /**
-     * @Description 查询有效的枚举优先级列表
-     * @Author sunshaoyu
-     * @Date 2020/6/12-13:48
-     * @return java.util.List<com.ssy.api.entity.db.local.SdpEnumPriorty>
-     */
-    public static List<SdpEnumPriorty> queryEffectEnumPriortyList(){
-        return sdpEnumPriortyMapper.selectAll_odb1(true);
-    }
+	/**
+	 * @Description 查询有效的枚举优先级列表
+	 * @Author sunshaoyu
+	 * @Date 2020/6/12-13:48
+	 * @return java.util.List<com.ssy.api.entity.db.local.SdpEnumPriorty>
+	 */
+	public static List<SdpEnumPriorty> queryEffectEnumPriortyList() {
+		return sdpEnumPriortyMapper.selectAll(true);
+	}
 
-    /**
-     * @Description 字典优先级检查主方法
-     * @Author sunshaoyu
-     * @Date 2020/6/12-16:55
-     * @param sdpDictPriorty
-     */
-    public static void checkDictPriortyMain(SdpDictPriorty sdpDictPriorty){
-        BizUtil.fieldNotNull(sdpDictPriorty.getDictType(), SdtDict.A.dict_type.getId(), SdtDict.A.dict_type.getLongName());
-        BizUtil.fieldNotNull(sdpDictPriorty.getDictPriority(), SdtDict.A.dict_priority.getId(), SdtDict.A.dict_priority.getLongName());
-        SdtBusiUtil.checkNumberNotNegate(new BigDecimal(sdpDictPriorty.getDictPriority()), SdtDict.A.dict_priority.getLongName());
-    }
+	/**
+	 * @Description 字典优先级检查主方法
+	 * @Author sunshaoyu
+	 * @Date 2020/6/12-16:55
+	 * @param sdpDictPriorty
+	 */
+	public static void checkDictPriortyMain(SdpDictPriorty sdpDictPriorty) {
+		BizUtil.fieldNotNull(sdpDictPriorty.getDictType(), SdtDict.A.dict_type.getId(),
+				SdtDict.A.dict_type.getLongName());
+		BizUtil.fieldNotNull(sdpDictPriorty.getDictPriority(), SdtDict.A.dict_priority.getId(),
+				SdtDict.A.dict_priority.getLongName());
+		SdtBusiUtil.checkNumberNotNegate(new BigDecimal(sdpDictPriorty.getDictPriority()),
+				SdtDict.A.dict_priority.getLongName());
+	}
 
-    /**
-     * @Description 枚举优先级检查主方法
-     * @Author sunshaoyu
-     * @Date 2020/6/12-16:57
-     * @param sdpEnumPriorty
-     */
-    public static void checkEnumPriortyMain(SdpEnumPriorty sdpEnumPriorty){
-        BizUtil.fieldNotNull(sdpEnumPriorty.getEnumType(), SdtDict.A.enum_type.getId(), SdtDict.A.enum_type.getLongName());
-        BizUtil.fieldNotNull(sdpEnumPriorty.getEnumPriority(), SdtDict.A.enum_priority.getId(), SdtDict.A.enum_priority.getLongName());
-        SdtBusiUtil.checkNumberNotNegate(new BigDecimal(sdpEnumPriorty.getEnumPriority()), SdtDict.A.enum_priority.getLongName());
-    }
+	/**
+	 * @Description 枚举优先级检查主方法
+	 * @Author sunshaoyu
+	 * @Date 2020/6/12-16:57
+	 * @param sdpEnumPriorty
+	 */
+	public static void checkEnumPriortyMain(SdpEnumPriorty sdpEnumPriorty) {
+		BizUtil.fieldNotNull(sdpEnumPriorty.getEnumType(), SdtDict.A.enum_type.getId(),
+				SdtDict.A.enum_type.getLongName());
+		BizUtil.fieldNotNull(sdpEnumPriorty.getEnumPriority(), SdtDict.A.enum_priority.getId(),
+				SdtDict.A.enum_priority.getLongName());
+		SdtBusiUtil.checkNumberNotNegate(new BigDecimal(sdpEnumPriorty.getEnumPriority()),
+				SdtDict.A.enum_priority.getLongName());
+	}
 
-    /**
-     * @Description 维护字典优先级
-     * @Author sunshaoyu
-     * @Date 2020/6/12-13:48
-     * @param sdpDictPriorty
-     */
-    public static void modifyDictPriorty(SdpDictPriorty sdpDictPriorty){
-        SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType(), true);
+	/**
+	 * @Description 维护字典优先级
+	 * @Author sunshaoyu
+	 * @Date 2020/6/12-13:48
+	 * @param sdpDictPriorty
+	 */
+	public static void modifyDictPriorty(SdpDictPriorty sdpDictPriorty) {
+		SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType(), true);
 
-        if(!CommUtil.equals(oldData.getDataVersion(), sdpDictPriorty.getDataVersion())){
-            ApPubErr.E0005(SdtTable.A.sdp_dict_priority.getLongName());
-        }else if(CommUtil.equals(BizUtil.auditOnUpdate(oldData, sdpDictPriorty), 0)){
-            ApPubErr.E0004();
-        }else{
-            sdpDictPriortyMapper.updateByPrimaryKey(sdpDictPriorty);
-        }
-    }
+		if (!CommUtil.equals(oldData.getDataVersion(), sdpDictPriorty.getDataVersion())) {
+			ApPubErr.E0005(SdtTable.A.sdp_dict_priority.getLongName());
+		} else if (CommUtil.equals(BizUtil.auditOnUpdate(oldData, sdpDictPriorty), 0)) {
+			ApPubErr.E0004();
+		} else {
+			sdpDictPriortyMapper.updateByPrimaryKey(sdpDictPriorty);
+		}
+	}
 
-    /**
-     * @Description 维护枚举优先级
-     * @Author sunshaoyu
-     * @Date 2020/6/12-17:14
-     * @param sdpEnumPriorty
-     */
-    public static void modifyEnumPriorty(SdpEnumPriorty sdpEnumPriorty){
-        SdpEnumPriorty oldData = sdpEnumPriortyMapper.selectByPrimaryKey(sdpEnumPriorty.getEnumType(), true);
-        SdtBusiUtil.checkExistenceFromTableQry(oldData, SdtTable.A.sdp_enum_priority.getLongName());
+	/**
+	 * @Description 维护枚举优先级
+	 * @Author sunshaoyu
+	 * @Date 2020/6/12-17:14
+	 * @param sdpEnumPriorty
+	 */
+	public static void modifyEnumPriorty(SdpEnumPriorty sdpEnumPriorty) {
+		SdpEnumPriorty oldData = sdpEnumPriortyMapper.selectByPrimaryKey(sdpEnumPriorty.getEnumType(), true);
+		SdtBusiUtil.checkExistenceFromTableQry(oldData, SdtTable.A.sdp_enum_priority.getLongName());
 
-        if(!CommUtil.equals(oldData.getDataVersion(), sdpEnumPriorty.getDataVersion())){
-            ApPubErr.E0005(SdtTable.A.sdp_enum_priority.getLongName());
-        }else if(CommUtil.equals(BizUtil.auditOnUpdate(oldData, sdpEnumPriorty), 0)){
-            ApPubErr.E0004();
-        }else{
-            sdpEnumPriortyMapper.updateByPrimaryKey(sdpEnumPriorty);
-        }
-    }
+		if (!CommUtil.equals(oldData.getDataVersion(), sdpEnumPriorty.getDataVersion())) {
+			ApPubErr.E0005(SdtTable.A.sdp_enum_priority.getLongName());
+		} else if (CommUtil.equals(BizUtil.auditOnUpdate(oldData, sdpEnumPriorty), 0)) {
+			ApPubErr.E0004();
+		} else {
+			sdpEnumPriortyMapper.updateByPrimaryKey(sdpEnumPriorty);
+		}
+	}
 
-    /**
-     * @Description 新增字典优先级
-     * @Author sunshaoyu
-     * @Date 2020/6/12-17:16
-     * @param sdpDictPriorty
-     */
-    public static void addDictPriorty(SdpDictPriorty sdpDictPriorty) {
-        SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType(), true);
-        if(CommUtil.isNotNull(oldData)){
-            throw ApPubErr.E0006(SdtTable.A.sdp_dict_priority.getLongName(), SdtBusiUtil.parseStrArrayToSingle(sdpDictPriorty.getDictType()));
-        }
-        sdpDictPriortyMapper.insert(sdpDictPriorty);
-    }
+	/**
+	 * @Description 新增字典优先级
+	 * @Author sunshaoyu
+	 * @Date 2020/6/12-17:16
+	 * @param sdpDictPriorty
+	 */
+	public static void addDictPriorty(SdpDictPriorty sdpDictPriorty) {
+		SdpDictPriorty oldData = sdpDictPriortyMapper.selectByPrimaryKey(sdpDictPriorty.getDictType(), true);
+		if (CommUtil.isNotNull(oldData)) {
+			throw ApPubErr.E0006(SdtTable.A.sdp_dict_priority.getLongName(),
+					SdtBusiUtil.parseStrArrayToSingle(sdpDictPriorty.getDictType()));
+		}
+		sdpDictPriortyMapper.insert(sdpDictPriorty);
+	}
 
-    /**
-     * @Description 新增枚举优先级
-     * @Author sunshaoyu
-     * @Date 2020/6/12-17:17
-     * @param sdpEnumPriorty
-     */
-    public static void addEnumPriorty(SdpEnumPriorty sdpEnumPriorty) {
-        SdpEnumPriorty oldData = sdpEnumPriortyMapper.selectByPrimaryKey(sdpEnumPriorty.getEnumType(), true);
-        if(CommUtil.isNotNull(oldData)){
-            ApPubErr.E0006(SdtTable.A.sdp_enum_priority.getLongName(), SdtBusiUtil.parseStrArrayToSingle(sdpEnumPriorty.getEnumType()));
-        }
-        sdpEnumPriortyMapper.insert(sdpEnumPriorty);
-    }
+	/**
+	 * @Description 新增枚举优先级
+	 * @Author sunshaoyu
+	 * @Date 2020/6/12-17:17
+	 * @param sdpEnumPriorty
+	 */
+	public static void addEnumPriorty(SdpEnumPriorty sdpEnumPriorty) {
+		SdpEnumPriorty oldData = sdpEnumPriortyMapper.selectByPrimaryKey(sdpEnumPriorty.getEnumType(), true);
+		if (CommUtil.isNotNull(oldData)) {
+			ApPubErr.E0006(SdtTable.A.sdp_enum_priority.getLongName(),
+					SdtBusiUtil.parseStrArrayToSingle(sdpEnumPriorty.getEnumType()));
+		}
+		sdpEnumPriortyMapper.insert(sdpEnumPriorty);
+	}
 
-    /**
-     * @Description 获取字典优先级
-     * @Author sunshaoyu
-     * @Date 2020/6/13-0:53
-     * @return java.util.Map<java.lang.String,com.ssy.api.entity.table.local.SdpDictPriorty>(字典类型, 字典优先级实体)
-     */
-    public static Map<String, SdpDictPriorty> getDictPriortyMap() {
-        Map<String, SdpDictPriorty> map = new HashMap<>();
-        List<SdpDictPriorty> dictPriortyList = queryEffectDictPriortyList();
+	/**
+	 * @Description 获取字典优先级
+	 * @Author sunshaoyu
+	 * @Date 2020/6/13-0:53
+	 * @return java.util.Map<java.lang.String,com.ssy.api.entity.table.local.SdpDictPriorty>(字典类型,
+	 *         字典优先级实体)
+	 */
+	public static Map<String, SdpDictPriorty> getDictPriortyMap() {
+		Map<String, SdpDictPriorty> map = new HashMap<>();
+		List<SdpDictPriorty> dictPriortyList = queryEffectDictPriortyList();
 
-        if(CommUtil.isNotNull(dictPriortyList)){
-            for(SdpDictPriorty s : dictPriortyList){
-                if(SdtBusiUtil.isMsModel(s.getDictType()) && !contextConfig.getMsModelFirst()){
-                    continue;
-                }else{
-                    map.put(s.getDictType(), s);
-                }
-            }
-        }
+		if (CommUtil.isNotNull(dictPriortyList)) {
+			for (SdpDictPriorty s : dictPriortyList) {
+				if (SdtBusiUtil.isMsModel(s.getDictType()) && !contextConfig.getMsModelFirst()) {
+					continue;
+				} else {
+					map.put(s.getDictType(), s);
+				}
+			}
+		}
 
-        //如果不支持ms优先,则移除ms的优先级
-        if(!contextConfig.getMsModelFirst()){
-            map.remove("MsDict");
-        }
-        return map;
-    }
+		// 如果不支持ms优先,则移除ms的优先级
+		if (!contextConfig.getMsModelFirst()) {
+			map.remove("MsDict");
+		}
+		return map;
+	}
 
-    /**
-     * @Description 获取枚举优先级
-     * @Author sunshaoyu
-     * @Date 2020/6/13-0:32
-     * @return java.util.Map<java.lang.String,com.ssy.api.entity.table.local.SdpEnumPriorty>(枚举类型, 枚举优先级实体)
-     */
-    public static Map<String, SdpEnumPriorty> getEnumPriortyMap() {
-        Map<String, SdpEnumPriorty> map = new HashMap<>();
-        List<SdpEnumPriorty> enumPriortyList = queryEffectEnumPriortyList();
+	/**
+	 * @Description 获取枚举优先级
+	 * @Author sunshaoyu
+	 * @Date 2020/6/13-0:32
+	 * @return java.util.Map<java.lang.String,com.ssy.api.entity.table.local.SdpEnumPriorty>(枚举类型,
+	 *         枚举优先级实体)
+	 */
+	public static Map<String, SdpEnumPriorty> getEnumPriortyMap() {
+		Map<String, SdpEnumPriorty> map = new HashMap<>();
+		List<SdpEnumPriorty> enumPriortyList = queryEffectEnumPriortyList();
 
-        if(CommUtil.isNotNull(enumPriortyList)){
-            for(SdpEnumPriorty s : enumPriortyList){
-                if(SdtBusiUtil.isMsModel(s.getEnumType()) && !contextConfig.getMsModelFirst()){
-                    continue;
-                }else{
-                    map.put(s.getEnumType(), s);
-                }
-            }
-        }
-        return map;
-    }
+		if (CommUtil.isNotNull(enumPriortyList)) {
+			for (SdpEnumPriorty s : enumPriortyList) {
+				if (SdtBusiUtil.isMsModel(s.getEnumType()) && !contextConfig.getMsModelFirst()) {
+					continue;
+				} else {
+					map.put(s.getEnumType(), s);
+				}
+			}
+		}
+		return map;
+	}
 }

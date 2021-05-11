@@ -9,19 +9,19 @@ import java.util.List;
 
 @TableType(name = "lnp_bal_attributes", desc = "loan balance attributes parameter")
 public interface LnpBalAttributesMapper {
-    int deleteByPrimaryKey(@Param("balAttributes") String balAttributes, @Param("orgId") String orgId);
+	int deleteByPrimaryKey(@Param("balAttributes") String balAttributes, @Param("orgId") String orgId);
 
-    int insert(LnpBalAttributes record);
+	int insert(LnpBalAttributes record);
 
-    int insertSelective(LnpBalAttributes record);
+	int insertSelective(LnpBalAttributes record);
 
-    LnpBalAttributes selectByPrimaryKey(@Param("balAttributes") String balAttributes, @Param("orgId") String orgId);
+	LnpBalAttributes selectByPrimaryKey(@Param("balAttributes") String balAttributes, @Param("orgId") String orgId);
 
-    int updateByPrimaryKeySelective(LnpBalAttributes record);
+	int updateByPrimaryKeySelective(LnpBalAttributes record);
 
-    int updateByPrimaryKey(LnpBalAttributes record);
+	int updateByPrimaryKey(LnpBalAttributes record);
 
-    /** 根据法人代码查属性列表 **/
-    @EnableNotNull
-    List<LnpBalAttributes> selectAll_odb1(String orgId, boolean nullException);
+	/** 根据法人代码查属性列表 **/
+	@EnableNotNull
+	List<LnpBalAttributes> selectAll(String orgId, boolean nullException);
 }

@@ -10,20 +10,21 @@ import java.util.List;
 
 @TableType(name = "sdp_datasource", desc = "parameter of dynamic data source")
 public interface SdpDatasourceMapper {
-    int deleteByPrimaryKey(@Param("datasourceId") String datasourceId, @Param("datasourceType") String datasourceType);
+	int deleteByPrimaryKey(@Param("datasourceId") String datasourceId, @Param("datasourceType") String datasourceType);
 
-    int insert(SdpDatasource record);
+	int insert(SdpDatasource record);
 
-    int insertSelective(SdpDatasource record);
+	int insertSelective(SdpDatasource record);
 
-    @EnableNotNull
-    SdpDatasource selectByPrimaryKey(@Param("datasourceId") String datasourceId, @Param("datasourceType") String datasourceType, boolean nullException);
+	@EnableNotNull
+	SdpDatasource selectByPrimaryKey(@Param("datasourceId") String datasourceId,
+			@Param("datasourceType") String datasourceType, boolean nullException);
 
-    int updateByPrimaryKeySelective(SdpDatasource record);
+	int updateByPrimaryKeySelective(SdpDatasource record);
 
-    int updateByPrimaryKey(SdpDatasource record);
+	int updateByPrimaryKey(SdpDatasource record);
 
-    /** 查询数据源列表 **/
-    @SelectPageWithCount
-    List<SdpDatasource> selectAll_odb1();
+	/** 查询数据源列表 **/
+	@SelectPageWithCount
+	List<SdpDatasource> selectAll();
 }

@@ -9,20 +9,25 @@ import java.util.List;
 
 @TableType(name = "tsp_flow_step_controller", desc = "batch flow step controller")
 public interface TspFlowStepControllerMapper {
-    int deleteByPrimaryKey(@Param("systemCode") String systemCode, @Param("corporateCode") String corporateCode, @Param("tranFlowId") String tranFlowId, @Param("flowStepNum") Integer flowStepNum, @Param("executionNo") Integer executionNo, @Param("tranGroupId") String tranGroupId);
+	int deleteByPrimaryKey(@Param("systemCode") String systemCode, @Param("corporateCode") String corporateCode,
+			@Param("tranFlowId") String tranFlowId, @Param("flowStepNum") Integer flowStepNum,
+			@Param("executionNo") Integer executionNo, @Param("tranGroupId") String tranGroupId);
 
-    int insert(TspFlowStepController record);
+	int insert(TspFlowStepController record);
 
-    int insertSelective(TspFlowStepController record);
+	int insertSelective(TspFlowStepController record);
 
-    @EnableNotNull
-    TspFlowStepController selectByPrimaryKey(@Param("systemCode") String systemCode, @Param("corporateCode") String corporateCode, @Param("tranFlowId") String tranFlowId, @Param("flowStepNum") Integer flowStepNum, @Param("executionNo") Integer executionNo, @Param("tranGroupId") String tranGroupId, boolean nullException);
+	@EnableNotNull
+	TspFlowStepController selectByPrimaryKey(@Param("systemCode") String systemCode,
+			@Param("corporateCode") String corporateCode, @Param("tranFlowId") String tranFlowId,
+			@Param("flowStepNum") Integer flowStepNum, @Param("executionNo") Integer executionNo,
+			@Param("tranGroupId") String tranGroupId, boolean nullException);
 
-    int updateByPrimaryKeySelective(TspFlowStepController record);
+	int updateByPrimaryKeySelective(TspFlowStepController record);
 
-    int updateByPrimaryKey(TspFlowStepController record);
+	int updateByPrimaryKey(TspFlowStepController record);
 
-    /** 根据组号获取批量步骤控制器列表 **/
-    @EnableNotNull
-    List<TspFlowStepController> selectAll_odb1(@Param("tranGroupId") String tranGroupId, boolean nullException);
+	/** 根据组号获取批量步骤控制器列表 **/
+	@EnableNotNull
+	List<TspFlowStepController> selectAll(@Param("tranGroupId") String tranGroupId, boolean nullException);
 }

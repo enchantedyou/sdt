@@ -8,20 +8,20 @@ import java.util.List;
 
 @TableType(name = "sdp_dict_priorty", desc = "parameter of dict priorty")
 public interface SdpDictPriortyMapper {
-    int deleteByPrimaryKey(String dictType);
+	int deleteByPrimaryKey(String dictType);
 
-    int insert(SdpDictPriorty record);
+	int insert(SdpDictPriorty record);
 
-    int insertSelective(SdpDictPriorty record);
+	int insertSelective(SdpDictPriorty record);
 
-    @EnableNotNull
-    SdpDictPriorty selectByPrimaryKey(String dictType, boolean nullException);
+	@EnableNotNull
+	SdpDictPriorty selectByPrimaryKey(String dictType, boolean nullException);
 
-    int updateByPrimaryKeySelective(SdpDictPriorty record);
+	int updateByPrimaryKeySelective(SdpDictPriorty record);
 
-    int updateByPrimaryKey(SdpDictPriorty record);
+	int updateByPrimaryKey(SdpDictPriorty record);
 
-    @EnableNotNull
-    /** 查询有效的字典优先级列表 **/
-    List<SdpDictPriorty> selectAll_odb1(boolean nullException);
+	@EnableNotNull
+	/** 查询有效的字典优先级列表 **/
+	List<SdpDictPriorty> selectAll(boolean nullException);
 }

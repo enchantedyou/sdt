@@ -9,19 +9,20 @@ import java.util.List;
 
 @TableType(name = "sdp_batch_step", desc = "parameter of batch step")
 public interface SdpBatchStepMapper {
-    int deleteByPrimaryKey(@Param("flowStepId") String flowStepId, @Param("flowStepGroup") String flowStepGroup);
+	int deleteByPrimaryKey(@Param("flowStepId") String flowStepId, @Param("flowStepGroup") String flowStepGroup);
 
-    int insert(SdpBatchStep record);
+	int insert(SdpBatchStep record);
 
-    int insertSelective(SdpBatchStep record);
+	int insertSelective(SdpBatchStep record);
 
-    SdpBatchStep selectByPrimaryKey(@Param("flowStepId") String flowStepId, @Param("flowStepGroup") String flowStepGroup);
+	SdpBatchStep selectByPrimaryKey(@Param("flowStepId") String flowStepId,
+			@Param("flowStepGroup") String flowStepGroup);
 
-    int updateByPrimaryKeySelective(SdpBatchStep record);
+	int updateByPrimaryKeySelective(SdpBatchStep record);
 
-    int updateByPrimaryKey(SdpBatchStep record);
+	int updateByPrimaryKey(SdpBatchStep record);
 
-    /** 根据批量步骤组别升序查询全部 **/
-    @EnableNotNull
-    List<SdpBatchStep> selectAll_odb1(boolean nullException);
+	/** 根据批量步骤组别升序查询全部 **/
+	@EnableNotNull
+	List<SdpBatchStep> selectAll(boolean nullException);
 }

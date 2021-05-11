@@ -11,152 +11,179 @@ import com.ssy.api.utils.system.CommUtil;
  */
 public class SdtServError {
 
-    /** 值必须大于{} **/
-    public static SdtException E0001(Object fieldValue, Object smallerValue, String fieldDesc) {
-        throw new SdtException(fieldDesc + " ["+fieldValue+"] must be greater than " + smallerValue, ErrCodeDef.INVALID_NUMBER);
-    }
+	private SdtServError() {
+	}
 
-    /** 值必须大于等于{} **/
-    public static SdtException E0002(Object fieldValue, Object smallerValue, String fieldDesc) {
-        throw new SdtException(fieldDesc + " ["+fieldValue+"] must be greater than or equal to " + smallerValue, ErrCodeDef.INVALID_NUMBER);
-    }
+	/** 值必须大于{} **/
+	public static SdtException E0001(Object fieldValue, Object smallerValue, String fieldDesc) {
+		throw new SdtException(fieldDesc + " [" + fieldValue + "] must be greater than " + smallerValue,
+				ErrCodeDef.INVALID_NUMBER);
+	}
 
-    /** 查询表的记录不存在 **/
-    public static SdtException E0003(String tableDesc, String... params) {
-        if(CommUtil.isNull(params)){
-            throw new SdtException(String.format("Fail to retreive data from table [%s], record not found", tableDesc), ErrCodeDef.DB_NO_RECORD);
-        }else{
-            StringBuffer buffer = new StringBuffer();
-            for(String p : params){
-                buffer.append(p).append("-");
-            }
-            String errorParamStr = buffer.substring(0, buffer.lastIndexOf("-"));
-            throw new SdtException(String.format("Fail to retreive data from table [%s], record not found, [%s]", tableDesc, errorParamStr), ErrCodeDef.DB_NO_RECORD);
-        }
-    }
+	/** 值必须大于等于{} **/
+	public static SdtException E0002(Object fieldValue, Object smallerValue, String fieldDesc) {
+		throw new SdtException(fieldDesc + " [" + fieldValue + "] must be greater than or equal to " + smallerValue,
+				ErrCodeDef.INVALID_NUMBER);
+	}
 
-    /** A必须大于B **/
-    public static SdtException E0004(String realName, Object realValue, String limitName, Object limitValue) {
-        throw new SdtException(realName + "["+realValue+"] must be greater than "+limitName+"["+limitValue+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 查询表的记录不存在 **/
+	public static SdtException E0003(String tableDesc, String... params) {
+		if (CommUtil.isNull(params)) {
+			throw new SdtException(String.format("Fail to retreive data from table [%s], record not found", tableDesc),
+					ErrCodeDef.DB_NO_RECORD);
+		} else {
+			StringBuilder builder = new StringBuilder();
+			for (String p : params) {
+				builder.append(p).append("-");
+			}
+			String errorParamStr = builder.substring(0, builder.lastIndexOf("-"));
+			throw new SdtException(String.format("Fail to retreive data from table [%s], record not found, [%s]",
+					tableDesc, errorParamStr), ErrCodeDef.DB_NO_RECORD);
+		}
+	}
 
-    /** A必须大于或等于B **/
-    public static SdtException E0005(String realName, Object realValue, String limitName, Object limitValue) {
-        throw new SdtException(realName + "["+realValue+"] must be greater than or euqal to "+limitName+"["+limitValue+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** A必须大于B **/
+	public static SdtException E0004(String realName, Object realValue, String limitName, Object limitValue) {
+		throw new SdtException(
+				realName + "[" + realValue + "] must be greater than " + limitName + "[" + limitValue + "]",
+				ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** 批量任务处理失败 **/
-    public static SdtException E0006(String systemCode) {
-        throw new SdtException("Batch task of system ["+systemCode+"] processing failed", ErrCodeDef.BATCH_TASK_ERROR);
-    }
+	/** A必须大于或等于B **/
+	public static SdtException E0005(String realName, Object realValue, String limitName, Object limitValue) {
+		throw new SdtException(
+				realName + "[" + realValue + "] must be greater than or euqal to " + limitName + "[" + limitValue + "]",
+				ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** 字段值设置非法,必须为指定值 **/
-    public static SdtException E0007(String longname, Object originalValue, Object limitValue) {
-        throw new SdtException("Invalid value of field "+longname+" ["+originalValue+"], must be: ["+limitValue+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 批量任务处理失败 **/
+	public static SdtException E0006(String systemCode) {
+		throw new SdtException("Batch task of system [" + systemCode + "] processing failed",
+				ErrCodeDef.BATCH_TASK_ERROR);
+	}
 
-    /** 批量执行编号{}的执行状态是{},无法再次执行 **/
-    public static SdtException E0008(String batchRunNo, String tranState) {
-        throw new SdtException("The execution status of batch execution number ["+batchRunNo+"] is ["+tranState+"] and cannot be executed again", ErrCodeDef.BATCH_TASK_ERROR);
-    }
+	/** 字段值设置非法,必须为指定值 **/
+	public static SdtException E0007(String longname, Object originalValue, Object limitValue) {
+		throw new SdtException(
+				"Invalid value of field " + longname + " [" + originalValue + "], must be: [" + limitValue + "]",
+				ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** 登录失效 **/
-    public static SdtException E0009() {
-        throw new SdtException("Login is invalid, please log in again", ErrCodeDef.LOGIN_EXPIRED);
-    }
+	/** 批量执行编号{}的执行状态是{},无法再次执行 **/
+	public static SdtException E0008(String batchRunNo, String tranState) {
+		throw new SdtException("The execution status of batch execution number [" + batchRunNo + "] is [" + tranState
+				+ "] and cannot be executed again", ErrCodeDef.BATCH_TASK_ERROR);
+	}
 
-    /** 用户{}不存在 **/
-    public static SdtException E0010(String userAcct) {
-        throw new SdtException("Account ["+userAcct+"] does not exist", ErrCodeDef.NOTHINGNESS_ACCT);
-    }
+	/** 登录失效 **/
+	public static SdtException E0009() {
+		throw new SdtException("Login is invalid, please log in again", ErrCodeDef.LOGIN_EXPIRED);
+	}
 
-    /** 用户{}的密码不正确 **/
-    public static SdtException E0011(String userAcct) {
-        throw new SdtException("Incorrect password for user account [" + userAcct + "]", ErrCodeDef.WRONG_PASSWD);
-    }
+	/** 用户{}不存在 **/
+	public static SdtException E0010(String userAcct) {
+		throw new SdtException("Account [" + userAcct + "] does not exist", ErrCodeDef.NOTHINGNESS_ACCT);
+	}
 
-    /** flowtran{}的输入输出接口字段设置不合法 **/
-    public static SdtException E0012(String flowtranId) {
-        throw new SdtException("The input and output interface fields of flowtran ["+flowtranId+"] are not legally set", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 用户{}的密码不正确 **/
+	public static SdtException E0011(String userAcct) {
+		throw new SdtException("Incorrect password for user account [" + userAcct + "]", ErrCodeDef.WRONG_PASSWD);
+	}
 
-    /** 不支持的PTE模块{} **/
-    public static SdtException E0013(E_PTEMODULE pteModule) {
-        throw new SdtException("Unsupported PTE module ["+pteModule.getValue()+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** flowtran{}的输入输出接口字段设置不合法 **/
+	public static SdtException E0012(String flowtranId) {
+		throw new SdtException(
+				"The input and output interface fields of flowtran [" + flowtranId + "] are not legally set",
+				ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** flowtran id{}对应的文件模型不存在 **/
-    public static SdtException E0014(String flowtranId) {
-        throw new SdtException("The file model corresponding to the flowtran id ["+flowtranId+"] does not exist", ErrCodeDef.FILE_NOT_EXIST);
-    }
+	/** 不支持的PTE模块{} **/
+	public static SdtException E0013(E_PTEMODULE pteModule) {
+		throw new SdtException("Unsupported PTE module [" + pteModule.getValue() + "]", ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** 无法找到flowtran编号是{},并且PTE模块是{}的json文件 **/
-    public static SdtException E0015(String flowtranId, E_PTEMODULE pteModule) {
-        throw new SdtException("Unable to find the json file whose flowtran indicator is ["+flowtranId+"] and the PTE module is ["+pteModule.getValue()+"]", ErrCodeDef.FILE_NOT_EXIST);
-    }
+	/** flowtran id{}对应的文件模型不存在 **/
+	public static SdtException E0014(String flowtranId) {
+		throw new SdtException("The file model corresponding to the flowtran id [" + flowtranId + "] does not exist",
+				ErrCodeDef.FILE_NOT_EXIST);
+	}
 
-    /** 无法检索到列表名称为{}的字段列表 **/
-    public static SdtException E0016(String listName) {
-        throw new SdtException("Cannot retrieve the field list with list name ["+listName+"]", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 无法找到flowtran编号是{},并且PTE模块是{}的json文件 **/
+	public static SdtException E0015(String flowtranId, E_PTEMODULE pteModule) {
+		throw new SdtException("Unable to find the json file whose flowtran indicator is [" + flowtranId
+				+ "] and the PTE module is [" + pteModule.getValue() + "]", ErrCodeDef.FILE_NOT_EXIST);
+	}
 
-    /** PTE json{}对应的文件模型不存在 **/
-    public static SdtException E0017(String pteJsonName) {
-        throw new SdtException("The file model corresponding to the PTE json ["+pteJsonName+"] does not exist", ErrCodeDef.FILE_NOT_EXIST);
-    }
+	/** 无法检索到列表名称为{}的字段列表 **/
+	public static SdtException E0016(String listName) {
+		throw new SdtException("Cannot retrieve the field list with list name [" + listName + "]",
+				ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** SQL运行时错误 **/
-    public static SdtException E0018(Exception e) {
-        throw new SdtException(e, ErrCodeDef.SQL_ERROR);
-    }
+	/** PTE json{}对应的文件模型不存在 **/
+	public static SdtException E0017(String pteJsonName) {
+		throw new SdtException("The file model corresponding to the PTE json [" + pteJsonName + "] does not exist",
+				ErrCodeDef.FILE_NOT_EXIST);
+	}
 
-    /** 未找到指定的节点{} **/
-    public static SdtException E0019(String node) {
-        throw new SdtException("The specified node ["+node+"] was not found", ErrCodeDef.DB_NO_RECORD);
-    }
+	/** SQL运行时错误 **/
+	public static SdtException E0018(Exception e) {
+		throw new SdtException(e, ErrCodeDef.SQL_ERROR);
+	}
 
-    /** 复合类型模型不存在 **/
-    public static SdtException E0020(String complexLocaltion) {
-        throw new SdtException("The file model corresponding to the complex type location ["+complexLocaltion+"] does not exist", ErrCodeDef.FILE_NOT_EXIST);
-    }
+	/** 未找到指定的节点{} **/
+	public static SdtException E0019(String node) {
+		throw new SdtException("The specified node [" + node + "] was not found", ErrCodeDef.DB_NO_RECORD);
+	}
 
-    /** 服务类型模型不存在 **/
-    public static SdtException E0021(String serviceLocaltion) {
-        throw new SdtException("The file model corresponding to the service type location ["+serviceLocaltion+"] does not exist", ErrCodeDef.FILE_NOT_EXIST);
-    }
+	/** 复合类型模型不存在 **/
+	public static SdtException E0020(String complexLocaltion) {
+		throw new SdtException(
+				"The file model corresponding to the complex type location [" + complexLocaltion + "] does not exist",
+				ErrCodeDef.FILE_NOT_EXIST);
+	}
 
-    /** 源复杂类型或目标实例类型不存在 **/
-    public static SdtException E0022() {
-        throw new SdtException("The source entity type or target entity type does not exist", ErrCodeDef.FILE_NOT_EXIST);
-    }
+	/** 服务类型模型不存在 **/
+	public static SdtException E0021(String serviceLocaltion) {
+		throw new SdtException(
+				"The file model corresponding to the service type location [" + serviceLocaltion + "] does not exist",
+				ErrCodeDef.FILE_NOT_EXIST);
+	}
 
-    /** 无法对主数据源的进程进行操作 **/
-    public static SdtException E0023() {
-        throw new SdtException("Unable to operate the process of the main data source", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 源复杂类型或目标实例类型不存在 **/
+	public static SdtException E0022() {
+		throw new SdtException("The source entity type or target entity type does not exist",
+				ErrCodeDef.FILE_NOT_EXIST);
+	}
 
-    /** 当前用户已被锁定 **/
-    public static SdtException E0024(String userName) {
-        throw new SdtException("Current user ["+userName+"] has been locked", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 无法对主数据源的进程进行操作 **/
+	public static SdtException E0023() {
+		throw new SdtException("Unable to operate the process of the main data source", ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** 用户已存在 **/
-    public static SdtException E0025(String userName) {
-        throw new SdtException("User ["+userName+"] already exists", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 当前用户已被锁定 **/
+	public static SdtException E0024(String userName) {
+		throw new SdtException("Current user [" + userName + "] has been locked", ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** 请登录后操作 **/
-    public static SdtException E0026() {
-        throw new SdtException("Please login before operation", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 用户已存在 **/
+	public static SdtException E0025(String userName) {
+		throw new SdtException("User [" + userName + "] already exists", ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** 两次输入的密码不一致 **/
-    public static SdtException E0027() {
-        throw new SdtException("The entered passwords are inconsistent, please confirm", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 请登录后操作 **/
+	public static SdtException E0026() {
+		throw new SdtException("Please login before operation", ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 
-    /** 请配置gitlab session后再执行操作 **/
-    public static SdtException E0028() {
-        throw new SdtException("Please operate after configuring gitlab session", ErrCodeDef.FIELD_NO_PASS_CHECK);
-    }
+	/** 两次输入的密码不一致 **/
+	public static SdtException E0027() {
+		throw new SdtException("The entered passwords are inconsistent, please confirm",
+				ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
+
+	/** 请配置gitlab session后再执行操作 **/
+	public static SdtException E0028() {
+		throw new SdtException("Please operate after configuring gitlab session", ErrCodeDef.FIELD_NO_PASS_CHECK);
+	}
 }

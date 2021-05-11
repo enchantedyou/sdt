@@ -6,17 +6,20 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface TspServiceControlMapper {
-    int deleteByPrimaryKey(@Param("systemCode") String systemCode, @Param("subSystemCode") String subSystemCode, @Param("serviceInvokeId") String serviceInvokeId, @Param("innerServiceCode") String innerServiceCode);
+	int deleteByPrimaryKey(@Param("systemCode") String systemCode, @Param("subSystemCode") String subSystemCode,
+			@Param("serviceInvokeId") String serviceInvokeId, @Param("innerServiceCode") String innerServiceCode);
 
-    int insert(TspServiceControl record);
+	int insert(TspServiceControl record);
 
-    int insertSelective(TspServiceControl record);
+	int insertSelective(TspServiceControl record);
 
-    TspServiceControl selectByPrimaryKey(@Param("systemCode") String systemCode, @Param("subSystemCode") String subSystemCode, @Param("serviceInvokeId") String serviceInvokeId, @Param("innerServiceCode") String innerServiceCode);
+	TspServiceControl selectByPrimaryKey(@Param("systemCode") String systemCode,
+			@Param("subSystemCode") String subSystemCode, @Param("serviceInvokeId") String serviceInvokeId,
+			@Param("innerServiceCode") String innerServiceCode);
 
-    int updateByPrimaryKeySelective(TspServiceControl record);
+	int updateByPrimaryKeySelective(TspServiceControl record);
 
-    int updateByPrimaryKey(TspServiceControl record);
+	int updateByPrimaryKey(TspServiceControl record);
 
-    List<TspServiceControl> selectAll_odb1();
+	List<TspServiceControl> selectAll();
 }

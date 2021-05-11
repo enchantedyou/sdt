@@ -1,28 +1,32 @@
 package com.ssy.api.dao.mapper.local;
 
-import com.ssy.api.entity.annotation.EnableNotNull;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.ssy.api.entity.annotation.SelectPageWithCount;
 import com.ssy.api.entity.annotation.TableType;
 import com.ssy.api.entity.table.local.SdbBatchExecution;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 @TableType(name = "sdb_batch_execution", desc = "batch execution book")
 public interface SdbBatchExecutionMapper {
-    int deleteByPrimaryKey(@Param("busiOrgId") String busiOrgId, @Param("tranFlowId") String tranFlowId, @Param("batchRunNo") String batchRunNo);
+	int deleteByPrimaryKey(@Param("busiOrgId") String busiOrgId, @Param("tranFlowId") String tranFlowId,
+			@Param("batchRunNo") String batchRunNo);
 
-    int insert(SdbBatchExecution record);
+	int insert(SdbBatchExecution record);
 
-    int insertSelective(SdbBatchExecution record);
+	int insertSelective(SdbBatchExecution record);
 
-    SdbBatchExecution selectByPrimaryKey(@Param("busiOrgId") String busiOrgId, @Param("tranFlowId") String tranFlowId, @Param("batchRunNo") String batchRunNo);
+	SdbBatchExecution selectByPrimaryKey(@Param("busiOrgId") String busiOrgId, @Param("tranFlowId") String tranFlowId,
+			@Param("batchRunNo") String batchRunNo);
 
-    int updateByPrimaryKeySelective(SdbBatchExecution record);
+	int updateByPrimaryKeySelective(SdbBatchExecution record);
 
-    int updateByPrimaryKey(SdbBatchExecution record);
+	int updateByPrimaryKey(SdbBatchExecution record);
 
-    /** 倒序查询批量执行登记簿列表 **/
-    @SelectPageWithCount
-    List<SdbBatchExecution> selectAll_odb1();
+	/**
+	 * 倒序查询批量执行登记簿列表
+	 **/
+	@SelectPageWithCount
+	List<SdbBatchExecution> selectAll();
 }

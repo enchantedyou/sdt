@@ -6,17 +6,19 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface CtpLanguagePacketMapper {
-    int deleteByPrimaryKey(@Param("languageResourceType") String languageResourceType, @Param("languageResourceKey") String languageResourceKey, @Param("uiLanguage") String uiLanguage);
+	int deleteByPrimaryKey(@Param("languageResourceType") String languageResourceType,
+			@Param("languageResourceKey") String languageResourceKey, @Param("uiLanguage") String uiLanguage);
 
-    int insert(CtpLanguagePacket record);
+	int insert(CtpLanguagePacket record);
 
-    int insertSelective(CtpLanguagePacket record);
+	int insertSelective(CtpLanguagePacket record);
 
-    CtpLanguagePacket selectByPrimaryKey(@Param("languageResourceType") String languageResourceType, @Param("languageResourceKey") String languageResourceKey, @Param("uiLanguage") String uiLanguage);
+	CtpLanguagePacket selectByPrimaryKey(@Param("languageResourceType") String languageResourceType,
+			@Param("languageResourceKey") String languageResourceKey, @Param("uiLanguage") String uiLanguage);
 
-    int updateByPrimaryKeySelective(CtpLanguagePacket record);
+	int updateByPrimaryKeySelective(CtpLanguagePacket record);
 
-    int updateByPrimaryKey(CtpLanguagePacket record);
+	int updateByPrimaryKey(CtpLanguagePacket record);
 
-    List<CtpLanguagePacket> selectAll_odb1();
+	List<CtpLanguagePacket> selectAll();
 }

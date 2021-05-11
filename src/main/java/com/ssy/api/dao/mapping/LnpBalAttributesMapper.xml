@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssy.api.dao.mapper.ln.LnpBalAttributesMapper">
-  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ln.LnpBalAttributes">
-    <constructor>
-      <idArg column="bal_attributes" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="org_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="bal_attributes_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="double_entry_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="debit_credit" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="bal_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="bal_attributes_gl" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="bal_attributes_gl_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ln.LnpBalAttributes">
+        <constructor>
+            <idArg column="bal_attributes" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="org_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bal_attributes_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="double_entry_ind" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="debit_credit" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bal_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bal_attributes_gl" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bal_attributes_gl_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
     bal_attributes, org_id, bal_attributes_name, double_entry_ind, debit_credit, bal_code, 
     bal_attributes_gl, bal_attributes_gl_name, data_create_user, data_create_time, data_update_user, 
     data_update_time, data_version
   </sql>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from lnp_bal_attributes
-    where bal_attributes = #{balAttributes,jdbcType=VARCHAR}
-      and org_id = #{orgId,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from lnp_bal_attributes
+        where bal_attributes = #{balAttributes,jdbcType=VARCHAR}
+        and org_id = #{orgId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
     delete from lnp_bal_attributes
     where bal_attributes = #{balAttributes,jdbcType=VARCHAR}
       and org_id = #{orgId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.ssy.api.entity.table.ln.LnpBalAttributes">
+    <insert id="insert" parameterType="com.ssy.api.entity.table.ln.LnpBalAttributes">
     insert into lnp_bal_attributes (bal_attributes, org_id, bal_attributes_name, 
       double_entry_ind, debit_credit, bal_code, 
       bal_attributes_gl, bal_attributes_gl_name, data_create_user, 
@@ -47,132 +47,132 @@
       #{dataCreateTime,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, 
       #{dataVersion,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ln.LnpBalAttributes">
-    insert into lnp_bal_attributes
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="balAttributes != null">
-        bal_attributes,
-      </if>
-      <if test="orgId != null">
-        org_id,
-      </if>
-      <if test="balAttributesName != null">
-        bal_attributes_name,
-      </if>
-      <if test="doubleEntryInd != null">
-        double_entry_ind,
-      </if>
-      <if test="debitCredit != null">
-        debit_credit,
-      </if>
-      <if test="balCode != null">
-        bal_code,
-      </if>
-      <if test="balAttributesGl != null">
-        bal_attributes_gl,
-      </if>
-      <if test="balAttributesGlName != null">
-        bal_attributes_gl_name,
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user,
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time,
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user,
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time,
-      </if>
-      <if test="dataVersion != null">
-        data_version,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="balAttributes != null">
-        #{balAttributes,jdbcType=VARCHAR},
-      </if>
-      <if test="orgId != null">
-        #{orgId,jdbcType=VARCHAR},
-      </if>
-      <if test="balAttributesName != null">
-        #{balAttributesName,jdbcType=VARCHAR},
-      </if>
-      <if test="doubleEntryInd != null">
-        #{doubleEntryInd,jdbcType=VARCHAR},
-      </if>
-      <if test="debitCredit != null">
-        #{debitCredit,jdbcType=VARCHAR},
-      </if>
-      <if test="balCode != null">
-        #{balCode,jdbcType=VARCHAR},
-      </if>
-      <if test="balAttributesGl != null">
-        #{balAttributesGl,jdbcType=VARCHAR},
-      </if>
-      <if test="balAttributesGlName != null">
-        #{balAttributesGlName,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateUser != null">
-        #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        #{dataVersion,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ln.LnpBalAttributes">
-    update lnp_bal_attributes
-    <set>
-      <if test="balAttributesName != null">
-        bal_attributes_name = #{balAttributesName,jdbcType=VARCHAR},
-      </if>
-      <if test="doubleEntryInd != null">
-        double_entry_ind = #{doubleEntryInd,jdbcType=VARCHAR},
-      </if>
-      <if test="debitCredit != null">
-        debit_credit = #{debitCredit,jdbcType=VARCHAR},
-      </if>
-      <if test="balCode != null">
-        bal_code = #{balCode,jdbcType=VARCHAR},
-      </if>
-      <if test="balAttributesGl != null">
-        bal_attributes_gl = #{balAttributesGl,jdbcType=VARCHAR},
-      </if>
-      <if test="balAttributesGlName != null">
-        bal_attributes_gl_name = #{balAttributesGlName,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        data_version = #{dataVersion,jdbcType=BIGINT},
-      </if>
-    </set>
-    where bal_attributes = #{balAttributes,jdbcType=VARCHAR}
-      and org_id = #{orgId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ln.LnpBalAttributes">
+    <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ln.LnpBalAttributes">
+        insert into lnp_bal_attributes
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="balAttributes != null">
+                bal_attributes,
+            </if>
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="balAttributesName != null">
+                bal_attributes_name,
+            </if>
+            <if test="doubleEntryInd != null">
+                double_entry_ind,
+            </if>
+            <if test="debitCredit != null">
+                debit_credit,
+            </if>
+            <if test="balCode != null">
+                bal_code,
+            </if>
+            <if test="balAttributesGl != null">
+                bal_attributes_gl,
+            </if>
+            <if test="balAttributesGlName != null">
+                bal_attributes_gl_name,
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user,
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time,
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user,
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time,
+            </if>
+            <if test="dataVersion != null">
+                data_version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="balAttributes != null">
+                #{balAttributes,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="balAttributesName != null">
+                #{balAttributesName,jdbcType=VARCHAR},
+            </if>
+            <if test="doubleEntryInd != null">
+                #{doubleEntryInd,jdbcType=VARCHAR},
+            </if>
+            <if test="debitCredit != null">
+                #{debitCredit,jdbcType=VARCHAR},
+            </if>
+            <if test="balCode != null">
+                #{balCode,jdbcType=VARCHAR},
+            </if>
+            <if test="balAttributesGl != null">
+                #{balAttributesGl,jdbcType=VARCHAR},
+            </if>
+            <if test="balAttributesGlName != null">
+                #{balAttributesGlName,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateUser != null">
+                #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                #{dataVersion,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ln.LnpBalAttributes">
+        update lnp_bal_attributes
+        <set>
+            <if test="balAttributesName != null">
+                bal_attributes_name = #{balAttributesName,jdbcType=VARCHAR},
+            </if>
+            <if test="doubleEntryInd != null">
+                double_entry_ind = #{doubleEntryInd,jdbcType=VARCHAR},
+            </if>
+            <if test="debitCredit != null">
+                debit_credit = #{debitCredit,jdbcType=VARCHAR},
+            </if>
+            <if test="balCode != null">
+                bal_code = #{balCode,jdbcType=VARCHAR},
+            </if>
+            <if test="balAttributesGl != null">
+                bal_attributes_gl = #{balAttributesGl,jdbcType=VARCHAR},
+            </if>
+            <if test="balAttributesGlName != null">
+                bal_attributes_gl_name = #{balAttributesGlName,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                data_version = #{dataVersion,jdbcType=BIGINT},
+            </if>
+        </set>
+        where bal_attributes = #{balAttributes,jdbcType=VARCHAR}
+        and org_id = #{orgId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ln.LnpBalAttributes">
     update lnp_bal_attributes
     set bal_attributes_name = #{balAttributesName,jdbcType=VARCHAR},
       double_entry_ind = #{doubleEntryInd,jdbcType=VARCHAR},
@@ -190,10 +190,10 @@
   </update>
 
 
-  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from lnp_bal_attributes
-    where org_id = #{orgId,jdbcType=VARCHAR}
-  </select>
+    <select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from lnp_bal_attributes
+        where org_id = #{orgId,jdbcType=VARCHAR}
+    </select>
 </mapper>

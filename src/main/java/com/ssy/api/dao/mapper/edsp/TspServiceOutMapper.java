@@ -6,18 +6,21 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface TspServiceOutMapper {
-    int deleteByPrimaryKey(@Param("systemCode") String systemCode, @Param("subSystemCode") String subSystemCode, @Param("serviceInvokeId") String serviceInvokeId, @Param("innerServiceCode") String innerServiceCode);
+	int deleteByPrimaryKey(@Param("systemCode") String systemCode, @Param("subSystemCode") String subSystemCode,
+			@Param("serviceInvokeId") String serviceInvokeId, @Param("innerServiceCode") String innerServiceCode);
 
-    int insert(TspServiceOut record);
+	int insert(TspServiceOut record);
 
-    int insertSelective(TspServiceOut record);
+	int insertSelective(TspServiceOut record);
 
-    TspServiceOut selectByPrimaryKey(@Param("systemCode") String systemCode, @Param("subSystemCode") String subSystemCode, @Param("serviceInvokeId") String serviceInvokeId, @Param("innerServiceCode") String innerServiceCode);
+	TspServiceOut selectByPrimaryKey(@Param("systemCode") String systemCode,
+			@Param("subSystemCode") String subSystemCode, @Param("serviceInvokeId") String serviceInvokeId,
+			@Param("innerServiceCode") String innerServiceCode);
 
-    int updateByPrimaryKeySelective(TspServiceOut record);
+	int updateByPrimaryKeySelective(TspServiceOut record);
 
-    int updateByPrimaryKey(TspServiceOut record);
+	int updateByPrimaryKey(TspServiceOut record);
 
-    /** 根据协议编号查询列表 **/
-    List<TspServiceOut> selectAll_odb1(String protocolId);
+	/** 根据协议编号查询列表 **/
+	List<TspServiceOut> selectAll(String protocolId);
 }

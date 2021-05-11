@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssy.api.dao.mapper.ln.LnaContractMapper">
-  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ln.LnaContract">
-    <constructor>
-      <idArg column="contract_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="org_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="contract_amt" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-      <arg column="contract_status" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.ln.LnaContract">
+        <constructor>
+            <idArg column="contract_no" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="org_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="contract_amt" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+            <arg column="contract_status" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_version" javaType="java.lang.Long" jdbcType="BIGINT"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
     contract_no, org_id, contract_amt, contract_status, data_create_time, data_update_time, 
     data_create_user, data_update_user, data_version
   </sql>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from lna_contract
-    where contract_no = #{contractNo,jdbcType=VARCHAR}
-      and org_id = #{orgId,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from lna_contract
+        where contract_no = #{contractNo,jdbcType=VARCHAR}
+        and org_id = #{orgId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
     delete from lna_contract
     where contract_no = #{contractNo,jdbcType=VARCHAR}
       and org_id = #{orgId,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.ssy.api.entity.table.ln.LnaContract">
+    <insert id="insert" parameterType="com.ssy.api.entity.table.ln.LnaContract">
     insert into lna_contract (contract_no, org_id, contract_amt, 
       contract_status, data_create_time, data_update_time, 
       data_create_user, data_update_user, data_version
@@ -40,96 +40,96 @@
       #{dataCreateUser,jdbcType=VARCHAR}, #{dataUpdateUser,jdbcType=VARCHAR}, #{dataVersion,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ln.LnaContract">
-    insert into lna_contract
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="contractNo != null">
-        contract_no,
-      </if>
-      <if test="orgId != null">
-        org_id,
-      </if>
-      <if test="contractAmt != null">
-        contract_amt,
-      </if>
-      <if test="contractStatus != null">
-        contract_status,
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time,
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time,
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user,
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user,
-      </if>
-      <if test="dataVersion != null">
-        data_version,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="contractNo != null">
-        #{contractNo,jdbcType=VARCHAR},
-      </if>
-      <if test="orgId != null">
-        #{orgId,jdbcType=VARCHAR},
-      </if>
-      <if test="contractAmt != null">
-        #{contractAmt,jdbcType=DECIMAL},
-      </if>
-      <if test="contractStatus != null">
-        #{contractStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateUser != null">
-        #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        #{dataVersion,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ln.LnaContract">
-    update lna_contract
-    <set>
-      <if test="contractAmt != null">
-        contract_amt = #{contractAmt,jdbcType=DECIMAL},
-      </if>
-      <if test="contractStatus != null">
-        contract_status = #{contractStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        data_version = #{dataVersion,jdbcType=BIGINT},
-      </if>
-    </set>
-    where contract_no = #{contractNo,jdbcType=VARCHAR}
-      and org_id = #{orgId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ln.LnaContract">
+    <insert id="insertSelective" parameterType="com.ssy.api.entity.table.ln.LnaContract">
+        insert into lna_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contractNo != null">
+                contract_no,
+            </if>
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="contractAmt != null">
+                contract_amt,
+            </if>
+            <if test="contractStatus != null">
+                contract_status,
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time,
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time,
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user,
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user,
+            </if>
+            <if test="dataVersion != null">
+                data_version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contractNo != null">
+                #{contractNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="contractAmt != null">
+                #{contractAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="contractStatus != null">
+                #{contractStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateUser != null">
+                #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                #{dataVersion,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.ln.LnaContract">
+        update lna_contract
+        <set>
+            <if test="contractAmt != null">
+                contract_amt = #{contractAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="contractStatus != null">
+                contract_status = #{contractStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                data_version = #{dataVersion,jdbcType=BIGINT},
+            </if>
+        </set>
+        where contract_no = #{contractNo,jdbcType=VARCHAR}
+        and org_id = #{orgId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.ln.LnaContract">
     update lna_contract
     set contract_amt = #{contractAmt,jdbcType=DECIMAL},
       contract_status = #{contractStatus,jdbcType=VARCHAR},
@@ -142,9 +142,9 @@
       and org_id = #{orgId,jdbcType=VARCHAR}
   </update>
 
-  <select id="selectAll_odb1" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from lna_contract
-  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from lna_contract
+    </select>
 </mapper>

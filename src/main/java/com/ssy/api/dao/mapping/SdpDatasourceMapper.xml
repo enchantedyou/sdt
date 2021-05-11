@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssy.api.dao.mapper.local.SdpDatasourceMapper">
-  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdpDatasource">
-    <constructor>
-      <idArg column="datasource_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="datasource_type" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="tlsql_ind" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="platform_table_prefix" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="datasource_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="datasource_driver" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="datasource_url" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="datasource_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="datasource_pwd" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="is_enabled" javaType="java.lang.Boolean" jdbcType="BIT" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdpDatasource">
+        <constructor>
+            <idArg column="datasource_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="datasource_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="tlsql_ind" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="platform_table_prefix" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="datasource_desc" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="datasource_driver" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="datasource_url" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="datasource_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="datasource_pwd" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="is_enabled" javaType="java.lang.Boolean" jdbcType="BIT"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
     datasource_id, datasource_type, tlsql_ind, platform_table_prefix, datasource_desc, 
     datasource_driver, datasource_url, datasource_user, datasource_pwd, data_create_user, 
     data_create_time, data_update_user, data_update_time, data_version, is_enabled
   </sql>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from sdp_datasource
-    where datasource_id = #{datasourceId,jdbcType=VARCHAR}
-      and datasource_type = #{datasourceType,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sdp_datasource
+        where datasource_id = #{datasourceId,jdbcType=VARCHAR}
+        and datasource_type = #{datasourceType,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
     delete from sdp_datasource
     where datasource_id = #{datasourceId,jdbcType=VARCHAR}
       and datasource_type = #{datasourceType,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
+    <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
     insert into sdp_datasource (datasource_id, datasource_type, tlsql_ind, 
       platform_table_prefix, datasource_desc, datasource_driver, 
       datasource_url, datasource_user, datasource_pwd, 
@@ -51,150 +51,150 @@
       #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER}, #{isEnabled,jdbcType=BIT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
-    insert into sdp_datasource
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="datasourceId != null">
-        datasource_id,
-      </if>
-      <if test="datasourceType != null">
-        datasource_type,
-      </if>
-      <if test="tlsqlInd != null">
-        tlsql_ind,
-      </if>
-      <if test="platformTablePrefix != null">
-        platform_table_prefix,
-      </if>
-      <if test="datasourceDesc != null">
-        datasource_desc,
-      </if>
-      <if test="datasourceDriver != null">
-        datasource_driver,
-      </if>
-      <if test="datasourceUrl != null">
-        datasource_url,
-      </if>
-      <if test="datasourceUser != null">
-        datasource_user,
-      </if>
-      <if test="datasourcePwd != null">
-        datasource_pwd,
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user,
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time,
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user,
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time,
-      </if>
-      <if test="dataVersion != null">
-        data_version,
-      </if>
-      <if test="isEnabled != null">
-        is_enabled,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="datasourceId != null">
-        #{datasourceId,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceType != null">
-        #{datasourceType,jdbcType=VARCHAR},
-      </if>
-      <if test="tlsqlInd != null">
-        #{tlsqlInd,jdbcType=VARCHAR},
-      </if>
-      <if test="platformTablePrefix != null">
-        #{platformTablePrefix,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceDesc != null">
-        #{datasourceDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceDriver != null">
-        #{datasourceDriver,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceUrl != null">
-        #{datasourceUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceUser != null">
-        #{datasourceUser,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourcePwd != null">
-        #{datasourcePwd,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateUser != null">
-        #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        #{dataVersion,jdbcType=INTEGER},
-      </if>
-      <if test="isEnabled != null">
-        #{isEnabled,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
-    update sdp_datasource
-    <set>
-      <if test="tlsqlInd != null">
-        tlsql_ind = #{tlsqlInd,jdbcType=VARCHAR},
-      </if>
-      <if test="platformTablePrefix != null">
-        platform_table_prefix = #{platformTablePrefix,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceDesc != null">
-        datasource_desc = #{datasourceDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceDriver != null">
-        datasource_driver = #{datasourceDriver,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceUrl != null">
-        datasource_url = #{datasourceUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceUser != null">
-        datasource_user = #{datasourceUser,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourcePwd != null">
-        datasource_pwd = #{datasourcePwd,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        data_version = #{dataVersion,jdbcType=INTEGER},
-      </if>
-      <if test="isEnabled != null">
-        is_enabled = #{isEnabled,jdbcType=BIT},
-      </if>
-    </set>
-    where datasource_id = #{datasourceId,jdbcType=VARCHAR}
-      and datasource_type = #{datasourceType,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
+    <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
+        insert into sdp_datasource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="datasourceId != null">
+                datasource_id,
+            </if>
+            <if test="datasourceType != null">
+                datasource_type,
+            </if>
+            <if test="tlsqlInd != null">
+                tlsql_ind,
+            </if>
+            <if test="platformTablePrefix != null">
+                platform_table_prefix,
+            </if>
+            <if test="datasourceDesc != null">
+                datasource_desc,
+            </if>
+            <if test="datasourceDriver != null">
+                datasource_driver,
+            </if>
+            <if test="datasourceUrl != null">
+                datasource_url,
+            </if>
+            <if test="datasourceUser != null">
+                datasource_user,
+            </if>
+            <if test="datasourcePwd != null">
+                datasource_pwd,
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user,
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time,
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user,
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time,
+            </if>
+            <if test="dataVersion != null">
+                data_version,
+            </if>
+            <if test="isEnabled != null">
+                is_enabled,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="datasourceId != null">
+                #{datasourceId,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceType != null">
+                #{datasourceType,jdbcType=VARCHAR},
+            </if>
+            <if test="tlsqlInd != null">
+                #{tlsqlInd,jdbcType=VARCHAR},
+            </if>
+            <if test="platformTablePrefix != null">
+                #{platformTablePrefix,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceDesc != null">
+                #{datasourceDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceDriver != null">
+                #{datasourceDriver,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceUrl != null">
+                #{datasourceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceUser != null">
+                #{datasourceUser,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourcePwd != null">
+                #{datasourcePwd,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateUser != null">
+                #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                #{dataVersion,jdbcType=INTEGER},
+            </if>
+            <if test="isEnabled != null">
+                #{isEnabled,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
+        update sdp_datasource
+        <set>
+            <if test="tlsqlInd != null">
+                tlsql_ind = #{tlsqlInd,jdbcType=VARCHAR},
+            </if>
+            <if test="platformTablePrefix != null">
+                platform_table_prefix = #{platformTablePrefix,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceDesc != null">
+                datasource_desc = #{datasourceDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceDriver != null">
+                datasource_driver = #{datasourceDriver,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceUrl != null">
+                datasource_url = #{datasourceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceUser != null">
+                datasource_user = #{datasourceUser,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourcePwd != null">
+                datasource_pwd = #{datasourcePwd,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                data_version = #{dataVersion,jdbcType=INTEGER},
+            </if>
+            <if test="isEnabled != null">
+                is_enabled = #{isEnabled,jdbcType=BIT},
+            </if>
+        </set>
+        where datasource_id = #{datasourceId,jdbcType=VARCHAR}
+        and datasource_type = #{datasourceType,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdpDatasource">
     update sdp_datasource
     set tlsql_ind = #{tlsqlInd,jdbcType=VARCHAR},
       platform_table_prefix = #{platformTablePrefix,jdbcType=VARCHAR},
@@ -213,10 +213,10 @@
       and datasource_type = #{datasourceType,jdbcType=VARCHAR}
   </update>
 
-  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from sdp_datasource
-    where is_enabled = true
-  </select>
+    <select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sdp_datasource
+        where is_enabled = true
+    </select>
 </mapper>

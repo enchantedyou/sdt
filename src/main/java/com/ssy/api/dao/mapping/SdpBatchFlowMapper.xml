@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssy.api.dao.mapper.local.SdpBatchFlowMapper">
-  <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdpBatchFlow">
-    <constructor>
-      <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="sub_system_code" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <idArg column="flow_group" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="datasource_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="flow_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="flow_order" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="is_enabled" javaType="java.lang.Boolean" jdbcType="BIT" />
-      <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.ssy.api.entity.table.local.SdpBatchFlow">
+        <constructor>
+            <idArg column="system_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="sub_system_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="flow_group" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="datasource_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="flow_desc" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="flow_order" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="is_enabled" javaType="java.lang.Boolean" jdbcType="BIT"/>
+            <arg column="data_create_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_create_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_user" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_update_time" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="data_version" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
     system_code, sub_system_code, flow_group, datasource_id, flow_desc, flow_order, is_enabled, 
     data_create_user, data_create_time, data_update_user, data_update_time, data_version
   </sql>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from sdp_batch_flow
-    where system_code = #{systemCode,jdbcType=VARCHAR}
-      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
-      and flow_group = #{flowGroup,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sdp_batch_flow
+        where system_code = #{systemCode,jdbcType=VARCHAR}
+        and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+        and flow_group = #{flowGroup,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
     delete from sdp_batch_flow
     where system_code = #{systemCode,jdbcType=VARCHAR}
       and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
       and flow_group = #{flowGroup,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdpBatchFlow">
+    <insert id="insert" parameterType="com.ssy.api.entity.table.local.SdpBatchFlow">
     insert into sdp_batch_flow (system_code, sub_system_code, flow_group, 
       datasource_id, flow_desc, flow_order, 
       is_enabled, data_create_user, data_create_time, 
@@ -47,121 +47,121 @@
       #{dataUpdateUser,jdbcType=VARCHAR}, #{dataUpdateTime,jdbcType=VARCHAR}, #{dataVersion,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdpBatchFlow">
-    insert into sdp_batch_flow
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="systemCode != null">
-        system_code,
-      </if>
-      <if test="subSystemCode != null">
-        sub_system_code,
-      </if>
-      <if test="flowGroup != null">
-        flow_group,
-      </if>
-      <if test="datasourceId != null">
-        datasource_id,
-      </if>
-      <if test="flowDesc != null">
-        flow_desc,
-      </if>
-      <if test="flowOrder != null">
-        flow_order,
-      </if>
-      <if test="isEnabled != null">
-        is_enabled,
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user,
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time,
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user,
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time,
-      </if>
-      <if test="dataVersion != null">
-        data_version,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="systemCode != null">
-        #{systemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="subSystemCode != null">
-        #{subSystemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="flowGroup != null">
-        #{flowGroup,jdbcType=VARCHAR},
-      </if>
-      <if test="datasourceId != null">
-        #{datasourceId,jdbcType=VARCHAR},
-      </if>
-      <if test="flowDesc != null">
-        #{flowDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="flowOrder != null">
-        #{flowOrder,jdbcType=INTEGER},
-      </if>
-      <if test="isEnabled != null">
-        #{isEnabled,jdbcType=BIT},
-      </if>
-      <if test="dataCreateUser != null">
-        #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        #{dataVersion,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdpBatchFlow">
-    update sdp_batch_flow
-    <set>
-      <if test="datasourceId != null">
-        datasource_id = #{datasourceId,jdbcType=VARCHAR},
-      </if>
-      <if test="flowDesc != null">
-        flow_desc = #{flowDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="flowOrder != null">
-        flow_order = #{flowOrder,jdbcType=INTEGER},
-      </if>
-      <if test="isEnabled != null">
-        is_enabled = #{isEnabled,jdbcType=BIT},
-      </if>
-      <if test="dataCreateUser != null">
-        data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataCreateTime != null">
-        data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateUser != null">
-        data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="dataUpdateTime != null">
-        data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="dataVersion != null">
-        data_version = #{dataVersion,jdbcType=INTEGER},
-      </if>
-    </set>
-    where system_code = #{systemCode,jdbcType=VARCHAR}
-      and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
-      and flow_group = #{flowGroup,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdpBatchFlow">
+    <insert id="insertSelective" parameterType="com.ssy.api.entity.table.local.SdpBatchFlow">
+        insert into sdp_batch_flow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="systemCode != null">
+                system_code,
+            </if>
+            <if test="subSystemCode != null">
+                sub_system_code,
+            </if>
+            <if test="flowGroup != null">
+                flow_group,
+            </if>
+            <if test="datasourceId != null">
+                datasource_id,
+            </if>
+            <if test="flowDesc != null">
+                flow_desc,
+            </if>
+            <if test="flowOrder != null">
+                flow_order,
+            </if>
+            <if test="isEnabled != null">
+                is_enabled,
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user,
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time,
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user,
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time,
+            </if>
+            <if test="dataVersion != null">
+                data_version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="systemCode != null">
+                #{systemCode,jdbcType=VARCHAR},
+            </if>
+            <if test="subSystemCode != null">
+                #{subSystemCode,jdbcType=VARCHAR},
+            </if>
+            <if test="flowGroup != null">
+                #{flowGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceId != null">
+                #{datasourceId,jdbcType=VARCHAR},
+            </if>
+            <if test="flowDesc != null">
+                #{flowDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="flowOrder != null">
+                #{flowOrder,jdbcType=INTEGER},
+            </if>
+            <if test="isEnabled != null">
+                #{isEnabled,jdbcType=BIT},
+            </if>
+            <if test="dataCreateUser != null">
+                #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                #{dataVersion,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ssy.api.entity.table.local.SdpBatchFlow">
+        update sdp_batch_flow
+        <set>
+            <if test="datasourceId != null">
+                datasource_id = #{datasourceId,jdbcType=VARCHAR},
+            </if>
+            <if test="flowDesc != null">
+                flow_desc = #{flowDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="flowOrder != null">
+                flow_order = #{flowOrder,jdbcType=INTEGER},
+            </if>
+            <if test="isEnabled != null">
+                is_enabled = #{isEnabled,jdbcType=BIT},
+            </if>
+            <if test="dataCreateUser != null">
+                data_create_user = #{dataCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCreateTime != null">
+                data_create_time = #{dataCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateUser != null">
+                data_update_user = #{dataUpdateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUpdateTime != null">
+                data_update_time = #{dataUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                data_version = #{dataVersion,jdbcType=INTEGER},
+            </if>
+        </set>
+        where system_code = #{systemCode,jdbcType=VARCHAR}
+        and sub_system_code = #{subSystemCode,jdbcType=VARCHAR}
+        and flow_group = #{flowGroup,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ssy.api.entity.table.local.SdpBatchFlow">
     update sdp_batch_flow
     set datasource_id = #{datasourceId,jdbcType=VARCHAR},
       flow_desc = #{flowDesc,jdbcType=VARCHAR},
@@ -177,11 +177,11 @@
       and flow_group = #{flowGroup,jdbcType=VARCHAR}
   </update>
 
-  <select id="selectAll_odb1" parameterType="map" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from sdp_batch_flow
-    where flow_group = #{flowGroup,jdbcType=VARCHAR}
-    and is_enabled = 1 order by flow_order
-  </select>
+    <select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sdp_batch_flow
+        where flow_group = #{flowGroup,jdbcType=VARCHAR}
+        and is_enabled = 1 order by flow_order
+    </select>
 </mapper>
