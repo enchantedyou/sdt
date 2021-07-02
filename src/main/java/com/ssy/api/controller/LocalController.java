@@ -34,7 +34,7 @@ import com.ssy.api.logic.local.SdPTEJsonParser;
 import com.ssy.api.logic.local.SdRdpEventBuilder;
 import com.ssy.api.servicetype.*;
 import com.ssy.api.utils.http.HttpServletUtil;
-import com.ssy.api.utils.parse.ExcelParser;
+import com.ssy.api.utils.parse.SunlineExcelParser;
 import com.ssy.api.utils.system.BizUtil;
 import com.ssy.api.utils.system.JDBCHelper;
 
@@ -239,7 +239,7 @@ public class LocalController {
 	public void downloadInterfaceDoc(String flowtranId, HttpServletResponse response) throws IOException {
 		BizUtil.fieldNotNull(flowtranId, SdtDict.A.flowtran_id.getId(), SdtDict.A.flowtran_id.getLongName());
 		HttpServletUtil.downloadHeaderSet(flowtranId + SdtConst.INTF_EXCEL_SUFFIX, response);
-		ExcelParser.genInterfaceDoc(flowtranId, response.getOutputStream());
+		SunlineExcelParser.genInterfaceDoc(flowtranId, response.getOutputStream());
 	}
 
 	/**

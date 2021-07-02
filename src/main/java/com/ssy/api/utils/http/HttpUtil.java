@@ -259,8 +259,8 @@ public class HttpUtil {
 		String responseStr = new String();
 		HttpEntity httpEntity = httpResponse.getEntity();
 		if (null != httpEntity) {
-			InputStream instream = httpEntity.getContent();
-			responseStr = convertStreamToString(instream);
+			InputStream inStream = httpEntity.getContent();
+			responseStr = convertStreamToString(inStream);
 		}
 		return responseStr;
 	}

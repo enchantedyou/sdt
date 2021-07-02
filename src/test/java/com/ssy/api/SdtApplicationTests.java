@@ -1,90 +1,31 @@
 package com.ssy.api;
 
-import com.ssy.api.dao.mapper.ap.ApsAccountingEventMapper;
-import com.ssy.api.dao.mapper.ct.CtpLanguagePacketMapper;
-import com.ssy.api.dao.mapper.ct.SmpSysDictLanguageMapper;
-import com.ssy.api.dao.mapper.edsp.TspServiceControlMapper;
-import com.ssy.api.dao.mapper.edsp.TspServiceInMapper;
-import com.ssy.api.dao.mapper.edsp.TspServiceOutMapper;
-import com.ssy.api.dao.mapper.ln.LnaContractMapper;
-import com.ssy.api.dao.mapper.ln.LnaLoanMapper;
-import com.ssy.api.dao.mapper.ln.LnaRepaymentScheduleMapper;
-import com.ssy.api.entity.config.SdtContextConfig;
-import com.ssy.api.entity.constant.SdtConst;
-import com.ssy.api.entity.table.ct.CtpLanguagePacket;
-import com.ssy.api.entity.table.ct.SmpSysDictLanguage;
-import com.ssy.api.entity.table.edsp.TspServiceIn;
-import com.ssy.api.entity.table.local.SdpModuleMapping;
-import com.ssy.api.factory.loader.FileLoader;
-import com.ssy.api.factory.odb.MetaDataFactory;
-import com.ssy.api.logic.audit.SdSqlAuditExecutor;
-import com.ssy.api.logic.higention.SdGitlabReader;
-import com.ssy.api.logic.local.SdFlowtranParser;
-import com.ssy.api.logic.local.SdMessageConvert;
-import com.ssy.api.logic.request.SdIcoreRequest;
-import com.ssy.api.meta.flowtran.Flowtran;
-import com.ssy.api.meta.flowtran.IntfService;
-import com.ssy.api.plugins.DBContextHolder;
-import com.ssy.api.servicetype.DataSourceService;
-import com.ssy.api.servicetype.LoanService;
-import com.ssy.api.servicetype.ModuleMapService;
-import com.ssy.api.servicetype.UserService;
-import com.ssy.api.utils.system.CommUtil;
-import com.ssy.api.utils.system.RedisHelper;
-import lombok.extern.slf4j.Slf4j;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.ssy.api.entity.constant.SdtConst;
+import com.ssy.api.factory.odb.MetaDataFactory;
+import com.ssy.api.utils.system.CommUtil;
+
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest(classes = SdtApplication.class)
 @Slf4j
 class SdtApplicationTests extends MetaDataFactory {
 
 	@Autowired
-	private FileLoader fileLoader;
-	@Autowired
-	private SdtContextConfig contextConfig;
-	@Autowired
-	private DataSourceService dataSourceService;
-	@Autowired
-	private SdGitlabReader gitlab;
-	@Autowired
-	private TspServiceInMapper tspServiceInMapper;
-	@Autowired
-	private TspServiceOutMapper tspServiceOutMapper;
-	@Autowired
-	private TspServiceControlMapper tspServiceControlMapper;
-	@Autowired
-	private ModuleMapService moduleMapService;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private SdSqlAuditExecutor sqlAuditExecutor;
-	@Autowired
-	private ApsAccountingEventMapper apsAccountingEventMapper;
-	@Autowired
-	private LnaRepaymentScheduleMapper lnaRepaymentScheduleMapper;
-	@Autowired
-	private LoanService loanService;
-	@Autowired
-	private SdMessageConvert messageConvert;
-	@Autowired
-	private LnaContractMapper lnaContractMapper;
-	@Autowired
-	private LnaLoanMapper lnaLoanMapper;
-	@Autowired
-	private SmpSysDictLanguageMapper smpSysDictLanguageMapper;
-	@Autowired
-	private CtpLanguagePacketMapper ctpLanguagePacketMapper;
+	private JdbcTemplate jdbcTemplate;
 
 	static {
 		System.setProperty("jasypt.encryptor.password", SdtConst.CONFIG_ENCKEY);
@@ -92,184 +33,109 @@ class SdtApplicationTests extends MetaDataFactory {
 
 	@Test
 	void contextLoads() throws Throwable {
-		System.out.println(RedisHelper.hasKey("123"));
-	}
+		final List<String> readAllLines = Files.readAllLines(Paths.get("C:\\Users\\admin\\Desktop\\ng.log"),
+				StandardCharsets.UTF_8);
+		int i = 1;
+		List<String> sqlList = new ArrayList<>();
+		StringBuilder builder = new StringBuilder(160000);
 
-	private String replace(String orgStr) {
-		orgStr = orgStr.replaceAll("Interest", "Profit");
-		orgStr = orgStr.replaceAll("interest", "profit");
-		orgStr = orgStr.replaceAll("Benifit", "Profit");
-		orgStr = orgStr.replaceAll("benifit", "profit");
-		orgStr = orgStr.replaceAll("Benefit", "Profit");
-		orgStr = orgStr.replaceAll("benefit", "profit");
-		orgStr = orgStr.replaceAll("Loan", "Financing");
-		orgStr = orgStr.replaceAll("loan", "financing");
-		return orgStr;
-	}
-
-	void IslamicPpocSmp_sys_dict_language() throws Exception {
-		StringBuilder baseLineBuilder = new StringBuilder(1 << 10);
-		StringBuilder addBuilder = new StringBuilder(1 << 10);
-		String deleteFormat = "delete from smp_sys_dict_language where dict_type = '%s' and dict_id = '%s' and language_type = '%s';";
-		String insertFormat = "INSERT INTO smp_sys_dict_language (DICT_TYPE, DICT_ID, LANGUAGE_TYPE, DICT_NAME) VALUES ('%s', '%s', '%s', '%s');";
-		DBContextHolder.switchToDataSource("cgc_sump");
-		List<SmpSysDictLanguage> dictList = smpSysDictLanguageMapper.selectAll();
-
-		dictList.forEach(e -> {
-			baseLineBuilder.append(String.format(deleteFormat, e.getDictType(), e.getDictId(), e.getLanguageType()))
-					.append("\r\n");
-			addBuilder.append(String.format(deleteFormat, e.getDictType(), e.getDictId(), e.getLanguageType()))
-					.append("\r\n");
-		});
-
-		dictList.forEach(e -> {
-			baseLineBuilder.append(
-					String.format(insertFormat, e.getDictType(), e.getDictId(), e.getLanguageType(), e.getDictName()))
-					.append("\r\n");
-			addBuilder.append(String.format(insertFormat, e.getDictType(), e.getDictId(), e.getLanguageType(),
-					replace(e.getDictName()))).append("\r\n");
-		});
-		baseLineBuilder.append("commit;");
-		addBuilder.append("commit;");
-		Files.write(Paths.get("C:\\Users\\DELL\\Desktop\\smp_sys_dict_language_add.sql"),
-				addBuilder.toString().getBytes("utf-8"));
-		Files.write(Paths.get("C:\\Users\\DELL\\Desktop\\smp_sys_dict_language_baseline.sql"),
-				baseLineBuilder.toString().getBytes("utf-8"));
-	}
-
-	void IslamicPpocCtp_language_packet() throws Exception {
-		StringBuilder baseLineBuilder = new StringBuilder(1 << 10);
-		StringBuilder addBuilder = new StringBuilder(1 << 10);
-		String deleteFormat = "delete from ctp_language_packet where language_resource_type = '%s' and language_resource_key = '%s' and ui_language = '%s';";
-		String insertFormat = "INSERT INTO ctp_language_packet (language_resource_type, language_resource_key, ui_language, language_resource_value, data_create_time, data_update_time, data_create_user, data_update_user, data_version) VALUES ('%s', '%s', '%s', '%s', 'S####', '20170301 09:30:11 233', NULL, NULL, '0');";
-		DBContextHolder.switchToDataSource("cgc_ct");
-		List<CtpLanguagePacket> ctpLanguagePacketList = ctpLanguagePacketMapper.selectAll();
-
-		ctpLanguagePacketList.forEach(e -> {
-			addBuilder.append(String.format(deleteFormat, e.getLanguageResourceType(), e.getLanguageResourceKey(),
-					e.getUiLanguage())).append("\r\n");
-			baseLineBuilder.append(String.format(deleteFormat, e.getLanguageResourceType(), e.getLanguageResourceKey(),
-					e.getUiLanguage())).append("\r\n");
-		});
-
-		ctpLanguagePacketList.forEach(e -> {
-			addBuilder.append(String.format(insertFormat, e.getLanguageResourceType(), e.getLanguageResourceKey(),
-					e.getUiLanguage(), replace(e.getLanguageResourceValue()))).append("\r\n");
-			baseLineBuilder.append(String.format(insertFormat, e.getLanguageResourceType(), e.getLanguageResourceKey(),
-					e.getUiLanguage(), e.getLanguageResourceValue())).append("\r\n");
-		});
-		baseLineBuilder.append("commit;");
-		addBuilder.append("commit;");
-		Files.write(Paths.get("C:\\Users\\DELL\\Desktop\\ctp_language_packet_baseline.sql"),
-				baseLineBuilder.toString().getBytes("utf-8"));
-		Files.write(Paths.get("C:\\Users\\DELL\\Desktop\\ctp_language_packet_add.sql"),
-				addBuilder.toString().getBytes("utf-8"));
-	}
-
-	public void reversalService() {
-		List<IntfService> serviceList = new ArrayList<>();
-
-		// 服务接入表
-		tspServiceInMapper.selectAll("rpc").forEach(tspServiceIn -> {
-			if ("D".equals(tspServiceIn.getTransactionMode()) && "T".equals(tspServiceIn.getServiceCategory())) {
-				Flowtran flowtran = SdFlowtranParser.load(tspServiceIn.getInnerServiceCode());
-				serviceList.addAll(flowtran.getServiceList());
-				log.info("交易{}的服务数:{},服务列表:{}", tspServiceIn.getInnerServiceCode(), flowtran.getServiceList().size(),
-						flowtran.getServiceList());
+		for (String line : readAllLines) {
+			if (CommUtil.isNull(line)) {
+				continue;
 			}
-		});
 
-		serviceList.forEach(service -> {
-			TspServiceIn tspServiceIn = tspServiceInMapper
-					.selectOne(CommUtil.nvl(service.getId(), service.getServiceName()));
-			if (CommUtil.isNotNull(tspServiceIn)) {
-				tspServiceIn.setTransactionMode("D");
-				tspServiceInMapper.updateByPrimaryKey(tspServiceIn);
+			final String[] array = line.split(" ");
+			// 请求url
+			String url = array[6];
+			if (!url.startsWith("/sdwlzlapp")) {
+				continue;
 			}
-		});
 
-		// 服务控制表
-		tspServiceControlMapper.selectAll().forEach(tspServiceControl -> {
-			String cancelService = tspServiceControl.getCancelService();
-			if (CommUtil.isNotNull(cancelService) && cancelService.toLowerCase().contains("cancel")) {
-				tspServiceControl.setServiceTransactionMode("Required");
-				tspServiceControl.setServiceType("try");
-				tspServiceControlMapper.updateByPrimaryKey(tspServiceControl);
-			}
-		});
-	}
+			// 请求ip
+			String ip = array[0];
+			// 请求时间
+			final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy:HH:mm:ss");
+			final String dateStr = array[3].substring(1).replace("Jun", "06");
+			String reqTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(format.parse(dateStr));
+			// 响应码
+			String resCode = array[8];
+			// 引用
+			String refer = array[10].substring(1, array[10].length() - 1);
 
-	public void dockerRest() {
-		List<SdpModuleMapping> moduleMappingList = moduleMapService.queryAllModuleList();
-		Map<String, String> rollbackMap = new HashMap<>();
-
-		// 服务接入表
-		tspServiceInMapper.selectAll("rpc").forEach(tspServiceIn -> {
-			tspServiceIn.setProtocolId("rest");
-			if (CommUtil.equals(tspServiceIn.getServiceCategory(), "T")) {
-				tspServiceIn.setOutServiceCode("/" + tspServiceIn.getInnerServiceCode());
-			} else if (CommUtil.equals(tspServiceIn.getServiceCategory(), "S")) {
-				String[] outServiceCode = tspServiceIn.getOutServiceCode().split("\\.");
-				String newOutServiceCode = "/" + outServiceCode[0].substring(0, 1).toLowerCase()
-						+ outServiceCode[0].substring(1) + "/" + outServiceCode[1];
-
-				if (outServiceCode[0].toLowerCase().contains("txc")
-						|| outServiceCode[0].toLowerCase().contains("msreversal")) {
-					newOutServiceCode = "/" + tspServiceIn.getInnerServiceImplCode().substring(0, 1).toLowerCase()
-							+ tspServiceIn.getInnerServiceImplCode().substring(1) + newOutServiceCode;
-					rollbackMap.put(tspServiceIn.getInnerServiceCode(), newOutServiceCode);
-				}
-				tspServiceIn.setOutServiceCode(newOutServiceCode);
-			}
-			if (tspServiceIn.getOutServiceCode().length() > 50) {
-				System.out.println(tspServiceIn.getOutServiceCode());
-			}
-			tspServiceInMapper.insert(tspServiceIn);
-		});
-		// 移除rpc协议的服务接入信息
-		tspServiceInMapper.selectAll("rpc").forEach(tspServiceIn -> {
-			tspServiceInMapper.deleteByPrimaryKey(tspServiceIn.getSystemCode(), tspServiceIn.getSubSystemCode(),
-					tspServiceIn.getOutServiceCode());
-		});
-
-		// 服务接出表
-		tspServiceOutMapper.selectAll("remote_rpc").forEach(tspServiceOut -> {
-			tspServiceOut.setProtocolId("rest");
-			tspServiceOut.setOutServiceApp(
-					CommUtil.nvl(getServiceOutApp(moduleMappingList, tspServiceOut.getOutServiceApp()),
-							tspServiceOut.getOutServiceApp()));
-			String[] outServiceCode = tspServiceOut.getOutServiceCode().split("\\.");
-			if (outServiceCode.length >= 2) {
-				String newOutServiceCode = "/" + outServiceCode[0].substring(0, 1).toLowerCase()
-						+ outServiceCode[0].substring(1) + "/" + outServiceCode[1];
-				String rollbackService = rollbackMap.get(tspServiceOut.getInnerServiceCode());
-				if (CommUtil.isNotNull(rollbackService)) {
-					newOutServiceCode = rollbackService;
-				}
-				tspServiceOut.setOutServiceCode(newOutServiceCode);
-				tspServiceOut.setOutServiceGroup("POST");
-				tspServiceOutMapper.updateByPrimaryKey(tspServiceOut);
-			}
-		});
-	}
-
-	private String getServiceOutApp(List<SdpModuleMapping> moduleMappingList, String subSystemCode) {
-		for (SdpModuleMapping moduleMapping : moduleMappingList) {
-			String moduleId = moduleMapping.getModuleId();
-			if (CommUtil.equals(moduleMapping.getSubSystemCode(), subSystemCode)) {
-				if (CommUtil.equals("cf", moduleId)) {
-					moduleId = "us";
-				}
-				return moduleId.toLowerCase() + "-onl";
+			String sql = String.format(
+					"INSERT INTO `nginx_log` (`ip`, `req_time`, `res_code`, `url`, `refer`) VALUES ('%s', '%s', '%s', '%s', '%s');",
+					ip, reqTime, resCode, url, refer);
+			// sqlList.add(sql);
+			builder.append(sql).append("\r\n");
+			if (sqlList.size() == 100) {
+				// jdbcTemplate.batchUpdate(sqlList.toArray(new String[100]));
+				sqlList.clear();
+				System.out.println(String.format("第%s批日志入库成功", i++));
 			}
 		}
-		return null;
+		Files.write(Paths.get("C:\\Users\\admin\\Desktop\\ng.sql"), builder.toString().getBytes("utf-8"));
 	}
 
-	void doRequest312020(int concurrentNum) throws IOException {
-		String url = "http://10.22.63.72:9009/gateway";
-		String body = fileLoader.loadAsString(new File("C:\\Users\\DELL\\Desktop\\312020.json"),
-				SdtConst.DEFAULT_CHARSET.name());
-		SdIcoreRequest.doRequest(url, body, concurrentNum);
+	@Test
+	void test2() throws Exception {
+		Calendar start = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		final String startTime = "2021-06-30 16:00:00";
+		final String endTime = "2021-06-30 19:00:00";
+		final int interval = 5;
+		start.setTime(sdf.parse(startTime));
+		end.setTime(sdf.parse(endTime));
+
+		while (start.before(end)) {
+			String s = sdf.format(start.getTime());
+			start.add(Calendar.MINUTE, interval);
+			String e = sdf.format(start.getTime());
+
+			String sql = String.format(
+					"SELECT count(*) req_count,res_code FROM nginx_log WHERE req_time >= '%s' AND req_time <= '%s' GROUP BY res_code ORDER BY res_code;",
+					s, e);
+
+			final List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
+			String totalCountSql = String
+					.format("SELECT count(*) 总数 FROM nginx_log WHERE req_time >= '%s' AND req_time <= '%s'", s, e);
+			int totalCount = jdbcTemplate.queryForObject(totalCountSql, Integer.class);
+
+			String r200 = null;
+			String r304 = null;
+			String r404 = null;
+			String r499 = null;
+			String r500 = null;
+			String r502 = null;
+			String r504 = null;
+			for (Map<String, Object> map : mapList) {
+				final Object resCode = map.get("res_code");
+				final Object reqCount = map.get("req_count");
+
+				if ("200".equals(resCode)) {
+					r200 = String.valueOf(reqCount);
+				} else if ("304".equals(resCode)) {
+					r304 = String.valueOf(reqCount);
+				} else if ("404".equals(resCode)) {
+					r404 = String.valueOf(reqCount);
+				} else if ("499".equals(resCode)) {
+					r499 = String.valueOf(reqCount);
+				} else if ("500".equals(resCode)) {
+					r500 = String.valueOf(reqCount);
+				} else if ("502".equals(resCode)) {
+					r502 = String.valueOf(reqCount);
+				} else if ("504".equals(resCode)) {
+					r504 = String.valueOf(reqCount);
+				} else {
+					System.err.println(resCode);
+				}
+			}
+			String analysisSql = String.format(
+					"INSERT INTO `nginx_log_analysis` (`开始时间`, `结束时间`, `响应数200`, `响应数304`, 响应数404, `响应数499`, `响应数500`, `响应数502`, `响应数504`, `总请求数`) VALUES ('%s', '%s', %s, %s, %s, %s, %s, %s, %s, %s);",
+					s, e, r200, r304, r404, r499, r500, r502, r504, totalCount);
+			jdbcTemplate.execute(analysisSql);
+			System.out.println(String.format("%s至%s的请求数量分析完成", s, e));
+		}
 	}
 }

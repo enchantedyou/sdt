@@ -1,5 +1,14 @@
 package com.ssy.api.logic.audit;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ssy.api.entity.config.SdtContextConfig;
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.entity.lang.TwoTuple;
@@ -7,16 +16,10 @@ import com.ssy.api.exception.SdtException;
 import com.ssy.api.factory.loader.FileLoader;
 import com.ssy.api.utils.business.SdtBusiUtil;
 import com.ssy.api.utils.parse.ExcelParser;
+import com.ssy.api.utils.parse.SunlineExcelParser;
 import com.ssy.api.utils.system.CommUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Description 源稽核库脚本执行器
@@ -132,7 +135,7 @@ public class SdSqlAuditExecutor {
 		Map<String, File> dmlSqlMap = fileLoader.load(dmlPath.toString(), false);
 		for (String key : dmlSqlMap.keySet()) {
 			if (ExcelParser.isExcel(key) && tableLocal.get().contains(SdtBusiUtil.getDotLeft(key))) {
-				builder.append(ExcelParser.extractSqlScripts(dmlSqlMap.get(key).getPath()));
+				builder.append(SunlineExcelParser.extractSqlScripts(dmlSqlMap.get(key).getPath()));
 			}
 		}
 		return builder.toString();
