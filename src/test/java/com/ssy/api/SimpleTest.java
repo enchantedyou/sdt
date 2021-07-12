@@ -133,7 +133,15 @@ public class SimpleTest {
 
 	@Test
 	public void test4() {
-		System.out.println(Long.parseLong("30/Jun/2021:23:24:58 +0800"));
+		String path = "C:\\Users\\admin\\Desktop\\资管-区县表-210710.xlsx";
+		final List<List<String>> extract = ExcelParser.extract(path, 0, 1);
+		StringBuilder builder = new StringBuilder();
+		for (List<String> list : extract) {
+			String id = list.get(0);
+			builder.append("indicNameMap.put(\"" + id.split("\\.")[0] + "\", \"" + list.get(1) + "\");")
+					.append("\r\n");
+		}
+		System.out.println(builder.toString());
 	}
 
 	public static boolean isNull(Object obj) {

@@ -52,15 +52,20 @@ public class ExcelParser {
 		}
 	}
 
+	public static List<List<String>> extract(String path, int sheetIdx) {
+		return extract(path, sheetIdx, 0);
+	}
+
 	/**
 	 * @Description 导出excel数据
 	 * @Author sunshaoyu
 	 * @Date 2021/7/1-19:39
 	 * @param path     excel路径
 	 * @param sheetIdx 工作簿下标，从0开始
+	 * @param startIdx
 	 * @return java.util.Map<java.lang.String,java.util.List<java.lang.String>>
 	 */
-	public static List<List<String>> extract(String path, int sheetIdx) {
+	public static List<List<String>> extract(String path, int sheetIdx, int startIdx) {
 		List<List<String>> dataList = new ArrayList<>();
 		try {
 			Workbook workbook = getWorkbook(path);
@@ -73,7 +78,7 @@ public class ExcelParser {
 			for (int i = 0; i < maxRowNum; i++) {
 				List<String> rowList = new ArrayList<>();
 				Row curRow = sheet.getRow(i);
-				if (null == curRow) {
+				if (null == curRow || i < startIdx) {
 					continue;
 				}
 				// 遍历列

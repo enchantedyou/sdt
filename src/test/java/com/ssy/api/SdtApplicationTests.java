@@ -1,14 +1,17 @@
 package com.ssy.api;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,8 +19,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.ssy.api.entity.constant.SdtConst;
 import com.ssy.api.factory.odb.MetaDataFactory;
+import com.ssy.api.utils.parse.ExcelParser;
 import com.ssy.api.utils.system.CommUtil;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest(classes = SdtApplication.class)
@@ -33,10 +38,8 @@ class SdtApplicationTests extends MetaDataFactory {
 
 	@Test
 	void contextLoads() throws Throwable {
-		final List<String> readAllLines = Files.readAllLines(Paths.get("C:\\Users\\admin\\Desktop\\ng.log"),
+		final List<String> readAllLines = Files.readAllLines(Paths.get("C:\\Users\\admin\\Desktop\\access0709.log"),
 				StandardCharsets.UTF_8);
-		int i = 1;
-		List<String> sqlList = new ArrayList<>();
 		StringBuilder builder = new StringBuilder(160000);
 
 		for (String line : readAllLines) {
@@ -47,7 +50,7 @@ class SdtApplicationTests extends MetaDataFactory {
 			final String[] array = line.split(" ");
 			// 请求url
 			String url = array[6];
-			if (!url.startsWith("/sdwlzlapp")) {
+			if (!url.startsWith("/sdwlzlapp/")) {
 				continue;
 			}
 
@@ -55,7 +58,7 @@ class SdtApplicationTests extends MetaDataFactory {
 			String ip = array[0];
 			// 请求时间
 			final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy:HH:mm:ss");
-			final String dateStr = array[3].substring(1).replace("Jun", "06");
+			final String dateStr = array[3].substring(1).replace("Jul", "07");
 			String reqTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(format.parse(dateStr));
 			// 响应码
 			String resCode = array[8];
@@ -65,13 +68,7 @@ class SdtApplicationTests extends MetaDataFactory {
 			String sql = String.format(
 					"INSERT INTO `nginx_log` (`ip`, `req_time`, `res_code`, `url`, `refer`) VALUES ('%s', '%s', '%s', '%s', '%s');",
 					ip, reqTime, resCode, url, refer);
-			// sqlList.add(sql);
 			builder.append(sql).append("\r\n");
-			if (sqlList.size() == 100) {
-				// jdbcTemplate.batchUpdate(sqlList.toArray(new String[100]));
-				sqlList.clear();
-				System.out.println(String.format("第%s批日志入库成功", i++));
-			}
 		}
 		Files.write(Paths.get("C:\\Users\\admin\\Desktop\\ng.sql"), builder.toString().getBytes("utf-8"));
 	}
@@ -82,11 +79,15 @@ class SdtApplicationTests extends MetaDataFactory {
 		Calendar end = Calendar.getInstance();
 
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		final String startTime = "2021-06-30 16:00:00";
-		final String endTime = "2021-06-30 19:00:00";
-		final int interval = 5;
+		final String startTime = "2021-07-09 22:00:00";
+		final String endTime = "2021-07-09 23:00:00";
+		final int interval = 1;
 		start.setTime(sdf.parse(startTime));
 		end.setTime(sdf.parse(endTime));
+
+		// 先删除以往的记录
+		jdbcTemplate.execute("delete from nginx_log_analysis;");
+		List<ConcurrentInfo> concurrentInfoList = new ArrayList<>();
 
 		while (start.before(end)) {
 			String s = sdf.format(start.getTime());
@@ -94,7 +95,7 @@ class SdtApplicationTests extends MetaDataFactory {
 			String e = sdf.format(start.getTime());
 
 			String sql = String.format(
-					"SELECT count(*) req_count,res_code FROM nginx_log WHERE req_time >= '%s' AND req_time <= '%s' GROUP BY res_code ORDER BY res_code;",
+					"SELECT count(*) req_count,res_code FROM nginx_log WHERE req_time > '%s' AND req_time <= '%s' GROUP BY res_code ORDER BY res_code;",
 					s, e);
 
 			final List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
@@ -131,11 +132,73 @@ class SdtApplicationTests extends MetaDataFactory {
 					System.err.println(resCode);
 				}
 			}
+			final double qps = BigDecimal.valueOf(totalCount)
+					.divide(BigDecimal.valueOf(interval * 60), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			String analysisSql = String.format(
-					"INSERT INTO `nginx_log_analysis` (`开始时间`, `结束时间`, `响应数200`, `响应数304`, 响应数404, `响应数499`, `响应数500`, `响应数502`, `响应数504`, `总请求数`) VALUES ('%s', '%s', %s, %s, %s, %s, %s, %s, %s, %s);",
-					s, e, r200, r304, r404, r499, r500, r502, r504, totalCount);
+					"INSERT INTO `nginx_log_analysis` (`开始时间`, `结束时间`, `响应数200`, `响应数304`, 响应数404, `响应数499`, `响应数500`, `响应数502`, `响应数504`, `总请求数`,qps) VALUES ('%s', '%s', %s, %s, %s, %s, %s, %s, %s, %s, %s);",
+					s, e, r200, r304, r404, r499, r500, r502, r504, totalCount, qps);
 			jdbcTemplate.execute(analysisSql);
-			System.out.println(String.format("%s至%s的请求数量分析完成", s, e));
+			System.out.println(String.format("%s至%s的并发量分析完成", s, e));
+			concurrentInfoList.add(new ConcurrentInfo(s, e, r200, r304, r404, r499, r500, r502, r504, totalCount, qps));
+		}
+		// 按总请求量倒序
+		Collections.sort(concurrentInfoList, (a, b) -> {
+			return b.totalCount - a.totalCount;
+		});
+		analysisInfoExcel(concurrentInfoList);
+	}
+
+	private void analysisInfoExcel(List<ConcurrentInfo> concurrentInfoList) throws IOException {
+		String templatePath = "C:\\Users\\admin\\Desktop\\山东\\模板\\并发量分析.xlsx";
+		final Workbook workbook = ExcelParser.getWorkbook(templatePath);
+		final Sheet sheet = workbook.getSheetAt(0);
+		int startIndex = 1;
+		for (ConcurrentInfo c : concurrentInfoList) {
+			final Row row = sheet.createRow(startIndex++);
+			row.createCell(0).setCellValue(c.s);
+			row.createCell(1).setCellValue(c.e);
+			row.createCell(2).setCellValue(c.totalCount);
+			row.createCell(3).setCellValue(c.qps);
+			row.createCell(4).setCellValue(c.r200);
+			row.createCell(5).setCellValue(c.r304);
+			row.createCell(6).setCellValue(c.r404);
+			row.createCell(7).setCellValue(c.r499);
+			row.createCell(8).setCellValue(c.r500);
+			row.createCell(9).setCellValue(c.r502);
+			row.createCell(9).setCellValue(c.r504);
+		}
+		workbook.write(new FileOutputStream("C:\\Users\\admin\\Desktop\\0709并发分析（22-23时1分钟维度）.xlsx"));
+	}
+
+	@Data
+	class ConcurrentInfo {
+		private String s;
+		private String e;
+		private String r200;
+		private String r304;
+
+		private String r404;
+		private String r499;
+		private String r500;
+		private String r502;
+		private String r504;
+
+		private int totalCount;
+		private double qps;
+
+		public ConcurrentInfo(String s, String e, String r200, String r304, String r404, String r499, String r500,
+				String r502, String r504, int totalCount, double qps) {
+			this.s = s;
+			this.e = e;
+			this.r200 = r200;
+			this.r304 = r304;
+			this.r404 = r404;
+			this.r499 = r499;
+			this.r500 = r500;
+			this.r502 = r502;
+			this.r504 = r504;
+			this.totalCount = totalCount;
+			this.qps = qps;
 		}
 	}
 }
